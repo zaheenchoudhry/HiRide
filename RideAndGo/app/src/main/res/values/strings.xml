@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Ride&amp;Go</string>
+    <string name="google_api_key">AIzaSyBNYhZT4Vwn_g-zCzLfhmzmidsI-wX3gO4</string>
+    <string name="facebook_app_id">109169366465923</string>
 </resources>

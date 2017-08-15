@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/signup_back_arrow"
+        android:layout_width="20dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        android:src="@drawable/arrow_back_black"/>
+
+    <TextView
+        android:id="@+id/signup_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#303030"
+        android:text="Sign Up"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <LinearLayout
+        android:id="@+id/signup_inputs_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true">
+
+        <RelativeLayout
+            android:id="@+id/signup_name_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/signup_name_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:background="@drawable/login_signup_edittext_border"
+                android:textColor="#303030"
+                android:textColorHint="#c0c0c0"
+                android:hint="Name"/>
+
+            <ImageView
+                android:id="@+id/signup_name_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/login_icon"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/signup_email_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/signup_email_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/login_signup_edittext_border"
+                android:textColor="#303030"
+                android:textColorHint="#c0c0c0"
+                android:hint="Email Address"/>
+
+            <ImageView
+                android:id="@+id/signup_email_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/email_icon"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/signup_password_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/signup_password_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:background="@drawable/login_signup_edittext_border"
+                android:textColor="#303030"
+                android:textColorHint="#c0c0c0"
+                android:hint="Password"/>
+
+            <ImageView
+                android:id="@+id/signup_password_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/password_icon"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/signup_confirm_password_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/signup_confirm_password_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:background="@drawable/login_signup_edittext_border"
+                android:textColor="#303030"
+                android:textColorHint="#c0c0c0"
+                android:hint="Confirm Password"/>
+
+            <ImageView
+                android:id="@+id/signup_confirm_password_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/password_icon"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/signup_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="#22409A"
+        android:text="Sign Up"
+        android:textColor="#ffffff"/>
+
+    <RelativeLayout
+        android:id="@+id/signup_terms_text_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/signup_terms_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="#303030"
+            android:text="By signing up, you agree to our"/>
+
+        <TextView
+            android:id="@+id/signup_terms_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="#22409A"
+            android:text="Terms of Use"/>
+
+    </RelativeLayout>
+</RelativeLayout>

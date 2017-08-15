@@ -1,11 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <FrameLayout
+    <include
+        layout="@layout/app_fragment_holder_main"
         android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_container"/>
-</RelativeLayout>
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#f1f5f8">
+
+            <RelativeLayout
+                android:id="@+id/name_holder_menu"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/menu_options_separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#e3ebee"/>
+
+            <RelativeLayout
+                android:id="@+id/account_option_holder"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <RelativeLayout
+                    android:id="@+id/account_option_indicator"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/account_option_icon"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/account_icon_blue"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:id="@+id/account_option_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Account" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ride_listing_option_holder"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <RelativeLayout
+                    android:id="@+id/ride_listing_option_indicator"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/ride_listing_option_icon"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/find_ride_icon_blue"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:id="@+id/ride_listing_option_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Find a Ride" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/upcoming_rides_option_holder"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <RelativeLayout
+                    android:id="@+id/upcoming_rides_option_indicator"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/upcoming_rides_option_icon"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/upcoming_rides_icon_blue"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:id="@+id/upcoming_rides_option_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Upcoming Rides" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/create_ride_holder"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <RelativeLayout
+                    android:id="@+id/create_ride_indicator"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/create_ride_option_icon"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/createride_icon_blue"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:id="@+id/create_ride_option_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Offer a Ride" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/history_stats_option_holder"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <RelativeLayout
+                    android:id="@+id/history_stats_option_indicator"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/history_stats_option_icon"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/ride_history_icon"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:id="@+id/history_stats_option_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="History and Stats" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.design.widget.NavigationView>
+
+</android.support.v4.widget.DrawerLayout>

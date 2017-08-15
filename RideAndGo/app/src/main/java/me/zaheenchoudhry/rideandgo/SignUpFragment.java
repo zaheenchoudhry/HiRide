@@ -1,71 +1,76 @@
 package me.zaheenchoudhry.rideandgo;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SignUpFragment extends Fragment {
 
+    private final int NUMBER_OF_INPUTS = 4;
     private final int NAME_INPUT = 0;
     private final int EMAIL_INPIT = 1;
     private final int PASSWORD_INPUT = 2;
     private final int PASSWORD_CONFIRM_INPUT = 3;
-    private RelativeLayout layout;
-    private RelativeLayout.LayoutParams relativeLayoutParams;
-    private RelativeLayout.LayoutParams inputParams, signUpButtonParams, titleTextParans, termsTextParams, termsParams;
-    private float screenX, screenY, unitX, unitY;
-    private Button signUpButton;
-    private EditText[] inputs;
-    private TextView titleText, termsText, termsMessageText;
+
+    private float screenX, screenY;
+
+    private TextView signupTitleText, signupTermsMessage, signupTermsText;
+    private EditText[] signupInputs;
+    private ImageView[] signupInputsIcons;
+    private RelativeLayout[] signupInputsHolders;
+    private Button signupButton;
+    private LinearLayout signupInputsHolder;
+    private RelativeLayout signupTermsTextHolder;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        layout = new RelativeLayout(getActivity());
-        //layout.setBackgroundResource(R.drawable.white);
-        //layout.setBackgroundColor(Color.parseColor("#e74c3c"));
+        View view = inflater.inflate(R.layout.signup_fragment, container, false);
         setUnit();
 
-        relativeLayoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
+        signupInputs = new EditText[NUMBER_OF_INPUTS];
+        signupInputsIcons = new ImageView[NUMBER_OF_INPUTS];
+        signupInputsHolders = new RelativeLayout[NUMBER_OF_INPUTS];
 
-        layout.setLayoutParams(relativeLayoutParams);
+        signupTitleText = (TextView)view.findViewById(R.id.signup_title_text);
+        signupButton = (Button)view.findViewById(R.id.signup_button);
+        signupTermsMessage = (TextView)view.findViewById(R.id.signup_terms_message);
+        signupTermsText = (TextView)view.findViewById(R.id.signup_terms_text);
+        signupTermsTextHolder = (RelativeLayout)view.findViewById(R.id.signup_terms_text_holder);
+        signupInputs[0] = (EditText)view.findViewById(R.id.signup_name_input);
+        signupInputs[1] = (EditText)view.findViewById(R.id.signup_email_input);
+        signupInputs[2] = (EditText)view.findViewById(R.id.signup_password_input);
+        signupInputs[3] = (EditText)view.findViewById(R.id.signup_confirm_password_input);
+        signupInputsIcons[0] = (ImageView)view.findViewById(R.id.signup_name_icon);
+        signupInputsIcons[1] = (ImageView)view.findViewById(R.id.signup_email_icon);
+        signupInputsIcons[2] = (ImageView)view.findViewById(R.id.signup_password_icon);
+        signupInputsIcons[3] = (ImageView)view.findViewById(R.id.signup_confirm_password_icon);
+        signupInputsHolders[0] = (RelativeLayout)view.findViewById(R.id.signup_name_holder);
+        signupInputsHolders[1] = (RelativeLayout)view.findViewById(R.id.signup_email_holder);
+        signupInputsHolders[2] = (RelativeLayout)view.findViewById(R.id.signup_password_holder);
+        signupInputsHolders[3] = (RelativeLayout)view.findViewById(R.id.signup_confirm_password_holder);
+        signupInputsHolder = (LinearLayout)view.findViewById(R.id.signup_inputs_holder);
 
         initializeTitleText();
         initializeInputs();
         initializeSignUpButton();
         initializeTermsText();
 
-        for (int i = 0; i < inputs.length; ++i) {
-            layout.addView(inputs[i]);
-        }
-        layout.addView(titleText);
-        layout.addView(signUpButton);
-        layout.addView(termsMessageText);
-        layout.addView(termsText);
-        return layout;
+        return view;
     }
 
     private void setUnit() {
@@ -74,168 +79,45 @@ public class SignUpFragment extends Fragment {
         display.getSize(size);
         this.screenX = size.x;
         this.screenY = size.y;
-        this.unitX = (float)Math.pow(size.x * 0.01, MainActivity.UNIT_NTH_ROOT);
-        this.unitY = (float)Math.pow(size.y * 0.01, MainActivity.UNIT_NTH_ROOT);
     }
 
     private void initializeTitleText() {
-        titleTextParans = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        titleText = new TextView(getActivity());
-        titleText.setLayoutParams(titleTextParans);
-        titleTextParans.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        titleText.setText("Sign Up");
-        titleText.setTextColor(Color.parseColor("#303030"));
-        titleText.setTextSize(screenX * 0.018f);
-        titleText.setY(screenY * 0.18f);
-    }
-
-    private Drawable getIconResource(int i) {
-        switch(i) {
-            case 0:
-                inputs[NAME_INPUT].setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-                inputs[NAME_INPUT].setHint("Name");
-                return getResources().getDrawable(R.drawable.login_icon, null);
-            case 1:
-                inputs[EMAIL_INPIT].setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                inputs[EMAIL_INPIT].setHint("Email Address");
-                return getResources().getDrawable(R.drawable.email_icon, null);
-            case 2:
-                inputs[PASSWORD_INPUT].setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                inputs[PASSWORD_INPUT].setTransformationMethod(PasswordTransformationMethod.getInstance());
-                inputs[PASSWORD_INPUT].setHint("Password");
-                return getResources().getDrawable(R.drawable.password_icon, null);
-            case 3:
-                inputs[PASSWORD_CONFIRM_INPUT].setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                inputs[PASSWORD_CONFIRM_INPUT].setTransformationMethod(PasswordTransformationMethod.getInstance());
-                inputs[PASSWORD_CONFIRM_INPUT].setHint("Confirm Password");
-                return getResources().getDrawable(R.drawable.password_icon, null);
-        }
-        return getResources().getDrawable(R.drawable.login_icon, null);
+        RelativeLayout.LayoutParams signupTitleTextParams = (RelativeLayout.LayoutParams)signupTitleText.getLayoutParams();
+        signupTitleText.setTextSize(screenX * 0.018f);
+        signupTitleTextParams.topMargin = (int)(screenY * 0.15f);
     }
 
     private void initializeInputs() {
-        inputs = new EditText[4];
+        RelativeLayout.LayoutParams signupInputsHolderParams = (RelativeLayout.LayoutParams)signupInputsHolder.getLayoutParams();
+        signupInputsHolderParams.topMargin = (int)(screenY * 0.27f);
 
-        inputParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        inputParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        for (int i = 0; i < NUMBER_OF_INPUTS; ++i) {
+            RelativeLayout.LayoutParams signupInputIconsParams = (RelativeLayout.LayoutParams)signupInputsIcons[i].getLayoutParams();
+            signupInputIconsParams.width = (int)(screenX * 0.08f);
+            signupInputIconsParams.height = (int)(screenX * 0.08f);
+            signupInputsIcons[i].setPadding((int)(screenX * 0.035f), 0, 0, 0);
 
-        for (int i = 0; i < inputs.length; ++i) {
-            inputs[i] = new EditText(getActivity());
-            inputs[i].setLayoutParams(inputParams);
-            inputs[i].setWidth((int)(screenX * 0.8f));
-
-            Drawable drawable = getIconResource(i);
-            Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-            float oldWidth = ((BitmapDrawable) drawable).getBitmap().getWidth();
-            float oldHeight = ((BitmapDrawable) drawable).getBitmap().getHeight();
-            int newWidth = (int)(screenX * 0.06f);
-            int newHeight = (int)((oldHeight / oldWidth) * newWidth);
-            Drawable drawable2 = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true));
-            inputs[i].setCompoundDrawablesWithIntrinsicBounds(drawable2, null, null, null);
-            inputs[i].setCompoundDrawablePadding((int)(screenX * 0.02f));
-            inputs[i].setPadding((int)(screenX * 0.03f), (int)(screenX * 0.035f), (int)(screenX * 0.0325f), (int)(screenX * 0.035f));
-            inputs[i].setBackground(null);
-            inputs[i].setY(screenY * 0.3f + screenX * 0.17f * i);
-
-            ShapeDrawable border = new ShapeDrawable(new RectShape());
-            border.getPaint().setColor(Color.parseColor("#c0c0c0"));
-            //c0c0c0
-            border.getPaint().setStrokeWidth(screenX * 0.006f);
-            border.getPaint().setStyle(Paint.Style.STROKE);
-            inputs[i].setBackground(border);
-            inputs[i].setHintTextColor(Color.parseColor("#c0c0c0"));
+            LinearLayout.LayoutParams signupInputsHoldersParams = (LinearLayout.LayoutParams)signupInputsHolders[i].getLayoutParams();
+            signupInputsHoldersParams.topMargin = (int)(screenY * 0.02f);
+            signupInputs[i].setWidth((int)(screenX * 0.8f));
+            signupInputs[i].setPadding((int)(screenX * 0.125f), (int)(screenX * 0.035f), (int)(screenX * 0.0325f), (int)(screenX * 0.035f));
         }
     }
 
-    private void initializeTermsText() {
-        termsTextParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        termsTextParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        termsTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        termsParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        termsParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        termsParams.addRule(RelativeLayout.CENTER_VERTICAL);
-
-        termsText = new TextView(getActivity());
-        termsText.setLayoutParams(termsParams);
-        termsMessageText = new TextView(getActivity());
-        termsMessageText.setLayoutParams(termsTextParams);
-        termsMessageText.setText("By signing up, you agree to our");
-        termsMessageText.setTextColor(Color.parseColor("#303030"));
-        termsMessageText.setTextSize(screenX * 0.008f);
-        termsMessageText.setY(screenY * 0.42f);
-        termsText.setText("Terms of Use");
-        termsText.setTextColor(Color.parseColor("#22409A"));
-        termsText.setTextSize(screenX * 0.008f);
-        termsText.setY(screenY * 0.45f);
-    }
-
     private void initializeSignUpButton() {
-        signUpButtonParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        signUpButton = new Button(getActivity());
-        signUpButton.setId(R.id.welcomeFragmentLoginButton);
-        signUpButtonParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        signUpButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        signUpButton.setLayoutParams(signUpButtonParams);
+        RelativeLayout.LayoutParams signUpButtonParams = (RelativeLayout.LayoutParams)signupButton.getLayoutParams();
         signUpButtonParams.height = (int)(screenY * 0.08f);
         signUpButtonParams.width = (int)(screenX * 0.6f);
-        signUpButton.setWidth((int)(screenX * 0.08f));
-        signUpButton.setHeight((int)(screenY * 0.6f));
-        signUpButton.setY(screenY * 0.32f);
-        signUpButton.setText("Sign Up");
-        signUpButton.setTextSize(screenX * 0.008f);
-        signUpButton.setTextColor(Color.parseColor("#ffffff"));
-        //303030
+        signUpButtonParams.topMargin = (int)(screenY * 0.75f);
+        signupButton.setTextSize(screenX * 0.008f);
+    }
 
-        /*ShapeDrawable border = new ShapeDrawable(new RectShape());
-        border.getPaint().setColor(Color.parseColor("#303030"));
-        border.getPaint().setStrokeWidth(10f);
-        border.getPaint().setStyle(Paint.Style.STROKE);
-        loginButton.setBackground(border);*/
-
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(Color.parseColor("#22409A"));
-        //gd.setStroke(8, Color.parseColor("#22409A"));
-        signUpButton.setBackground(gd);
-
-        signUpButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        signUpButton.setTextColor(Color.WHITE);
-                        signUpButton.setBackgroundColor(Color.parseColor("#404040"));
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        SignUpFragment signUpFragment = new SignUpFragment();
-                        if (signUpFragment != null) {
-                            /*FragmentManager fragmentManager = getActivity().getFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.WelcomeActivity, signUpFragment);
-                            //fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();*/
-                            String name = inputs[0].getText().toString();
-                            String email = inputs[1].getText().toString();
-                            String password = inputs[2].getText().toString();
-
-                            SignUpServerRequest signUpServerRequest = new SignUpServerRequest(getActivity());
-                            signUpServerRequest.execute(name, email, password);
-                        }
-                        return true;
-                }
-                return false;
-            }
-        });
+    private void initializeTermsText() {
+        RelativeLayout.LayoutParams signupTermsTextHolderParams = (RelativeLayout.LayoutParams)signupTermsTextHolder.getLayoutParams();
+        RelativeLayout.LayoutParams signupTermsTextParams = (RelativeLayout.LayoutParams)signupTermsText.getLayoutParams();
+        signupTermsMessage.setTextSize(screenX * 0.008f);
+        signupTermsText.setTextSize(screenX * 0.008f);
+        signupTermsTextHolderParams.topMargin = (int)(screenY * 0.85f);
+        signupTermsTextParams.topMargin = (int)(screenY * 0.03f);
     }
 }
