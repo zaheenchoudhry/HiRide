@@ -111,7 +111,7 @@ public class WelcomeFragment extends Fragment {
 
 
         ImageView blackBackground = new ImageView(getActivity());
-        blackBackground.setImageResource(R.drawable.black);
+        //blackBackground.setImageResource(R.drawable.black);
         blackBackgroundParams.width = (int)(screenX);
         blackBackgroundParams.height = (int)screenY;
         blackBackgroundParams.addRule(RelativeLayout.CENTER_HORIZONTAL);

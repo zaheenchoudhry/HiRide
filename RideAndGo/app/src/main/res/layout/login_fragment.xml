@@ -7,7 +7,7 @@
         android:id="@+id/login_back_arrow"
         android:layout_width="20dp"
         android:layout_height="18dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="45dp"
         android:layout_marginStart="25dp"
         android:src="@drawable/arrow_back_black"/>
 

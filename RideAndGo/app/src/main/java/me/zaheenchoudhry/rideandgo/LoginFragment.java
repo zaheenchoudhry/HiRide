@@ -111,12 +111,12 @@ public class LoginFragment extends Fragment {
     private void initializeTitleText() {
         RelativeLayout.LayoutParams loginTitleTextParams = (RelativeLayout.LayoutParams)loginTitleText.getLayoutParams();
         loginTitleText.setTextSize(screenX * 0.018f);
-        loginTitleTextParams.topMargin = (int)(screenY * 0.15f);
+        loginTitleTextParams.topMargin = (int)(screenY * 0.18f);
     }
 
     private void initializeInputs() {
         RelativeLayout.LayoutParams loginInputsHolderParams = (RelativeLayout.LayoutParams)loginInputsHolder.getLayoutParams();
-        loginInputsHolderParams.topMargin = (int)(screenY * 0.25f);
+        loginInputsHolderParams.topMargin = (int)(screenY * 0.28f);
 
         for (int i = 0; i < NUMBER_OF_INPUTS; ++i) {
             RelativeLayout.LayoutParams loginInputIconsParams = (RelativeLayout.LayoutParams)loginInputsIcons[i].getLayoutParams();
@@ -134,20 +134,20 @@ public class LoginFragment extends Fragment {
     private void initializeForgotPasswordText() {
         RelativeLayout.LayoutParams forgotPasswordTextParams = (RelativeLayout.LayoutParams)forgotPasswordText.getLayoutParams();
         forgotPasswordText.setTextSize(screenX * 0.01f);
-        forgotPasswordTextParams.topMargin = (int)(screenY * 0.50f);
+        forgotPasswordTextParams.topMargin = (int)(screenY * 0.53f);
     }
 
     private void initializeLoginButton() {
         RelativeLayout.LayoutParams loginButtonParams = (RelativeLayout.LayoutParams)loginButton.getLayoutParams();
         loginButtonParams.height = (int)(screenY * 0.08f);
         loginButtonParams.width = (int)(screenX * 0.6f);
-        loginButtonParams.topMargin = (int)(screenY * 0.6f);
+        loginButtonParams.topMargin = (int)(screenY * 0.63f);
         loginButton.setTextSize(screenX * 0.008f);
     }
 
     private void initializeButtonsDivider() {
         RelativeLayout.LayoutParams loginButtonsDividerHolderParams = (RelativeLayout.LayoutParams)loginButtonsDividerHolder.getLayoutParams();
-        loginButtonsDividerHolderParams.topMargin = (int)(screenY * 0.715f);
+        loginButtonsDividerHolderParams.topMargin = (int)(screenY * 0.745f);
         RelativeLayout.LayoutParams loginButtonsDividerParams1 = (RelativeLayout.LayoutParams)loginButtonsDivider[0].getLayoutParams();
         RelativeLayout.LayoutParams loginButtonsDividerParams2 = (RelativeLayout.LayoutParams)loginButtonsDivider[1].getLayoutParams();
         loginButtonsDividerParams1.width = (int)(screenX * 0.25f);
@@ -165,7 +165,7 @@ public class LoginFragment extends Fragment {
         RelativeLayout.LayoutParams facebookLoginTextParams = (RelativeLayout.LayoutParams)facebookLoginText.getLayoutParams();
         facebookLoginButtonParams.height = (int)(screenY * 0.08f);
         facebookLoginButtonParams.width = (int)(screenX * 0.6f);
-        facebookLoginButtonHolderParams.topMargin = (int)(screenY * 0.8f);
+        facebookLoginButtonHolderParams.topMargin = (int)(screenY * 0.83f);
         facebookLoginImageParams.width = (int)(screenY * 0.05f);
         facebookLoginImageParams.height = (int)(screenY * 0.05f);
         facebookLoginText.setTextSize(screenX * 0.008f);

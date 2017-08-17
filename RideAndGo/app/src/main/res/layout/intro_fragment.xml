@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/intro_logo_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toronto_intro_2">
+
+        <RelativeLayout
+            android:id="@+id/container_transparency_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#66000000"/>
+
+        <ImageView
+            android:id="@+id/intro_hiride_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/hiride_logo_white"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/intro_buttons_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff">
+
+        <LinearLayout
+            android:id="@+id/login_signup_buttons_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true">
+
+            <Button
+                android:id="@+id/intro_login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#22409A"
+                android:text="Log In"
+                android:textColor="#ffffff"/>
+
+            <Button
+                android:id="@+id/intro_signup_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Up"
+                android:textColor="#22409A"
+                android:background="@drawable/intro_signup_button_border" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/intro_buttons_divider_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/intro_buttons_divider_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/line_medium_gray"/>
+
+            <TextView
+                android:id="@+id/intro_buttons_divider_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="or"/>
+
+            <ImageView
+                android:id="@+id/intro_buttons_divider_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/line_medium_gray"/>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/intro_facebook_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="#4267b2"
+            android:textAllCaps="false"
+            android:text="Continue With Facebook"
+            android:textColor="#ffffff" />
+
+        <ImageView
+            android:id="@+id/intro_facebook_login_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            android:src="@drawable/facebook_icon_white"/>
+
+        <RelativeLayout
+            android:id="@+id/terms_text_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/terms_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColor="#303030"
+                android:text="By signing up, you agree to our"/>
+
+            <TextView
+                android:id="@+id/terms_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColor="#22409A"
+                android:text="Terms of Use"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

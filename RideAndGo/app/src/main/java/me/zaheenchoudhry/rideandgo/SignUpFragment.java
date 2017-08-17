@@ -84,12 +84,12 @@ public class SignUpFragment extends Fragment {
     private void initializeTitleText() {
         RelativeLayout.LayoutParams signupTitleTextParams = (RelativeLayout.LayoutParams)signupTitleText.getLayoutParams();
         signupTitleText.setTextSize(screenX * 0.018f);
-        signupTitleTextParams.topMargin = (int)(screenY * 0.15f);
+        signupTitleTextParams.topMargin = (int)(screenY * 0.18f);
     }
 
     private void initializeInputs() {
         RelativeLayout.LayoutParams signupInputsHolderParams = (RelativeLayout.LayoutParams)signupInputsHolder.getLayoutParams();
-        signupInputsHolderParams.topMargin = (int)(screenY * 0.27f);
+        signupInputsHolderParams.topMargin = (int)(screenY * 0.30f);
 
         for (int i = 0; i < NUMBER_OF_INPUTS; ++i) {
             RelativeLayout.LayoutParams signupInputIconsParams = (RelativeLayout.LayoutParams)signupInputsIcons[i].getLayoutParams();
@@ -108,7 +108,7 @@ public class SignUpFragment extends Fragment {
         RelativeLayout.LayoutParams signUpButtonParams = (RelativeLayout.LayoutParams)signupButton.getLayoutParams();
         signUpButtonParams.height = (int)(screenY * 0.08f);
         signUpButtonParams.width = (int)(screenX * 0.6f);
-        signUpButtonParams.topMargin = (int)(screenY * 0.75f);
+        signUpButtonParams.topMargin = (int)(screenY * 0.78f);
         signupButton.setTextSize(screenX * 0.008f);
     }
 
@@ -117,7 +117,7 @@ public class SignUpFragment extends Fragment {
         RelativeLayout.LayoutParams signupTermsTextParams = (RelativeLayout.LayoutParams)signupTermsText.getLayoutParams();
         signupTermsMessage.setTextSize(screenX * 0.008f);
         signupTermsText.setTextSize(screenX * 0.008f);
-        signupTermsTextHolderParams.topMargin = (int)(screenY * 0.85f);
+        signupTermsTextHolderParams.topMargin = (int)(screenY * 0.88f);
         signupTermsTextParams.topMargin = (int)(screenY * 0.03f);
     }
 }

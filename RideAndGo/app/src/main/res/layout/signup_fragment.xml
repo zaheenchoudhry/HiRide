@@ -7,7 +7,7 @@
         android:id="@+id/signup_back_arrow"
         android:layout_width="20dp"
         android:layout_height="18dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="45dp"
         android:layout_marginStart="25dp"
         android:src="@drawable/arrow_back_black"/>
 
@@ -151,6 +151,5 @@
             android:layout_centerHorizontal="true"
             android:textColor="#22409A"
             android:text="Terms of Use"/>
-
     </RelativeLayout>
 </RelativeLayout>
