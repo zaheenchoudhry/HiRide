@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
 
         RelativeLayout layout = new RelativeLayout(this);
         setContentView(layout);
-        layout.setId(R.id.WelcomeActivity);
+        //layout.setId(R.id.WelcomeActivity);
 
         setUnit();
 

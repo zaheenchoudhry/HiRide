@@ -29,26 +29,49 @@
         android:layout_centerHorizontal="true">
 
         <RelativeLayout
-            android:id="@+id/signup_name_holder"
+            android:id="@+id/signup_full_name_holder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/signup_name_input"
+                android:id="@+id/signup_full_name_input"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textCapWords"
                 android:background="@drawable/login_signup_edittext_border"
                 android:textColor="#303030"
                 android:textColorHint="#c0c0c0"
-                android:hint="Name"/>
+                android:hint="Full Name"/>
 
             <ImageView
-                android:id="@+id/signup_name_icon"
+                android:id="@+id/signup_full_name_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:src="@drawable/login_icon"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/signup_phone_number_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/signup_phone_number_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:background="@drawable/login_signup_edittext_border"
+                android:textColor="#303030"
+                android:textColorHint="#c0c0c0"
+                android:hint="Phone Number"/>
+
+            <ImageView
+                android:id="@+id/signup_phone_number_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/phone_icon"/>
         </RelativeLayout>
 
         <RelativeLayout

@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,24 +23,65 @@ import android.widget.TextView;
 
 public class AppActivity extends Activity {
 
+    public static final int NUM_OF_MENU_OPTIONS = 5;
+    public static final int MENU_OPTION_ACCOUNT = 0;
+    public static final int MENU_OPTION_RIDE_LISTING = 1;
+    public static final int MENU_OPTION_UPCOMING_RIDES = 2;
+    public static final int MENU_OPTION_CREATE_RIDE = 3;
+    public static final int MENU_OPTION_HISTORY_STATS = 4;
+
     private float screenX, screenY;
 
-    private RelativeLayout nameMenuHolder, accountOptionHolder, rideListingOptionHolder;
-    private RelativeLayout upcomingRidesOptionHolder, createRideHolder, historyStatsOptionHolder;
+    private RelativeLayout menuProfileHolder;
+    private RelativeLayout[] menuOptions, menuOptionsIndicator;
     private NavigationView menu;
+    private DrawerLayout appDrawerLayout;
+    private TextView[] menuOptionsText;
+    private ImageView menuProfileImage;
+    private TextView menuProfileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app);
         setUnit();
-        setMenuSize();
 
-        LoginFragment createRideFragment = new LoginFragment();
+        menuOptions = new RelativeLayout[NUM_OF_MENU_OPTIONS];
+        menuOptionsIndicator = new RelativeLayout[NUM_OF_MENU_OPTIONS];
+        menuOptionsText = new TextView[NUM_OF_MENU_OPTIONS];
+
+        appDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        menu = (NavigationView)findViewById(R.id.nav_view);
+        menuProfileHolder = (RelativeLayout)findViewById(R.id.menu_profile_holder);
+        menuOptions[0] = (RelativeLayout)findViewById(R.id.account_option_holder);
+        menuOptions[1] = (RelativeLayout)findViewById(R.id.ride_listing_option_holder);
+        menuOptions[2] = (RelativeLayout)findViewById(R.id.upcoming_rides_option_holder);
+        menuOptions[3] = (RelativeLayout)findViewById(R.id.create_ride_holder);
+        menuOptions[4] = (RelativeLayout)findViewById(R.id.history_stats_option_holder);
+        menuOptionsIndicator[0] = (RelativeLayout)findViewById(R.id.account_option_indicator);
+        menuOptionsIndicator[1] = (RelativeLayout)findViewById(R.id.ride_listing_option_indicator);
+        menuOptionsIndicator[2] = (RelativeLayout)findViewById(R.id.upcoming_rides_option_indicator);
+        menuOptionsIndicator[3] = (RelativeLayout)findViewById(R.id.create_ride_indicator);
+        menuOptionsIndicator[4] = (RelativeLayout)findViewById(R.id.history_stats_option_indicator);
+        menuOptionsText[0] = (TextView)findViewById(R.id.account_option_text);
+        menuOptionsText[1] = (TextView)findViewById(R.id.ride_listing_option_text);
+        menuOptionsText[2] = (TextView)findViewById(R.id.upcoming_rides_option_text);
+        menuOptionsText[3] = (TextView)findViewById(R.id.create_ride_option_text);
+        menuOptionsText[4] = (TextView)findViewById(R.id.history_stats_option_text);
+        menuProfileImage = (ImageView)findViewById(R.id.menu_profile_image);
+        menuProfileName = (TextView)findViewById(R.id.menu_profile_name);
+
+        initializeMenuAndProfileDisplay();
+        initializeMenuOptions();
+        initializeMenuActions();
+
+        RideDetailFragment createRideFragment = new RideDetailFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, createRideFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
+        //appDrawerLayout.openDrawer(Gravity.START);
     }
 
     @Override
@@ -77,120 +121,82 @@ public class AppActivity extends Activity {
         this.screenY = size.y;
     }
 
-    private void setMenuSize() {
-        menu = (NavigationView)findViewById(R.id.nav_view);
+    private void initializeMenuAndProfileDisplay() {
         ViewGroup.LayoutParams menuParams = menu.getLayoutParams();
         menuParams.width = (int)(screenX * 0.75f);
 
-        nameMenuHolder = (RelativeLayout)findViewById(R.id.name_holder_menu);
-        ViewGroup.LayoutParams nameMenuHolderParams = nameMenuHolder.getLayoutParams();
+        ViewGroup.LayoutParams nameMenuHolderParams = menuProfileHolder.getLayoutParams();
         nameMenuHolderParams.height = (int)(screenY * 0.3f);
 
-        accountOptionHolder = (RelativeLayout)findViewById(R.id.account_option_holder);
-        ViewGroup.LayoutParams accountOptionHolderParams = accountOptionHolder.getLayoutParams();
-        accountOptionHolderParams.height = (int)(screenY * 0.105f);
+        RelativeLayout.LayoutParams menuProfileImageParams = (RelativeLayout.LayoutParams)menuProfileImage.getLayoutParams();
+        menuProfileImageParams.width = (int)(screenY * 0.09f);
+        menuProfileImageParams.height = (int)(screenY * 0.09f);
+        menuProfileImageParams.topMargin = (int)(screenY * 0.1f);
 
-        rideListingOptionHolder = (RelativeLayout)findViewById(R.id.ride_listing_option_holder);
-        ViewGroup.LayoutParams rideListingOptionHolderParams = rideListingOptionHolder.getLayoutParams();
-        rideListingOptionHolderParams.height = (int)(screenY * 0.105f);
+        RelativeLayout.LayoutParams menuProfileNameParams = (RelativeLayout.LayoutParams)menuProfileName.getLayoutParams();
+        menuProfileName.setTextSize((int)(screenX * 0.0115f));
+        menuProfileNameParams.topMargin = (int)(screenY * 0.02f);
+    }
 
-        upcomingRidesOptionHolder = (RelativeLayout)findViewById(R.id.upcoming_rides_option_holder);
-        ViewGroup.LayoutParams upcomingRidesOptionHolderParams = upcomingRidesOptionHolder.getLayoutParams();
-        upcomingRidesOptionHolderParams.height = (int)(screenY * 0.105f);
+    private void initializeMenuOptions() {
+        ImageView[] menuOptionsIcon = new ImageView[NUM_OF_MENU_OPTIONS];
+        menuOptionsIcon[0] = (ImageView)findViewById(R.id.account_option_icon);
+        menuOptionsIcon[1] = (ImageView)findViewById(R.id.ride_listing_option_icon);
+        menuOptionsIcon[2] = (ImageView)findViewById(R.id.upcoming_rides_option_icon);
+        menuOptionsIcon[3] = (ImageView)findViewById(R.id.create_ride_option_icon);
+        menuOptionsIcon[4] = (ImageView)findViewById(R.id.history_stats_option_icon);
 
-        createRideHolder = (RelativeLayout)findViewById(R.id.create_ride_holder);
-        ViewGroup.LayoutParams createRideHolderParams = createRideHolder.getLayoutParams();
-        createRideHolderParams.height = (int)(screenY * 0.105f);
+        int[] menuOptionsIconDimension = new int[NUM_OF_MENU_OPTIONS];
+        menuOptionsIconDimension[0] = (int)(screenY * 0.044f);
+        menuOptionsIconDimension[1] = (int)(screenY * 0.031f);
+        menuOptionsIconDimension[2] = (int)(screenY * 0.032f);
+        menuOptionsIconDimension[3] = (int)(screenY * 0.057f);
+        menuOptionsIconDimension[4] = (int)(screenY * 0.04f);
 
-        historyStatsOptionHolder = (RelativeLayout)findViewById(R.id.history_stats_option_holder);
-        ViewGroup.LayoutParams historyStatsOptionHolderParams = historyStatsOptionHolder.getLayoutParams();
-        historyStatsOptionHolderParams.height = (int)(screenY * 0.105f);
+        int[] menuOptionsIconMarginStart = new int[NUM_OF_MENU_OPTIONS];
+        menuOptionsIconMarginStart[0] = (int)(screenX * 0.092f);
+        menuOptionsIconMarginStart[1] = (int)(screenX * 0.102f);
+        menuOptionsIconMarginStart[2] = (int)(screenX * 0.1f);
+        menuOptionsIconMarginStart[3] = (int)(screenX * 0.083f);
+        menuOptionsIconMarginStart[4] = (int)(screenX * 0.093f);
 
+        for (int i = 0; i < NUM_OF_MENU_OPTIONS; ++i) {
+            ViewGroup.LayoutParams menuOptionsParams = menuOptions[i].getLayoutParams();
+            ViewGroup.LayoutParams menuOptionsIndicatorParams = menuOptionsIndicator[i].getLayoutParams();
+            RelativeLayout.LayoutParams menuOptionsIconParams = (RelativeLayout.LayoutParams)menuOptionsIcon[i].getLayoutParams();
+            RelativeLayout.LayoutParams menuOptionsTextParams = (RelativeLayout.LayoutParams)menuOptionsText[i].getLayoutParams();
 
-        RelativeLayout accountOptionIndicator = (RelativeLayout)findViewById(R.id.account_option_indicator);
-        ViewGroup.LayoutParams accountOptionIndicatorParams = accountOptionIndicator.getLayoutParams();
-        accountOptionIndicatorParams.width = (int)(screenX * 0.02f);
+            menuOptionsParams.height = (int)(screenY * 0.105f);
+            menuOptionsIndicatorParams.width = (int)(screenX * 0.02f);
 
-        RelativeLayout rideListingOptionIndicator = (RelativeLayout)findViewById(R.id.ride_listing_option_indicator);
-        ViewGroup.LayoutParams rideListingOptionIndicatorParams = rideListingOptionIndicator.getLayoutParams();
-        rideListingOptionIndicatorParams.width = (int)(screenX * 0.02f);
+            menuOptionsIconParams.width = menuOptionsIconDimension[i];
+            menuOptionsIconParams.height = menuOptionsIconDimension[i];
+            menuOptionsIconParams.setMarginStart(menuOptionsIconMarginStart[i]);
 
-        RelativeLayout upcomingRidesOptionIndicator = (RelativeLayout)findViewById(R.id.upcoming_rides_option_indicator);
-        ViewGroup.LayoutParams upcomingRidesOptionIndicatorParams = upcomingRidesOptionIndicator.getLayoutParams();
-        upcomingRidesOptionIndicatorParams.width = (int)(screenX * 0.02f);
+            menuOptionsText[i].setTextSize((int)(screenX * 0.012f));
+            menuOptionsTextParams.setMarginStart((int)(screenX * 0.195f));
+        }
+    }
 
-        RelativeLayout createRideIndicator = (RelativeLayout)findViewById(R.id.create_ride_indicator);
-        ViewGroup.LayoutParams createRideIndicatorParams = createRideIndicator.getLayoutParams();
-        createRideIndicatorParams.width = (int)(screenX * 0.02f);
-
-        RelativeLayout historyStatsOptionIndicator = (RelativeLayout)findViewById(R.id.history_stats_option_indicator);
-        ViewGroup.LayoutParams historyStatsOptionIndicatorParams = historyStatsOptionIndicator.getLayoutParams();
-        historyStatsOptionIndicatorParams.width = (int)(screenX * 0.02f);
-
-
-        RelativeLayout menuOptionsSeparator = (RelativeLayout)findViewById(R.id.menu_options_separator);
-        ViewGroup.LayoutParams menuOptionsSeparatorParams = menuOptionsSeparator.getLayoutParams();
-        menuOptionsSeparatorParams.height = (int)(screenY * 0.002f);
-
-
-        ImageView accountOptionIcon = (ImageView)findViewById(R.id.account_option_icon);
-        RelativeLayout.LayoutParams accountOptionIconParams = (RelativeLayout.LayoutParams)accountOptionIcon.getLayoutParams();
-        accountOptionIconParams.width = (int)(screenY * 0.044f);
-        accountOptionIconParams.height = (int)(screenY * 0.044f);
-        accountOptionIconParams.setMarginStart((int)(screenX * 0.092f));
-
-        TextView accountOptionText = (TextView)findViewById(R.id.account_option_text);
-        RelativeLayout.LayoutParams accountOptionTextParams = (RelativeLayout.LayoutParams)accountOptionText.getLayoutParams();
-        accountOptionText.setTextSize((int)(screenX * 0.012f));
-        accountOptionTextParams.setMarginStart((int)(screenX * 0.195f));
-
-
-        ImageView rideListingOptionIcon = (ImageView)findViewById(R.id.ride_listing_option_icon);
-        RelativeLayout.LayoutParams rideListingOptionIconParams = (RelativeLayout.LayoutParams)rideListingOptionIcon.getLayoutParams();
-        rideListingOptionIconParams.width = (int)(screenY * 0.031f);
-        rideListingOptionIconParams.height = (int)(screenY * 0.031f);
-        rideListingOptionIconParams.setMarginStart((int)(screenX * 0.102f));
-
-        TextView rideListingOptionText = (TextView)findViewById(R.id.ride_listing_option_text);
-        RelativeLayout.LayoutParams rideListingOptionTextParams = (RelativeLayout.LayoutParams)rideListingOptionText.getLayoutParams();
-        rideListingOptionText.setTextSize((int)(screenX * 0.012f));
-        rideListingOptionTextParams.setMarginStart((int)(screenX * 0.195f));
-
-
-        ImageView upcomingRidesOptionIcon = (ImageView)findViewById(R.id.upcoming_rides_option_icon);
-        RelativeLayout.LayoutParams upcomingRidesOptionIconParams = (RelativeLayout.LayoutParams)upcomingRidesOptionIcon.getLayoutParams();
-        upcomingRidesOptionIconParams.width = (int)(screenY * 0.032f);
-        upcomingRidesOptionIconParams.height = (int)(screenY * 0.032f);
-        upcomingRidesOptionIconParams.setMarginStart((int)(screenX * 0.1f));
-
-        TextView upcomingRidesOptionText = (TextView)findViewById(R.id.upcoming_rides_option_text);
-        RelativeLayout.LayoutParams upcomingRidesOptionTextParams = (RelativeLayout.LayoutParams)upcomingRidesOptionText.getLayoutParams();
-        upcomingRidesOptionText.setTextSize((int)(screenX * 0.012f));
-        upcomingRidesOptionTextParams.setMarginStart((int)(screenX * 0.195f));
-
-
-        ImageView createRideOptionIcon = (ImageView)findViewById(R.id.create_ride_option_icon);
-        RelativeLayout.LayoutParams createRideOptionIconParams = (RelativeLayout.LayoutParams)createRideOptionIcon.getLayoutParams();
-        createRideOptionIconParams.width = (int)(screenY * 0.057f);
-        createRideOptionIconParams.height = (int)(screenY * 0.057f);
-        createRideOptionIconParams.setMarginStart((int)(screenX * 0.083f));
-
-        TextView createRideOptionText = (TextView)findViewById(R.id.create_ride_option_text);
-        RelativeLayout.LayoutParams createRideOptionTextParams = (RelativeLayout.LayoutParams)createRideOptionText.getLayoutParams();
-        createRideOptionText.setTextSize((int)(screenX * 0.012f));
-        createRideOptionTextParams.setMarginStart((int)(screenX * 0.195f));
-
-
-        ImageView historyStatsOptionIcon = (ImageView)findViewById(R.id.history_stats_option_icon);
-        RelativeLayout.LayoutParams historyStatsOptionIconParams = (RelativeLayout.LayoutParams)historyStatsOptionIcon.getLayoutParams();
-        historyStatsOptionIconParams.width = (int)(screenY * 0.04f);
-        historyStatsOptionIconParams.height = (int)(screenY * 0.04f);
-        historyStatsOptionIconParams.setMarginStart((int)(screenX * 0.093f));
-
-        TextView historyStatsOptionText = (TextView)findViewById(R.id.history_stats_option_text);
-        RelativeLayout.LayoutParams historyStatsOptionTextParams = (RelativeLayout.LayoutParams)historyStatsOptionText.getLayoutParams();
-        historyStatsOptionText.setTextSize((int)(screenX * 0.012f));
-        historyStatsOptionTextParams.setMarginStart((int)(screenX * 0.195f));
+    private void initializeMenuActions() {
+        for (int i = 0; i < NUM_OF_MENU_OPTIONS; ++i) {
+            final int currentIndex = i;
+            menuOptions[currentIndex].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    menuOptions[currentIndex].setBackgroundColor(Color.parseColor("#e3ebee"));
+                    menuOptionsIndicator[currentIndex].setBackgroundColor(Color.parseColor("#22409A"));
+                    menuOptionsText[currentIndex].setTextColor(Color.parseColor("#303030"));
+                    for (int j = 0; j < NUM_OF_MENU_OPTIONS; ++j) {
+                        if (j != currentIndex) {
+                            menuOptions[j].setBackgroundColor(Color.TRANSPARENT);
+                            menuOptionsIndicator[j].setBackgroundColor(Color.TRANSPARENT);
+                            menuOptionsText[j].setTextColor(Color.parseColor("#686868"));
+                        }
+                    }
+                }
+            });
+        }
     }
 
     public float getScreenX() {

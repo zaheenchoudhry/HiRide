@@ -2,4 +2,6 @@
     <string name="app_name">Ride&amp;Go</string>
     <string name="google_api_key">AIzaSyBNYhZT4Vwn_g-zCzLfhmzmidsI-wX3gO4</string>
     <string name="facebook_app_id">109169366465923</string>
+    <string name="ride_request_url">http://zaheenchoudhry.me/rideandgo/newRideRequest.php</string>
+    <string name="new_account_request_url">http://104.196.187.254/newAccountRequest.php</string>
 </resources>

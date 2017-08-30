@@ -172,7 +172,7 @@ public class ActivityOld extends Activity {
         ViewGroup.LayoutParams menuParams = menu.getLayoutParams();
         menuParams.width = (int)(screenX * 0.75f);
 
-        nameMenuHolder = (RelativeLayout)findViewById(R.id.name_holder_menu);
+        //nameMenuHolder = (RelativeLayout)findViewById(R.id.name_holder_menu);
         ViewGroup.LayoutParams nameMenuHolderParams = nameMenuHolder.getLayoutParams();
         nameMenuHolderParams.height = (int)(screenY * 0.3f);
 

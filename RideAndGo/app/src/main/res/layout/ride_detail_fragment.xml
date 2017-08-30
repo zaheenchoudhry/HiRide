@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/ride_detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:layout_gravity="top"
+        android:background="#f0f4f7"
+        app:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            
+            <RelativeLayout
+                android:id="@+id/ride_detail_menu_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:id="@+id/ride_detail_menu_image"
+                    android:layout_width="25dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/menu_icon_grey_2"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/ride_detail_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="#444A5A"
+                android:text="Ride Detail"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_gravity="fill_vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f0f4f7">
+
+            <RelativeLayout
+                android:id="@+id/ride_detail_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:background="#ffffff"
+                android:paddingBottom="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_date_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/ride_detail_date_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#808080"
+                        android:textSize="12sp"
+                        android:text="SUN"/>
+
+                    <TextView
+                        android:id="@+id/ride_detail_date_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#1777CD"
+                        android:textSize="30sp"
+                        android:text="20"/>
+
+                    <TextView
+                        android:id="@+id/ride_detail_date_month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#808080"
+                        android:textSize="12sp"
+                        android:text="AUG"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_time_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ride_detail_date_container">
+
+                    <TextView
+                        android:id="@+id/ride_detail_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#606060"
+                        android:textSize="16sp"
+                        android:text="4:00"/>
+
+                    <TextView
+                        android:id="@+id/ride_detail_am_pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#606060"
+                        android:layout_toEndOf="@id/ride_detail_time"
+                        android:textSize="15sp"
+                        android:text="PM"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_city_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ride_detail_time_container">
+
+                    <TextView
+                        android:id="@+id/ride_detail_start_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="#404040"
+                        android:textSize="18sp"
+                        android:text="Waterloo"/>
+
+                    <ImageView
+                        android:id="@+id/ride_detail_city_arrow"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/arrow_right_darkgrey"
+                        android:layout_toEndOf="@id/ride_detail_start_city" />
+
+                    <TextView
+                        android:id="@+id/ride_detail_end_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="#404040"
+                        android:textSize="18sp"
+                        android:layout_toEndOf="@id/ride_detail_city_arrow"
+                        android:text="Toronto"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_price_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ride_detail_city_container">
+
+                    <TextView
+                        android:id="@+id/ride_detail_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#1366ae"
+                        android:textSize="18sp"
+                        android:text="$ 10.00"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_ride_button_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ride_detail_price_container">
+
+                    <Button
+                        android:id="@+id/ride_detail_shortlist_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#1777CD"
+                        android:textColor="#ffffff"
+                        android:textSize="12sp"
+                        android:text="Shortlist"/>
+
+                    <Button
+                        android:id="@+id/ride_detail_book_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/ride_detail_shortlist_button"
+                        android:background="@drawable/ride_detail_button_border"
+                        android:textColor="#1777CD"
+                        android:textSize="12sp"
+                        android:text="Book Ride"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_pickup_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ride_detail_ride_button_container">
+
+                    <TextView
+                        android:id="@+id/ride_detail_pickup_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:text="Pickup:" />
+
+                    <TextView
+                        android:id="@+id/ride_detail_pickup_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#808080"
+                        android:textSize="14sp"
+                        android:layout_toEndOf="@id/ride_detail_pickup_title"
+                        android:text="21 Columbia St W"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_dropoff_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ride_detail_pickup_container">
+
+                    <TextView
+                        android:id="@+id/ride_detail_dropoff_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:text="Dropoff:" />
+
+                    <TextView
+                        android:id="@+id/ride_detail_dropoff_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#808080"
+                        android:textSize="14sp"
+                        android:layout_toEndOf="@id/ride_detail_dropoff_title"
+                        android:text="Scarborough Town Centre"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_ride_separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ride_detail_dropoff_container"
+                    android:background="#f0f4f7"/>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_profile_message_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/ride_detail_ride_separator">
+
+                    <RelativeLayout
+                        android:id="@+id/ride_detail_driver_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:id="@+id/ride_detail_driver_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/akshat_profile_pic"/>
+
+                        <TextView
+                            android:id="@+id/ride_detail_driver_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/ride_detail_driver_image"
+                            android:textColor="#404040"
+                            android:text="Akshat Soni"/>
+
+                        <RelativeLayout
+                            android:id="@+id/ride_detail_rating_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@id/ride_detail_driver_name">
+
+                            <ImageView
+                                android:id="@+id/ride_detail_rating_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/star_gold"/>
+
+                            <TextView
+                                android:id="@+id/ride_detail_rating"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toEndOf="@+id/ride_detail_rating_icon"
+                                android:textColor="#404040"
+                                android:text="4.5"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/ride_detail_message_button_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/ride_detail_driver_profile">
+
+                        <Button
+                            android:id="@+id/ride_detail_message_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/ride_detail_button_border_2"
+                            android:textColor="#1887fb"
+                            android:textSize="12sp"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:text="Text Message"/>
+
+                        <RelativeLayout
+                            android:id="@+id/ride_detail_messenger_button_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@id/ride_detail_message_button">
+
+                            <Button
+                                android:id="@+id/ride_detail_messenger_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:background="#1887fb"
+                                android:textColor="#ffffff"
+                                android:textSize="12sp"
+                                android:text="Messenger"/>
+
+                            <ImageView
+                                android:id="@+id/ride_detail_messenger_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/messenger_icon_white"
+                                android:elevation="2dp"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_payment_methods_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ride_detail_profile_message_container">
+
+                    <TextView
+                        android:id="@+id/ride_detail_payment_methods_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#404040"
+                        android:text="Accepted Payment Methods"/>
+
+                    <RelativeLayout
+                        android:id="@+id/ride_detail_payment_methods_top"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ride_detail_payment_methods_text"
+                        android:background="#f0f4f7"/>
+
+                    <RelativeLayout
+                        android:id="@+id/ride_detail_payment_methods_holder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ride_detail_payment_methods_top">
+
+                        <RelativeLayout
+                            android:id="@+id/ride_detail_cash_method_holder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true">
+
+                                <ImageView
+                                    android:id="@+id/ride_detail_cash_method_icon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:src="@drawable/check_mark_icon_2"/>
+
+                                <TextView
+                                    android:id="@+id/ride_detail_cash_method_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toEndOf="@id/ride_detail_cash_method_icon"
+                                    android:textColor="#606060"
+                                    android:text="Cash"/>
+                            </RelativeLayout>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/ride_detail_payment_methods_divider"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:background="#f0f4f7"/>
+
+                        <RelativeLayout
+                            android:id="@+id/ride_detail_inapp_method_holder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/ride_detail_payment_methods_divider">
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true">
+
+                                <ImageView
+                                    android:id="@+id/ride_detail_inapp_method_icon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:src="@drawable/cross_icon_2"/>
+
+                                <TextView
+                                    android:id="@+id/ride_detail_inapp_method_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toEndOf="@id/ride_detail_inapp_method_icon"
+                                    android:textColor="#606060"
+                                    android:text="In-App Payment"/>
+                            </RelativeLayout>
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/ride_detail_payment_methods_bottom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ride_detail_payment_methods_holder"
+                        android:background="#f0f4f7"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/ride_details_driver_prefs_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/ride_detail_payment_methods_container"
+                    android:textColor="#404040"
+                    android:text="Driver Preferences"/>
+
+                <RelativeLayout
+                    android:id="@+id/ride_details_driver_prefs_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ride_details_driver_prefs_title">
+
+                    <RelativeLayout
+                        android:id="@+id/ride_details_prefs_music_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#1777CD">
+
+                        <RelativeLayout
+                            android:id="@+id/ride_details_prefs_music_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/ride_details_prefs_music_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/music_icon_white"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_music_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#ffffff"
+                            android:text="Music"/>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_music_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@id/ride_details_prefs_music_text"
+                            android:textColor="#ffffff"
+                            android:text="No"
+                            android:visibility="invisible"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/ride_details_prefs_drinks_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/driver_preferences_container_border"
+                        android:layout_toEndOf="@id/ride_details_prefs_music_holder">
+
+                        <RelativeLayout
+                            android:id="@+id/ride_details_prefs_drinks_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/ride_details_prefs_drinks_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/drinks_icon_blue"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_drinks_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#1366ae"
+                            android:text="Food / Drinks"/>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_drinks_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@id/ride_details_prefs_drinks_text"
+                            android:textColor="#1366ae"
+                            android:text="No"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/ride_details_prefs_luggage_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/driver_preferences_container_border"
+                        android:layout_toEndOf="@id/ride_details_prefs_drinks_holder">
+
+                        <RelativeLayout
+                            android:id="@+id/ride_details_prefs_luggage_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/ride_details_prefs_luggage_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/luggage_icon_blue"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_luggage_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#1366ae"
+                            android:text="Extra Luggage"/>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_luggage_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@id/ride_details_prefs_luggage_text"
+                            android:textColor="#1366ae"
+                            android:text="No"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/ride_details_prefs_pets_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/driver_preferences_container_border"
+                        android:layout_toEndOf="@id/ride_details_prefs_luggage_holder">
+
+                        <RelativeLayout
+                            android:id="@+id/ride_details_prefs_pets_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/ride_details_prefs_pets_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/pet_icon_blue"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_pets_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#1366ae"
+                            android:text="Pets"/>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_pets_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@id/ride_details_prefs_pets_text"
+                            android:textColor="#1366ae"
+                            android:text="No"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ride_detail_border_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ride_detail_container"
+                android:background="#f0f4f7"/>
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

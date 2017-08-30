@@ -183,7 +183,7 @@ public class SignUpFragmentOld extends Fragment {
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         signUpButton = new Button(getActivity());
-        signUpButton.setId(R.id.welcomeFragmentLoginButton);
+        //signUpButton.setId(R.id.welcomeFragmentLoginButton);
         signUpButtonParams.addRule(RelativeLayout.CENTER_VERTICAL);
         signUpButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         signUpButton.setLayoutParams(signUpButtonParams);

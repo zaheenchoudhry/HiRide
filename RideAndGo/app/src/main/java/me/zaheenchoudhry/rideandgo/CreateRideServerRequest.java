@@ -43,7 +43,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
         String pickupLongitude = args[15];
         String dropoffLatitude = args[16];
         String dropoffLongitude = args[17];
-        String signup_request_url = "http://zaheenchoudhry.me/rideandgo/newRideRequest.php";
+        String signup_request_url = context.getString(R.string.ride_request_url);;
 
         try {
             /*String signup_request_data = URLEncoder.encode("name", "UTF-8") + "=" +

@@ -1,6 +1,8 @@
 package me.zaheenchoudhry.rideandgo;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -19,16 +21,11 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.facebook.internal.CallbackManagerImpl.RequestCodeOffset.Login;
 
 public class LoginFragment extends Fragment {
 
@@ -45,7 +42,7 @@ public class LoginFragment extends Fragment {
     private Button loginButton, facebookLoginButton;
     private LinearLayout loginInputsHolder;
     private RelativeLayout facebookLoginButtonHolder, loginButtonsDividerHolder;
-    private ImageView facebookLoginImage;
+    private ImageView facebookLoginImage, backPageArrow;
 
     private CallbackManager callbackManager;
 
@@ -83,7 +80,9 @@ public class LoginFragment extends Fragment {
         loginButtonsDivider[0] = (ImageView)view.findViewById(R.id.login_buttons_divider_1);
         loginButtonsDivider[1] = (ImageView)view.findViewById(R.id.login_buttons_divider_2);
         loginButtonsDividerHolder = (RelativeLayout)view.findViewById(R.id.login_buttons_divider_holder);
+        backPageArrow = (ImageView)view.findViewById(R.id.login_back_arrow);
 
+        initializeBackPageArrow();
         initializeTitleText();
         initializeInputs();
         initializeForgotPasswordText();
@@ -106,6 +105,24 @@ public class LoginFragment extends Fragment {
         display.getSize(size);
         this.screenX = size.x;
         this.screenY = size.y;
+    }
+
+    private void initializeBackPageArrow() {
+        backPageArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getActivity().getFragmentManager();
+                if (fragmentManager.getBackStackEntryCount() > 0 ){
+                    fragmentManager.beginTransaction().commit();
+                    fragmentManager.popBackStack();
+                } else {
+                    IntroFragment introFragment = new IntroFragment();
+                    FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.login_signup_fragment_container, introFragment);
+                    transaction.commit();
+                }
+            }
+        });
     }
 
     private void initializeTitleText() {

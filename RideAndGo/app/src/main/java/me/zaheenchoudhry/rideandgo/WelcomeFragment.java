@@ -185,7 +185,7 @@ public class WelcomeFragment extends Fragment {
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         loginButton = new Button(getActivity());
-        loginButton.setId(R.id.welcomeFragmentLoginButton);
+        //loginButton.setId(R.id.welcomeFragmentLoginButton);
         loginButtonParams.addRule(RelativeLayout.CENTER_VERTICAL);
         loginButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         loginButton.setLayoutParams(loginButtonParams);
@@ -222,7 +222,7 @@ public class WelcomeFragment extends Fragment {
                         if (loginFragment != null) {
                             FragmentManager fragmentManager = getActivity().getFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.WelcomeActivity, loginFragment);
+                            //fragmentTransaction.replace(R.id.WelcomeActivity, loginFragment);
                             //fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
@@ -245,7 +245,7 @@ public class WelcomeFragment extends Fragment {
         //button.setBackground(gd);*/
 
         signUpButton = new Button(getActivity());
-        signUpButton.setId(R.id.welcomeFragmentSignUpButton);
+        //signUpButton.setId(R.id.welcomeFragmentSignUpButton);
         signUpButtonParams.addRule(RelativeLayout.CENTER_VERTICAL);
         signUpButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         signUpButton.setLayoutParams(signUpButtonParams);
@@ -292,7 +292,7 @@ public class WelcomeFragment extends Fragment {
                         if (signUpFragment != null) {
                             FragmentManager fragmentManager = getActivity().getFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.WelcomeActivity, signUpFragment);
+                            //fragmentTransaction.replace(R.id.WelcomeActivity, signUpFragment);
                             //fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();

@@ -252,7 +252,7 @@ public class LoginFragmentOld extends Fragment {
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         loginButton = new Button(getActivity());
-        loginButton.setId(R.id.welcomeFragmentLoginButton);
+        //loginButton.setId(R.id.welcomeFragmentLoginButton);
         loginButtonParams.addRule(RelativeLayout.CENTER_VERTICAL);
         loginButtonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         loginButton.setLayoutParams(loginButtonParams);
@@ -291,7 +291,7 @@ public class LoginFragmentOld extends Fragment {
                         if (loginFragment != null) {
                             FragmentManager fragmentManager = getActivity().getFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.WelcomeActivity, loginFragment);
+                            //fragmentTransaction.replace(R.id.WelcomeActivity, loginFragment);
                             //fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();

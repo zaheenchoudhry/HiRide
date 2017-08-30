@@ -21,8 +21,7 @@
             android:id="@+id/intro_hiride_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/hiride_logo_white"/>
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
     <RelativeLayout

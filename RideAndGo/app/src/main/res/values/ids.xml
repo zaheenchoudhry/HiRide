@@ -1,7 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="WelcomeActivity" type="id">2</item>
-
-    <item name="welcomeFragmentLoginButton" type="id">51</item>
-    <item name="welcomeFragmentSignUpButton" type="id">52</item>
 </resources>

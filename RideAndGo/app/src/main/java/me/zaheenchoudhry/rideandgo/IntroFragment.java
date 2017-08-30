@@ -1,6 +1,7 @@
 package me.zaheenchoudhry.rideandgo;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -121,6 +122,28 @@ public class IntroFragment extends Fragment {
         signupButtonParams.leftMargin = (int)(screenX * 0.02f);
         loginButton.setTextSize(screenX * 0.008f);
         signupButton.setTextSize(screenX * 0.008f);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginFragment loginFragment = new LoginFragment();
+                FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+                transaction.replace(R.id.login_signup_fragment_container, loginFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SignUpFragment signupFragment = new SignUpFragment();
+                FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+                transaction.replace(R.id.login_signup_fragment_container, signupFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 
     private void initializeButtonsDivider() {
