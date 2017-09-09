@@ -60,7 +60,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:text="Create a Ride"/>
 
                 </LinearLayout>
             </RelativeLayout>
@@ -78,7 +79,7 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/menu_button"
+                        android:id="@+id/create_ride_menu_button"
                         android:layout_width="25dp"
                         android:layout_height="22dp"
                         android:src="@drawable/menu_icon_white_2"
@@ -117,138 +118,698 @@
         android:paddingBottom="85dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#f1f5f8"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingTop="8dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="6dp">
+            android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/pickup_dropoff_locations_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:background="#ffffff">
 
-                <EditText
-                    android:id="@+id/edittext_pickup"
+                <TextView
+                    android:id="@+id/pickup_dropoff_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_width="300dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:paddingStart="42dp"
-                    android:background="@drawable/edittext_border"
-                    android:inputType="text"
-                    android:hint="Pick-up Location"
-                    android:maxLines="1"
-                    android:textCursorDrawable="@drawable/edittext_cursor"
-                    android:cursorVisible="false"
-                    android:focusable="false"
-                    android:clickable="true"/>
-
-                <ImageView
-                    android:padding="3dp"
-                    android:src="@drawable/location_icon"
-                    android:layout_marginTop="38dp"
-                    android:layout_marginStart="-296dp"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_toEndOf="@id/edittext_pickup"/>
+                    android:textColor="#606060"
+                    android:text="Pickup and Dropoff"/>
 
                 <RelativeLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
-                    android:background="#eaeaea"
-                    android:layout_toEndOf="@id/edittext_pickup"
-                    android:layout_marginStart="-50dp">
+                    android:id="@+id/edittext_pickup_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/pickup_dropoff_title_text">
+
+                    <EditText
+                        android:id="@+id/edittext_pickup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/edittext_border"
+                        android:inputType="text"
+                        android:hint="Pickup Location"
+                        android:maxLines="1"
+                        android:textCursorDrawable="@drawable/edittext_cursor"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:textColor="#303030"
+                        android:textColorHint="#c0c0c0" />
 
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/add_icon_darkgrey"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"/>
+                        android:id="@+id/edittext_pickup_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/location_icon" />
 
+                    <RelativeLayout
+                        android:id="@+id/edittext_pickup_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:background="#1777CD"
+                        android:layout_toEndOf="@id/edittext_pickup">
+
+                        <ImageView
+                            android:id="@+id/edittext_pickup_button_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/add_icon_white"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/place_autocomplete_fragment_pickup_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:visibility="invisible">
+
+                        <fragment
+                            android:id="@+id/place_autocomplete_fragment_pickup"
+                            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </RelativeLayout>
                 </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/edittext_dropoff"
-                    android:layout_centerHorizontal="true"
-                    android:layout_width="300dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="95dp"
-                    android:layout_marginBottom="30dp"
-                    android:paddingStart="42dp"
-                    android:background="@drawable/edittext_border"
-                    android:inputType="text"
-                    android:hint="Drop-off Location"
-                    android:maxLines="1"
-                    android:textCursorDrawable="@drawable/edittext_cursor"
-                    android:cursorVisible="false"
-                    android:focusable="false"
-                    android:clickable="true"/>
-
-                <ImageView
-                    android:padding="3dp"
-                    android:src="@drawable/location_icon"
-                    android:layout_marginTop="103dp"
-                    android:layout_marginStart="-296dp"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_toEndOf="@id/edittext_dropoff"/>
-
                 <RelativeLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="95dp"
-                    android:background="#1777CD"
-                    android:layout_toEndOf="@id/edittext_dropoff"
-                    android:layout_marginStart="-50dp">
+                    android:id="@+id/edittext_dropoff_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/edittext_pickup_holder">
+
+                    <EditText
+                        android:id="@+id/edittext_dropoff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/edittext_border"
+                        android:inputType="text"
+                        android:hint="Dropoff Location"
+                        android:maxLines="1"
+                        android:textCursorDrawable="@drawable/edittext_cursor"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:textColor="#303030"
+                        android:textColorHint="#c0c0c0" />
 
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/add_icon_white"
+                        android:id="@+id/edittext_dropoff_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/location_icon" />
+
+                    <RelativeLayout
+                        android:id="@+id/edittext_dropoff_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:background="#444A5A"
+                        android:layout_toEndOf="@id/edittext_dropoff">
+
+                        <ImageView
+                            android:id="@+id/edittext_dropoff_button_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/add_icon_white"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/place_autocomplete_fragment_dropoff_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:visibility="invisible">
 
+                        <fragment
+                            android:id="@+id/place_autocomplete_fragment_dropoff"
+                            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </RelativeLayout>
                 </RelativeLayout>
-                
-                <RelativeLayout
-                    android:layout_width="300dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_centerHorizontal="true"
-                    android:visibility="invisible">
-
-                    <fragment
-                        android:id="@+id/place_autocomplete_fragment_pickup"
-                        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="300dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="95dp"
-                    android:layout_centerHorizontal="true"
-                    android:visibility="invisible">
-
-                    <fragment
-                        android:id="@+id/place_autocomplete_fragment_dropoff"
-                        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </RelativeLayout>
-
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/date_time_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/pickup_dropoff_locations_container">
+
+                <RelativeLayout
+                    android:id="@+id/date_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff">
+
+                    <TextView
+                        android:id="@+id/date_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#808080"
+                        android:text="Date" />
+
+                    <RelativeLayout
+                        android:id="@+id/date_underline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:background="#1777CD"
+                        android:layout_below="@id/date_title"/>
+
+                    <RelativeLayout
+                        android:id="@+id/create_ride_date_text_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/date_underline">
+
+                        <TextView
+                            android:id="@+id/create_ride_date_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="#808080"
+                            android:textSize="12sp"/>
+
+                        <TextView
+                            android:id="@+id/create_ride_date_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="#808080"
+                            android:textSize="30sp"/>
+
+                        <TextView
+                            android:id="@+id/create_ride_date_month"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="#808080"
+                            android:textSize="12sp"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/time_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/date_container"
+                    android:background="#ffffff">
+
+                    <TextView
+                        android:id="@+id/time_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#808080"
+                        android:text="Time" />
+
+                    <RelativeLayout
+                        android:id="@+id/time_underline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:background="#444A5A"
+                        android:layout_below="@id/time_title"/>
+
+                    <RelativeLayout
+                        android:id="@+id/time_text_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true">
+
+                        <TextView
+                            android:id="@+id/time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#808080"
+                            android:text="12:00"/>
+
+                        <TextView
+                            android:id="@+id/time_am_pm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#808080"
+                            android:layout_toEndOf="@id/time"
+                            android:text="PM"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/seats_price_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/date_time_container">
+
+                <RelativeLayout
+                    android:id="@+id/seats_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff">
+
+                    <TextView
+                        android:id="@+id/seats_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#808080"
+                        android:text="Seats" />
+
+                    <RelativeLayout
+                        android:id="@+id/seats_underline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:background="#444A5A"
+                        android:layout_below="@id/seats_title"/>
+
+                    <RelativeLayout
+                        android:id="@+id/seats_text_buttons_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true">
+
+                        <ImageView
+                            android:id="@+id/subtract_seats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/subtract_icon_lightgrey" />
+
+                        <TextView
+                            android:id="@+id/seats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:textColor="#808080"
+                            android:text="3"/>
+
+                        <ImageView
+                            android:id="@+id/add_seats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/add_icon_lightgrey" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/price_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:layout_toEndOf="@id/seats_container">
+
+                    <TextView
+                        android:id="@+id/price_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#808080"
+                        android:focusableInTouchMode="true"
+                        android:focusable="true"
+                        android:text="Price" />
+
+                    <RelativeLayout
+                        android:id="@+id/price_underline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:background="#1777CD"
+                        android:layout_below="@id/price_title"/>
+
+                    <RelativeLayout
+                        android:id="@+id/price_text_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true">
+
+                        <TextView
+                            android:id="@+id/price_sign_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:textColor="#808080"
+                            android:text="$" />
+
+                        <EditText
+                            android:id="@+id/price_edittext"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/price_sign_text"
+                            android:inputType="numberDecimal"
+                            android:hint="Price"
+                            android:textColorHint="#c0c0c0"
+                            android:gravity="center"
+                            android:background="@null"
+                            android:maxLines="1"
+                            android:textCursorDrawable="@drawable/edittext_cursor"
+                            android:textColor="#808080"
+                            android:text="10.00"/>
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/price_per_seat_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#a0a0a0"
+                        android:text="Per Seat" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/create_ride_payment_methods_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/seats_price_container"
+                android:background="#ffffff">
+
+                <TextView
+                    android:id="@+id/create_ride_payment_methods_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="#404040"
+                    android:text="Accepted Payment Methods"/>
+
+                <RelativeLayout
+                    android:id="@+id/create_ride_payment_methods_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/create_ride_payment_methods_text"
+                    android:background="#f1f5f8"/>
+
+                <RelativeLayout
+                    android:id="@+id/create_ride_payment_methods_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/create_ride_payment_methods_top">
+
+                    <RelativeLayout
+                        android:id="@+id/create_ride_cash_method_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true">
+
+                            <ImageView
+                                android:id="@+id/create_ride_cash_method_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/check_mark_icon_2"/>
+
+                            <TextView
+                                android:id="@+id/create_ride_cash_method_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toEndOf="@id/create_ride_cash_method_icon"
+                                android:textColor="#606060"
+                                android:text="Cash"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/create_ride_payment_methods_divider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:background="#f1f5f8"/>
+
+                    <RelativeLayout
+                        android:id="@+id/create_ride_inapp_method_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/create_ride_payment_methods_divider">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true">
+
+                            <ImageView
+                                android:id="@+id/create_ride_inapp_method_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/cross_icon_2"/>
+
+                            <TextView
+                                android:id="@+id/create_ride_inapp_method_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toEndOf="@id/create_ride_inapp_method_icon"
+                                android:textColor="#606060"
+                                android:text="In-App Payment"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/create_ride_payment_methods_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/create_ride_payment_methods_holder"
+                    android:background="#f1f5f8"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/create_ride_driver_prefs_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/create_ride_payment_methods_container"
+                android:background="#ffffff">
+
+                <TextView
+                    android:id="@+id/create_ride_driver_prefs_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="#404040"
+                    android:text="Your Preferences"/>
+
+                <RelativeLayout
+                    android:id="@+id/create_ride_driver_prefs_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/create_ride_driver_prefs_title">
+
+                    <RelativeLayout
+                        android:id="@+id/create_ride_prefs_music_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#1777CD">
+
+                        <RelativeLayout
+                            android:id="@+id/create_ride_prefs_music_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/create_ride_prefs_music_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/music_icon_white"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/create_ride_prefs_music_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#ffffff"
+                            android:text="Music"/>
+
+                        <TextView
+                            android:id="@+id/create_ride_prefs_music_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@id/create_ride_prefs_music_text"
+                            android:textColor="#1366ae"
+                            android:text="No"
+                            android:visibility="invisible"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/create_ride_prefs_drinks_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/driver_preferences_container_border"
+                        android:layout_toEndOf="@id/create_ride_prefs_music_holder">
+
+                        <RelativeLayout
+                            android:id="@+id/create_ride_prefs_drinks_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/create_ride_prefs_drinks_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/drinks_icon_blue"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/create_ride_prefs_drinks_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#1366ae"
+                            android:text="Food / Drinks"/>
+
+                        <TextView
+                            android:id="@+id/create_ride_prefs_drinks_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@id/create_ride_prefs_drinks_text"
+                            android:textColor="#1366ae"
+                            android:text="No"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/create_ride_prefs_luggage_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/driver_preferences_container_border"
+                        android:layout_toEndOf="@id/create_ride_prefs_drinks_holder">
+
+                        <RelativeLayout
+                            android:id="@+id/create_ride_prefs_luggage_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/create_ride_prefs_luggage_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/luggage_icon_blue"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/create_ride_prefs_luggage_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#1366ae"
+                            android:text="Extra Luggage"/>
+
+                        <TextView
+                            android:id="@+id/create_ride_prefs_luggage_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@id/create_ride_prefs_luggage_text"
+                            android:textColor="#1366ae"
+                            android:text="No"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/create_ride_prefs_pets_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/driver_preferences_container_border"
+                        android:layout_toEndOf="@id/create_ride_prefs_luggage_holder">
+
+                        <RelativeLayout
+                            android:id="@+id/create_ride_prefs_pets_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/create_ride_prefs_pets_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/pet_icon_blue"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/create_ride_prefs_pets_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#1366ae"
+                            android:text="Pets"/>
+
+                        <TextView
+                            android:id="@+id/create_ride_prefs_pets_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@id/create_ride_prefs_pets_text"
+                            android:textColor="#1366ae"
+                            android:text="No"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/create_ride_button_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/create_ride_driver_prefs_container"
+                android:background="#ffffff">
+
+                <Button
+                    android:id="@+id/create_ride_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="#444A5A"
+                    android:textColor="#ffffff"
+                    android:text="Post"/>
+            </RelativeLayout>
+
+            <!-- <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="155dp"
                 android:layout_marginTop="5dp">
@@ -531,9 +1092,9 @@
                     android:text="Create"
                     android:textSize="15sp" />
 
-            </RelativeLayout>
+            </RelativeLayout> -->
 
-        </LinearLayout>
+        </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

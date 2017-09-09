@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -29,8 +30,12 @@ public class AppActivity extends Activity {
     public static final int MENU_OPTION_UPCOMING_RIDES = 2;
     public static final int MENU_OPTION_CREATE_RIDE = 3;
     public static final int MENU_OPTION_HISTORY_STATS = 4;
+    public static final int RIDE_DETAIL_PAGE = -1;
 
     private float screenX, screenY;
+    private int currentPage;
+
+    private UserAccount userAccount;
 
     private RelativeLayout menuProfileHolder;
     private RelativeLayout[] menuOptions, menuOptionsIndicator;
@@ -43,6 +48,12 @@ public class AppActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        userAccount = (UserAccount)intent.getSerializableExtra(getString(R.string.user_account_serialized_name));
+
+        currentPage = -1;
+
         setContentView(R.layout.activity_app);
         setUnit();
 
@@ -75,13 +86,10 @@ public class AppActivity extends Activity {
         initializeMenuOptions();
         initializeMenuActions();
 
-        RideDetailFragment createRideFragment = new RideDetailFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, createRideFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-
-        //appDrawerLayout.openDrawer(Gravity.START);
+        menuOptions[MENU_OPTION_CREATE_RIDE].setBackgroundColor(Color.parseColor("#e3ebee"));
+        menuOptionsIndicator[MENU_OPTION_CREATE_RIDE].setBackgroundColor(Color.parseColor("#22409A"));
+        menuOptionsText[MENU_OPTION_CREATE_RIDE].setTextColor(Color.parseColor("#303030"));
+        switchToPage(MENU_OPTION_CREATE_RIDE);
     }
 
     @Override
@@ -111,6 +119,10 @@ public class AppActivity extends Activity {
             }
         }
         return super.dispatchTouchEvent( event );
+    }
+
+    public void openMenu() {
+        appDrawerLayout.openDrawer(Gravity.START, false);
     }
 
     private void setUnit() {
@@ -194,9 +206,31 @@ public class AppActivity extends Activity {
                             menuOptionsText[j].setTextColor(Color.parseColor("#686868"));
                         }
                     }
+                    switchToPage(currentIndex);
                 }
             });
         }
+    }
+
+    public void switchToPage(int pageNumber) {
+        appDrawerLayout.closeDrawer(Gravity.START);
+        if (pageNumber != currentPage) {
+            currentPage = pageNumber;
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            if (pageNumber == MENU_OPTION_RIDE_LISTING) {
+                RideListingFragment rideListingFragment = new RideListingFragment();
+                transaction.replace(R.id.fragment_container, rideListingFragment);
+            } else if (pageNumber == MENU_OPTION_CREATE_RIDE) {
+                CreateRideFragment createRideFragment = new CreateRideFragment();
+                transaction.replace(R.id.fragment_container, createRideFragment);
+            }
+            //transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
+
+    public void setCurrentPageNumber(int currentPage) {
+        this.currentPage = currentPage;
     }
 
     public float getScreenX() {
@@ -205,5 +239,13 @@ public class AppActivity extends Activity {
 
     public float getScreenY() {
         return screenY;
+    }
+
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 }

@@ -184,16 +184,13 @@ public class SignUpFragment extends Fragment {
                     alertDialog.setMessage("Passwords do not match");
                     alertDialog.show();
                 } else {
-                    String accountType = "0";
                     String name = signupInputs[SignUpFragment.FULL_NAME_INPUT].getText().toString();
                     String phoneNumber = getNumericPhoneNumber(signupInputs[SignUpFragment.PHONE_NUMBER_INPUT].getText().toString());
                     String email = signupInputs[SignUpFragment.EMAIL_INPUT].getText().toString();
                     String password = signupInputs[SignUpFragment.PASSWORD_INPUT].getText().toString();
-                    String facebookAccountNumber = "";
-                    String facebookProfilePicURI = "";
 
                     CreateAccountServerRequest createAccountServerRequest = new CreateAccountServerRequest(getActivity());
-                    createAccountServerRequest.execute(accountType, name, phoneNumber, email, password, facebookAccountNumber, facebookProfilePicURI);
+                    createAccountServerRequest.execute(name, phoneNumber, email, password);
                 }
             }
         });

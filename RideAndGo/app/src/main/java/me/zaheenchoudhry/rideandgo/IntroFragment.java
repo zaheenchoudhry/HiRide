@@ -1,8 +1,12 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
@@ -20,6 +24,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
@@ -38,6 +43,7 @@ public class IntroFragment extends Fragment {
     private ImageView hirideLogo, facebookLoginImage;
 
     private CallbackManager callbackManager;
+    private ProfileTracker profileTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -175,8 +181,7 @@ public class IntroFragment extends Fragment {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                AccessToken accessToken = loginResult.getAccessToken();
-                Profile profile = Profile.getCurrentProfile();
+                attemptContinueWithFacebook();
             }
 
             @Override
@@ -186,14 +191,26 @@ public class IntroFragment extends Fragment {
 
             @Override
             public void onError(FacebookException error) {
-
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Okay", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog.setTitle("Something Went Wrong");
+                alertDialog.setMessage("Could not Log In");
+                alertDialog.show();
             }
         });
 
         facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginManager.getInstance().logInWithReadPermissions(IntroFragment.this, Arrays.asList("public_profile", "email"));
+                if (AccessToken.getCurrentAccessToken() == null) {
+                    LoginManager.getInstance().logInWithReadPermissions(IntroFragment.this, Arrays.asList("public_profile", "email"));
+                } else {
+                    attemptContinueWithFacebook();
+                }
             }
         });
     }
@@ -205,5 +222,38 @@ public class IntroFragment extends Fragment {
         termsText.setTextSize(screenX * 0.008f);
         termsTextHolderParams.topMargin = (int)(screenY * 0.285f);
         termsTextParams.topMargin = (int)(screenY * 0.025f);
+    }
+
+    private void attemptContinueWithFacebook() {
+        if (Profile.getCurrentProfile() == null) {
+            profileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                    attemptFacebookServerRequest();
+                }
+            };
+        } else {
+            attemptFacebookServerRequest();
+        }
+    }
+
+    private void attemptFacebookServerRequest() {
+        //AccessToken accessToken = loginResult.getAccessToken();
+        Profile profile = Profile.getCurrentProfile();
+        String name = profile.getName();
+        String facebookAccountNumber = profile.getId();
+        String facebookProfileLinkURI = profile.getLinkUri().toString();
+        String facebookProfilePicURI= profile.getProfilePictureUri(128, 128).toString();
+
+        FacebookLoginSignupServerRequest facebookLoginSignupServerRequest = new FacebookLoginSignupServerRequest(getActivity(), true);
+        facebookLoginSignupServerRequest.execute(name, facebookAccountNumber, facebookProfileLinkURI, facebookProfilePicURI);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (profileTracker != null && profileTracker.isTracking()) {
+            profileTracker.stopTracking();
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,31 +21,33 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-public class CreateAccountServerRequest extends AsyncTask<String, Void, String> {
+public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, String> {
 
     private Context context;
     private ProgressDialog pleaseWaitDialog;
+    private boolean shouldShowDialogs;
 
-    public CreateAccountServerRequest(Context context) {
+    public FacebookLoginSignupServerRequest(Context context, boolean shouldShowDialogs) {
         super();
         this.context = context;
+        this.shouldShowDialogs = shouldShowDialogs;
     }
 
     @Override
     protected String doInBackground(String... args) {
-        String accountType = Integer.toString(UserAccount.ACCOUNT_TYPE_APP);
+        String accountType = Integer.toString(UserAccount.ACCOUNT_TYPE_FACEBOOK_ACCOUNT);
         String name = args[0];
-        String phoneNumber = args[1];
-        String email = args[2];
-        String password = args[3];
+        String facebookAccountNumber = args[1];
+        String facebookProfileLinkURI = args[2];
+        String facebookProfilePicURI = args[3];
         String signup_request_url = context.getString(R.string.facebook_account_request_url);
 
         try {
             String accountParameters = "&accountType=" + accountType;
             accountParameters += "&name=" + URLEncoder.encode(name, "UTF-8");
-            accountParameters += "&phoneNumber=" + phoneNumber;
-            accountParameters += "&email=" + URLEncoder.encode(email, "UTF-8");
-            accountParameters += "&password=" + URLEncoder.encode(password, "UTF-8");
+            accountParameters += "&facebookAccountNumber=" + facebookAccountNumber;
+            accountParameters += "&facebookProfileLinkURI=" + URLEncoder.encode(facebookProfileLinkURI, "UTF-8");
+            accountParameters += "&facebookProfilePicURI=" + URLEncoder.encode(facebookProfilePicURI, "UTF-8");
 
             URL url = new URL(signup_request_url);
             URLConnection connection = url.openConnection();
@@ -85,15 +88,21 @@ public class CreateAccountServerRequest extends AsyncTask<String, Void, String> 
     @Override
     protected void onPreExecute() {
         pleaseWaitDialog = new ProgressDialog(context);
-        pleaseWaitDialog.setTitle("Creating Account");
-        pleaseWaitDialog.setMessage("Please wait...");
-        pleaseWaitDialog.setCanceledOnTouchOutside(false);
-        pleaseWaitDialog.show();
+        if (shouldShowDialogs) {
+            pleaseWaitDialog.setTitle("Checking Credentials");
+            pleaseWaitDialog.setMessage("Please wait...");
+            pleaseWaitDialog.setCanceledOnTouchOutside(false);
+            pleaseWaitDialog.show();
+        }
+        //alertDialog = new AlertDialog.Builder(context).create();
+        //alertDialog.setTitle("Create Ride Response");
     }
 
     @Override
     protected void onPostExecute(String result) {
-        pleaseWaitDialog.dismiss();
+        if (pleaseWaitDialog.isShowing()) {
+            pleaseWaitDialog.dismiss();
+        }
 
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Okay", new DialogInterface.OnClickListener() {
@@ -102,31 +111,51 @@ public class CreateAccountServerRequest extends AsyncTask<String, Void, String> 
             }
         });
 
-        if (result == null || result.equals("") || result.equals("failed")) {
-            alertDialog.setTitle("Signup Failed");
-            alertDialog.setMessage("Could not create account");
-            alertDialog.show();
-        } else if (result.equals("exists")) {
-            alertDialog.setTitle("Email ID Exists");
-            alertDialog.setMessage("The Email ID you entered already exists");
-            alertDialog.show();
+        if (result == null || result.equals("")) {
+            // for offline mode
+            SharedPreferences prefs =  context.getSharedPreferences(context.getString(R.string.saved_data_preferences_name), Context.MODE_PRIVATE);
+            boolean isLoggedIn = prefs.getBoolean(context.getString(R.string.saved_data_is_logged_in_facebook_preference_name), false);
+            if (shouldShowDialogs) {
+                if (isLoggedIn) {
+                    ((LoginSignupActivity)context).changeToAppActivity(getNewOfflineUserAccount());
+                } else {
+                    alertDialog.setTitle("Something Went Wrong");
+                    alertDialog.setMessage("Could not Log In");
+                    alertDialog.show();
+                }
+            } else {
+                // for offline mode, show app with only upcoming rides info
+                if (isLoggedIn) {
+                    ((LoginSignupActivity) context).changeToAppActivity(getNewOfflineUserAccount());
+                } else {
+                    ((LoginSignupActivity)context).initializeActivity();
+                }
+            }
+        } else if (result.equals("failed")) {
+            if (shouldShowDialogs) {
+                alertDialog.setTitle("Something Went Wrong");
+                alertDialog.setMessage("Could not Log In");
+                alertDialog.show();
+            } else {
+                ((LoginSignupActivity)context).initializeActivity();
+            }
         } else {
             UserAccount userAccount = null;
             try {
                 JSONObject jsonResponse = new JSONObject(result);
-                JSONArray rideList = jsonResponse.getJSONArray("AppUserAccount");
+                JSONArray rideList = jsonResponse.getJSONArray("FacebookUserAccount");
                 for (int i = 0; i < rideList.length(); ++i) {
                     try {
                         JSONObject jsonAccount = rideList.getJSONObject(i);
                         userAccount = new UserAccount(jsonAccount.getInt("UserId"), jsonAccount.getInt("AccountType"), jsonAccount.getString("Name"), jsonAccount.getInt("PhoneNumber"));
-                        userAccount.setEmailId(jsonAccount.getString("EmailId"));
+                        userAccount.setFacebookUserSpecificDetails(jsonAccount.getInt("FacebookAccountNumber"), jsonAccount.getString("FacebookProfileLinkURI"), jsonAccount.getString("FacebookProfilePicURI"));
                         userAccount.setAcceptedPaymentMethods(jsonAccount.getInt("AcceptsCash"), jsonAccount.getInt("AcceptsInAppPayments"));
                         userAccount.setPreferences(jsonAccount.getInt("PrefersMusic"), jsonAccount.getInt("PrefersDrinks"), jsonAccount.getInt("PrefersExtraLuggage"), jsonAccount.getInt("PrefersPets"));
 
+                        //if (shouldShowDialogs) {
                         SharedPreferences.Editor editor = context.getSharedPreferences(context.getString(R.string.saved_data_preferences_name), Context.MODE_PRIVATE).edit();
-                        editor.putBoolean(context.getString(R.string.saved_data_is_logged_in_email_preference_name), true);
+                        editor.putBoolean(context.getString(R.string.saved_data_is_logged_in_facebook_preference_name), true);
                         editor.putString(context.getString(R.string.saved_data_name_preference_name), jsonAccount.getString("Name"));
-                        editor.putString(context.getString(R.string.saved_data_email_id_preference_name), jsonAccount.getString("EmailId"));
                         editor.putString(context.getString(R.string.saved_data_password_preference_name), jsonAccount.getString("Password"));
                         editor.putBoolean(context.getString(R.string.saved_data_accepts_cash_name), jsonAccount.getInt("AcceptsCash") != 0);
                         editor.putBoolean(context.getString(R.string.saved_data_accepts_inapp_payments_name), jsonAccount.getInt("AcceptsInAppPayments") != 0);
@@ -135,23 +164,49 @@ public class CreateAccountServerRequest extends AsyncTask<String, Void, String> 
                         editor.putBoolean(context.getString(R.string.saved_data_prefers_extra_luggage_name), jsonAccount.getInt("PrefersExtraLuggage") != 0);
                         editor.putBoolean(context.getString(R.string.saved_data_prefers_pets_name), jsonAccount.getInt("PrefersPets") != 0);
                         editor.apply();
+                        //}
 
                         if (alertDialog.isShowing()) {
                             alertDialog.dismiss();
                         }
                     } catch (JSONException e) {
-                        alertDialog.setTitle("Start-up Failed");
-                        alertDialog.setMessage("Could not start the application");
-                        alertDialog.show();
+                        Log.e("HiRide", "exception", e);
+                        if (shouldShowDialogs) {
+                            alertDialog.setTitle("Start-up Failed");
+                            alertDialog.setMessage("Could not start the application");
+                            alertDialog.show();
+                        } else {
+                            ((LoginSignupActivity)context).initializeActivity();
+                        }
                     }
                 }
             } catch (Exception e) {
-                alertDialog.setTitle("Start-up Failed");
-                alertDialog.setMessage("Could not start the application");
-                alertDialog.show();
+                Log.e("HiRide", "exception", e);
+                if (shouldShowDialogs) {
+                    alertDialog.setTitle("Start-up Failed");
+                    alertDialog.setMessage("Could not start the application");
+                    alertDialog.show();
+                } else {
+                    ((LoginSignupActivity)context).initializeActivity();
+                }
             }
             ((LoginSignupActivity)context).changeToAppActivity(userAccount);
         }
+    }
+
+    private UserAccount getNewOfflineUserAccount() {
+        SharedPreferences prefs =  context.getSharedPreferences(context.getString(R.string.saved_data_preferences_name), Context.MODE_PRIVATE);
+        String name = prefs.getString(context.getString(R.string.saved_data_name_preference_name), "Guest");
+        UserAccount userAccount = new UserAccount(name);
+        int acceptsCash = (prefs.getBoolean(context.getString(R.string.saved_data_accepts_cash_name), true)) ? 1 : 0;
+        int acceptsInappPayments = (prefs.getBoolean(context.getString(R.string.saved_data_accepts_cash_name), true)) ? 1 : 0;
+        int prefersMusic = (prefs.getBoolean(context.getString(R.string.saved_data_accepts_cash_name), true)) ? 1 : 0;
+        int prefersDrinks = (prefs.getBoolean(context.getString(R.string.saved_data_accepts_cash_name), false)) ? 1 : 0;
+        int prefersLuggage = (prefs.getBoolean(context.getString(R.string.saved_data_accepts_cash_name), false)) ? 1 : 0;
+        int prefersPets = (prefs.getBoolean(context.getString(R.string.saved_data_accepts_cash_name), false)) ? 1 : 0;
+        userAccount.setAcceptedPaymentMethods(acceptsCash, acceptsInappPayments);
+        userAccount.setPreferences(prefersMusic, prefersDrinks, prefersLuggage, prefersPets);
+        return userAccount;
     }
 
     @Override

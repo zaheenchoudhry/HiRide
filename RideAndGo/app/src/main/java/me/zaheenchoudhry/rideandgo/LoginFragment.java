@@ -1,9 +1,13 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
@@ -22,6 +26,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
@@ -29,9 +34,9 @@ import java.util.Arrays;
 
 public class LoginFragment extends Fragment {
 
-    private final int NUMBER_OF_INPUTS = 2;
-    private final int EMAIL_INPIT = 0;
-    private final int PASSWORD_INPUT = 1;
+    public static final int NUMBER_OF_INPUTS = 2;
+    public static final int EMAIL_INPUT = 0;
+    public static final int PASSWORD_INPUT = 1;
 
     private float screenX, screenY;
 
@@ -45,6 +50,7 @@ public class LoginFragment extends Fragment {
     private ImageView facebookLoginImage, backPageArrow;
 
     private CallbackManager callbackManager;
+    private ProfileTracker profileTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -160,6 +166,31 @@ public class LoginFragment extends Fragment {
         loginButtonParams.width = (int)(screenX * 0.6f);
         loginButtonParams.topMargin = (int)(screenY * 0.63f);
         loginButton.setTextSize(screenX * 0.008f);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Okay", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                if (!SignUpFragment.isEmailValid(loginInputs[LoginFragment.EMAIL_INPUT].getText())) {
+                    alertDialog.setTitle("Invalid Email ID");
+                    alertDialog.setMessage("The Email ID entered is invalid");
+                    alertDialog.show();
+                } else {
+                    String email = loginInputs[LoginFragment.EMAIL_INPUT].getText().toString();
+                    String password = loginInputs[LoginFragment.PASSWORD_INPUT].getText().toString();
+                    String isPasswordEncrypted = "0";
+
+                    LoginServerRequest loginServerRequest = new LoginServerRequest(getActivity(), true);
+                    loginServerRequest.execute(email, password, isPasswordEncrypted);
+                }
+            }
+        });
     }
 
     private void initializeButtonsDivider() {
@@ -192,8 +223,7 @@ public class LoginFragment extends Fragment {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                AccessToken accessToken = loginResult.getAccessToken();
-                Profile profile = Profile.getCurrentProfile();
+                attemptContinueWithFacebook();
             }
 
             @Override
@@ -203,15 +233,60 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onError(FacebookException error) {
-
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Okay", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog.setTitle("Something Went Wrong");
+                alertDialog.setMessage("Could not Log In");
+                alertDialog.show();
             }
         });
 
         facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginManager.getInstance().logInWithReadPermissions(LoginFragment.this, Arrays.asList("public_profile", "email"));
+                if (AccessToken.getCurrentAccessToken() == null) {
+                    LoginManager.getInstance().logInWithReadPermissions(LoginFragment.this, Arrays.asList("public_profile", "email"));
+                } else {
+                    attemptContinueWithFacebook();
+                }
             }
         });
+    }
+
+    private void attemptContinueWithFacebook() {
+        if (Profile.getCurrentProfile() == null) {
+            profileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                    attemptFacebookServerRequest();
+                }
+            };
+        } else {
+            attemptFacebookServerRequest();
+        }
+    }
+
+    private void attemptFacebookServerRequest() {
+        //AccessToken accessToken = loginResult.getAccessToken();
+        Profile profile = Profile.getCurrentProfile();
+        String name = profile.getName();
+        String facebookAccountNumber = profile.getId();
+        String facebookProfileLinkURI = profile.getLinkUri().toString();
+        String facebookProfilePicURI= profile.getProfilePictureUri(128, 128).toString();
+
+        FacebookLoginSignupServerRequest facebookLoginSignupServerRequest = new FacebookLoginSignupServerRequest(getActivity(), true);
+        facebookLoginSignupServerRequest.execute(name, facebookAccountNumber, facebookProfileLinkURI, facebookProfilePicURI);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (profileTracker != null && profileTracker.isTracking()) {
+            profileTracker.stopTracking();
+        }
     }
 }

@@ -2,6 +2,21 @@
     <string name="app_name">Ride&amp;Go</string>
     <string name="google_api_key">AIzaSyBNYhZT4Vwn_g-zCzLfhmzmidsI-wX3gO4</string>
     <string name="facebook_app_id">109169366465923</string>
-    <string name="ride_request_url">http://zaheenchoudhry.me/rideandgo/newRideRequest.php</string>
-    <string name="new_account_request_url">http://104.196.187.254/newAccountRequest.php</string>
+    <string name="ride_request_url">http://35.185.15.124/newRideRequest.php</string>
+    <string name="new_account_request_url">http://35.185.15.124/newAccountRequest.php</string>
+    <string name="login_request_url">http://35.185.15.124/loginRequest.php</string>
+    <string name="facebook_account_request_url">http://35.185.15.124/facebookAccountRequest.php</string>
+    <string name="saved_data_preferences_name">HiRidePreferences</string>
+    <string name="saved_data_is_logged_in_email_preference_name">isLoggedInThroughEmail</string>
+    <string name="saved_data_is_logged_in_facebook_preference_name">isLoggedInThroughFacebook</string>
+    <string name="saved_data_email_id_preference_name">emailId</string>
+    <string name="saved_data_password_preference_name">password</string>
+    <string name="user_account_serialized_name">userAccount</string>
+    <string name="saved_data_name_preference_name">name</string>
+    <string name="saved_data_accepts_cash_name">acceptsCash</string>
+    <string name="saved_data_accepts_inapp_payments_name">acceptsInappPayments</string>
+    <string name="saved_data_prefers_music_name">prefersMusic</string>
+    <string name="saved_data_prefers_drinks_food_name">prefersDrinks</string>
+    <string name="saved_data_prefers_extra_luggage_name">prefersLuggage</string>
+    <string name="saved_data_prefers_pets_name">prefersPets</string>
 </resources>

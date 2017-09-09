@@ -2,9 +2,12 @@ package me.zaheenchoudhry.rideandgo;
 
 import android.app.Fragment;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Display;
@@ -16,11 +19,22 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+
 public class RideDetailFragment extends Fragment {
 
-    public static final int NUM_OF_PREFERENCES = 4;
+    public static final int ACCESSOR_DRIVER = 0;
+    public static final int ACCESSOR_VIEWER = 1;
+    public static final int ACCESSOR_PASSENGER = 2;
 
     private float screenX, screenY;
+    private int accessor;
+
+    private String[] dayOfMonth = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+    private String[] dayOfWeek = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
+
+    private RidePost ridePost;
 
     private RelativeLayout rideDetailContainer, menuButton, borderBottom, rideSeparator;
     private RelativeLayout dateContainer, timeContainer, rideCitiesContainer;
@@ -38,9 +52,15 @@ public class RideDetailFragment extends Fragment {
     private ImageView[] preferencesIcons;
     private Button shortlistButton, bookRideButton, messageButton, messengerButton;
 
+    public RideDetailFragment(int accessor, RidePost ridePost) {
+        this.accessor = accessor;
+        this.ridePost = ridePost;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AppActivity)getActivity()).setCurrentPageNumber(AppActivity.RIDE_DETAIL_PAGE);
     }
 
     @Override
@@ -48,11 +68,11 @@ public class RideDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.ride_detail_fragment, container, false);
         setUnit();
 
-        preferences = new RelativeLayout[NUM_OF_PREFERENCES];
-        preferencesIcons = new ImageView[NUM_OF_PREFERENCES];
-        preferencesTexts = new TextView[NUM_OF_PREFERENCES];
-        preferencesIconsHolders = new RelativeLayout[NUM_OF_PREFERENCES];
-        preferencesNoTexts = new TextView[NUM_OF_PREFERENCES];
+        preferences = new RelativeLayout[UserAccount.NUM_OF_PREFERENCES];
+        preferencesIcons = new ImageView[UserAccount.NUM_OF_PREFERENCES];
+        preferencesTexts = new TextView[UserAccount.NUM_OF_PREFERENCES];
+        preferencesIconsHolders = new RelativeLayout[UserAccount.NUM_OF_PREFERENCES];
+        preferencesNoTexts = new TextView[UserAccount.NUM_OF_PREFERENCES];
 
         rideDetailContainer = (RelativeLayout)view.findViewById(R.id.ride_detail_container);
         menuButton = (RelativeLayout)view.findViewById(R.id.ride_detail_menu_button);
@@ -124,6 +144,46 @@ public class RideDetailFragment extends Fragment {
         preferencesNoTexts[1] = (TextView)view.findViewById(R.id.ride_details_prefs_drinks_no_text);
         preferencesNoTexts[2] = (TextView)view.findViewById(R.id.ride_details_prefs_luggage_no_text);
         preferencesNoTexts[3] = (TextView)view.findViewById(R.id.ride_details_prefs_pets_no_text);
+
+        dateDayText.setText(dayOfWeek[ridePost.getDay() - 1]);
+        dateMonthText.setText(dayOfMonth[ridePost.getMonth() - 1]);
+        dateDateText.setText((ridePost.getDate() < 10) ? ("0" + Integer.toString(ridePost.getDate())) : Integer.toString(ridePost.getDate()));
+
+        int hourFormat12 = (ridePost.getHour() > 12) ? (ridePost.getHour() - 12) : ridePost.getHour();
+        hourFormat12 = (hourFormat12 == 0) ? 12 : hourFormat12;
+        String timeString = Integer.toString(hourFormat12) + ":";
+        timeString += (ridePost.getMinute() < 10) ? ("0" + Integer.toString(ridePost.getMinute())) : Integer.toString(ridePost.getMinute());
+        timeText.setText(timeString);
+        timeAmPmText.setText((ridePost.getHour() >= 12) ? "PM" : "AM");
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        String priceString = (ridePost.getPrice() != 0) ? df.format(ridePost.getPrice()) : "0.00";
+        priceText.setText("$ " + priceString);
+
+        pickupAddressText.setText(ridePost.getPickupAddressDisplay());
+        dropoffAddressText.setText(ridePost.getDropoffAddressDisplay());
+        startCityText.setText(ridePost.getPickupCity());
+        endCityText.setText(ridePost.getDropoffCity());
+
+        /*if (accessor == ACCESSOR_DRIVER) {
+            UserAccount userAccount = ((AppActivity)getActivity()).getUserAccount();
+            driverNameText.setText(userAccount.getName());
+            if (userAccount.isLoggedIn() && userAccount.getAccountType() == UserAccount.ACCOUNT_TYPE_FACEBOOK_ACCOUNT) {
+                driverImage.setImageURI(Uri.parse(userAccount.getFacebookProfilePicURI()));
+                System.out.println("HERE IS STUFF !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                System.out.println(userAccount.getFacebookProfilePicURI());
+                try {
+                    driverImage.setImageDrawable(Drawable.createFromStream(
+                            getActivity().getContentResolver().openInputStream(Uri.parse(userAccount.getFacebookProfilePicURI())),
+                            null));
+                } catch (FileNotFoundException e) {
+
+                }
+
+
+            }
+        }*/
+
 
         initializeToolbar();
         initializeRideDetailContainer();
@@ -291,9 +351,25 @@ public class RideDetailFragment extends Fragment {
         messengerIconParams.height = (int)(screenY * 0.035f);
         messengerIconParams.width = (int)(screenY * 0.035f);
         messengerIconParams.setMarginStart((int)(screenX * 0.03f));
+
+        if (accessor == ACCESSOR_DRIVER) {
+            messageButtonsContainer.setVisibility(View.GONE);
+        }
     }
 
     private void initializePaymentMethodsDisplay() {
+        boolean acceptsCash = false;
+        boolean acceptsInAppPayments = false;
+
+        if (accessor == ACCESSOR_DRIVER) {
+            UserAccount userAccount = ((AppActivity)getActivity()).getUserAccount();
+            acceptsCash = userAccount.doesAcceptCash();
+            acceptsInAppPayments = userAccount.doesAcceptInAppPayments();
+        }
+
+        cashMethodIcon.setImageResource((acceptsCash) ? R.drawable.check_mark_icon_2 : R.drawable.cross_icon_2);
+        inappMethodIcon.setImageResource((acceptsInAppPayments) ? R.drawable.check_mark_icon_2 : R.drawable.cross_icon_2);
+
         RelativeLayout.LayoutParams paymentMethodsContainerParams = (RelativeLayout.LayoutParams)paymentMethodsContainer.getLayoutParams();
         RelativeLayout.LayoutParams paymentMethodsTopParams = (RelativeLayout.LayoutParams)paymentMethodsTop.getLayoutParams();
         RelativeLayout.LayoutParams paymentMethodsBottomParams = (RelativeLayout.LayoutParams)paymentMethodsBottom.getLayoutParams();
@@ -332,7 +408,44 @@ public class RideDetailFragment extends Fragment {
         driverPreferencesTitle.setTextSize(screenX * 0.01f);
         preferenceHolderParams.topMargin = (int)(screenY * 0.015f);
 
-        for (int i = 0; i < NUM_OF_PREFERENCES; ++i) {
+        boolean[] prefersPreference = new boolean[UserAccount.NUM_OF_PREFERENCES];
+        if (accessor == ACCESSOR_DRIVER) {
+            UserAccount userAccount = ((AppActivity)getActivity()).getUserAccount();
+            prefersPreference[0] = userAccount.doesPreferMusic();
+            prefersPreference[1] = userAccount.doesPreferDrinks();
+            prefersPreference[2] = userAccount.doesPreferExtraLuggage();
+            prefersPreference[3] = userAccount.doesPreferPets();
+        } else {
+            prefersPreference[0] = true;
+            prefersPreference[1] = false;
+            prefersPreference[2] = false;
+            prefersPreference[3] = false;
+        }
+
+        int[] preferenceIconResourceWhite = new int[UserAccount.NUM_OF_PREFERENCES];
+        int[] preferenceIconResourceBlue = new int[UserAccount.NUM_OF_PREFERENCES];
+        preferenceIconResourceWhite[0] = R.drawable.music_icon_white;
+        preferenceIconResourceWhite[1] = R.drawable.drinks_icon_white;
+        preferenceIconResourceWhite[2] = R.drawable.luggage_icon_white;
+        preferenceIconResourceWhite[3] = R.drawable.pet_icon_white;
+        preferenceIconResourceBlue[0] = R.drawable.music_icon_blue;
+        preferenceIconResourceBlue[1] = R.drawable.drinks_icon_blue;
+        preferenceIconResourceBlue[2] = R.drawable.luggage_icon_blue;
+        preferenceIconResourceBlue[3] = R.drawable.pet_icon_blue;
+
+        for (int i = 0; i < UserAccount.NUM_OF_PREFERENCES; ++i) {
+            if (prefersPreference[i]) {
+                preferences[i].setBackgroundColor(Color.parseColor("#1777CD"));
+                preferencesIcons[i].setImageResource(preferenceIconResourceWhite[i]);
+                preferencesTexts[i].setTextColor(Color.parseColor("#ffffff"));
+                preferencesNoTexts[i].setVisibility(View.INVISIBLE);
+            } else {
+                preferences[i].setBackground(getActivity().getDrawable(R.drawable.driver_preferences_container_border));
+                preferencesIcons[i].setImageResource(preferenceIconResourceBlue[i]);
+                preferencesTexts[i].setTextColor(Color.parseColor("#1366ae"));
+                preferencesNoTexts[i].setVisibility(View.VISIBLE);
+            }
+
             RelativeLayout.LayoutParams preferencesParams = (RelativeLayout.LayoutParams)preferences[i].getLayoutParams();
             RelativeLayout.LayoutParams preferencesIconsParams = (RelativeLayout.LayoutParams)preferencesIcons[i].getLayoutParams();
             RelativeLayout.LayoutParams preferencesIconsHoldersParams = (RelativeLayout.LayoutParams)preferencesIconsHolders[i].getLayoutParams();
@@ -345,8 +458,13 @@ public class RideDetailFragment extends Fragment {
             preferencesTexts[i].setTextSize(screenX * 0.0065f);
             preferencesTexts[i].setPadding(0, 0, 0, (int)(screenY * 0.002f));
             preferencesIconsHoldersParams.height = (int)(screenX * 0.09f);
+
+            Rect prefTextBounds = new Rect();
+            Paint prefTextPaint = preferencesTexts[i].getPaint();
+            prefTextPaint.getTextBounds(preferencesTexts[i].getText().toString(), 0, preferencesTexts[i].getText().toString().length(), prefTextBounds);
+
             preferencesNoTexts[i].setTextSize(screenX * 0.0065f);
-            preferencesNoTexts[i].setPadding(0, 0, 0, -(int)(screenX * 0.008f));
+            preferencesNoTexts[i].setPadding(0, 0, 0, -(int)(prefTextBounds.height() * 0.2f));
         }
     }
 
