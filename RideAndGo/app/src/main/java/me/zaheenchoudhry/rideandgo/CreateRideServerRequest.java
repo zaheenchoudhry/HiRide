@@ -1,7 +1,7 @@
 package me.zaheenchoudhry.rideandgo;
 
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -215,7 +215,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
             editor.apply();
             ((AppActivity)context).setUserAccount(userAccount);
 
-            FragmentTransaction transaction = ((AppActivity)context).getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = ((AppActivity)context).getSupportFragmentManager().beginTransaction();
             RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_DRIVER, ridePost);
             transaction.replace(R.id.fragment_container, rideDetailFragment);
             transaction.commit();

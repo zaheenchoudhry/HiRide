@@ -1,7 +1,7 @@
 package me.zaheenchoudhry.rideandgo;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -141,9 +141,9 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
             e.printStackTrace();
         }
 
-        Fragment currentFragment = getActivity().getFragmentManager().findFragmentById(R.id.fragment_container);
+        Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (currentFragment instanceof RideListingFragment) {
-            FragmentTransaction fragTransaction = getActivity().getFragmentManager().beginTransaction();
+            FragmentTransaction fragTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             fragTransaction.detach(currentFragment);
             fragTransaction.attach(currentFragment);
             fragTransaction.commit();

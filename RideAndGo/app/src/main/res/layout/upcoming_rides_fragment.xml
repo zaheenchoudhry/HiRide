@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/ride_detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:layout_gravity="top"
+        android:background="#444A5A"
+        app:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/ride_detail_menu_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp">
+
+                <ImageView
+                    android:id="@+id/ride_detail_menu_image"
+                    android:layout_width="25dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/menu_icon_white_2"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/ride_detail_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="#ffffff"
+                android:text="Upcoming Rides"
+                android:textSize="17sp" />
+
+            <RelativeLayout
+                android:id="@+id/toolbar_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#404554"
+                android:layout_marginTop="59dp" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/upcoming_rides_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#444A5A"
+        app:tabTextAppearance="@style/TabLayoutTextAppearance"
+        app:layout_collapseMode="pin"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabTextColor="#bbbbbb"
+        app:tabSelectedTextColor="#ffffff"
+        app:tabIndicatorHeight="4dp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/upcoming_rides_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white" />
+</LinearLayout>

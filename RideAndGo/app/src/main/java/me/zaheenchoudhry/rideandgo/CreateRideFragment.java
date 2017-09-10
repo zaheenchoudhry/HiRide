@@ -2,10 +2,7 @@ package me.zaheenchoudhry.rideandgo;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -16,6 +13,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
@@ -26,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.DatePicker;
 import com.google.android.gms.common.api.Status;
@@ -34,6 +31,7 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -84,7 +82,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
     private ImageView addSeatButton, subtractSeatButton, cashMethodIcon, inappMethodIcon;
     private EditText pickupInput, dropoffInput, searchTextPickup, searchTextDropoff, priceInput;
     private ImageView pickupEdittextIcon, pickupEdittextButtonIcon, dropoffEdittextIcon, dropoffEdittextButtonIcon;
-    private PlaceAutocompleteFragment autocompleteFragmentPickup, autocompleteFragmentDropoff;
+    private SupportPlaceAutocompleteFragment autocompleteFragmentPickup, autocompleteFragmentDropoff;
     private RelativeLayout[] preferences, preferencesIconsHolders;
     private ImageView[] preferencesIcons;
     private TextView[] preferencesTexts, preferencesNoTexts;
@@ -148,7 +146,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         pickupEdittextIcon = (ImageView)view.findViewById(R.id.edittext_pickup_icon);
         pickupEdittextButtonIcon = (ImageView)view.findViewById(R.id.edittext_pickup_button_icon);
         autocompleteFragmentPickupContainer = (RelativeLayout)view.findViewById(R.id.place_autocomplete_fragment_pickup_container);
-        autocompleteFragmentPickup = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_pickup);
+        autocompleteFragmentPickup = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_pickup);
         searchTextPickup = ((EditText)autocompleteFragmentPickup.getView().findViewById(R.id.place_autocomplete_search_input));
 
         dropoffInput = (EditText)view.findViewById(R.id.edittext_dropoff);
@@ -157,7 +155,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         dropoffEdittextIcon = (ImageView)view.findViewById(R.id.edittext_dropoff_icon);
         dropoffEdittextButtonIcon = (ImageView)view.findViewById(R.id.edittext_dropoff_button_icon);
         autocompleteFragmentDropoffContainer = (RelativeLayout)view.findViewById(R.id.place_autocomplete_fragment_dropoff_container);
-        autocompleteFragmentDropoff = (PlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_dropoff);
+        autocompleteFragmentDropoff = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_dropoff);
         searchTextDropoff = ((EditText)autocompleteFragmentDropoff.getView().findViewById(R.id.place_autocomplete_search_input));
 
         dateTimeContainer = (RelativeLayout)view.findViewById(R.id.date_time_container);

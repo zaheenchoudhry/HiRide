@@ -1,13 +1,11 @@
 package me.zaheenchoudhry.rideandgo;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Display;
@@ -19,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
 
 public class RideDetailFragment extends Fragment {

@@ -197,7 +197,7 @@
 
                         <fragment
                             android:id="@+id/place_autocomplete_fragment_pickup"
-                            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                            android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
                     </RelativeLayout>
@@ -261,7 +261,7 @@
 
                         <fragment
                             android:id="@+id/place_autocomplete_fragment_dropoff"
-                            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                            android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
                     </RelativeLayout>

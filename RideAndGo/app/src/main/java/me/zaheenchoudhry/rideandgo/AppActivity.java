@@ -1,8 +1,8 @@
 package me.zaheenchoudhry.rideandgo;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class AppActivity extends Activity {
+public class AppActivity extends FragmentActivity {
 
     public static final int NUM_OF_MENU_OPTIONS = 5;
     public static final int MENU_OPTION_ACCOUNT = 0;
@@ -52,7 +52,7 @@ public class AppActivity extends Activity {
         Intent intent = getIntent();
         userAccount = (UserAccount)intent.getSerializableExtra(getString(R.string.user_account_serialized_name));
 
-        currentPage = -1;
+        currentPage = -2;
 
         setContentView(R.layout.activity_app);
         setUnit();
@@ -86,15 +86,15 @@ public class AppActivity extends Activity {
         initializeMenuOptions();
         initializeMenuActions();
 
-        menuOptions[MENU_OPTION_CREATE_RIDE].setBackgroundColor(Color.parseColor("#e3ebee"));
-        menuOptionsIndicator[MENU_OPTION_CREATE_RIDE].setBackgroundColor(Color.parseColor("#22409A"));
-        menuOptionsText[MENU_OPTION_CREATE_RIDE].setTextColor(Color.parseColor("#303030"));
-        switchToPage(MENU_OPTION_CREATE_RIDE);
+        menuOptions[MENU_OPTION_UPCOMING_RIDES].setBackgroundColor(Color.parseColor("#e3ebee"));
+        menuOptionsIndicator[MENU_OPTION_UPCOMING_RIDES].setBackgroundColor(Color.parseColor("#22409A"));
+        menuOptionsText[MENU_OPTION_UPCOMING_RIDES].setTextColor(Color.parseColor("#303030"));
+        switchToPage(MENU_OPTION_UPCOMING_RIDES);
     }
 
     @Override
     public void onBackPressed() {
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 0 ){
             fragmentManager.popBackStack();
             //fragmentManager.popBackStackImmediate();
@@ -216,13 +216,16 @@ public class AppActivity extends Activity {
         appDrawerLayout.closeDrawer(Gravity.START);
         if (pageNumber != currentPage) {
             currentPage = pageNumber;
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             if (pageNumber == MENU_OPTION_RIDE_LISTING) {
                 RideListingFragment rideListingFragment = new RideListingFragment();
                 transaction.replace(R.id.fragment_container, rideListingFragment);
             } else if (pageNumber == MENU_OPTION_CREATE_RIDE) {
                 CreateRideFragment createRideFragment = new CreateRideFragment();
                 transaction.replace(R.id.fragment_container, createRideFragment);
+            } else if (pageNumber == MENU_OPTION_UPCOMING_RIDES) {
+                UpcomingRidesFragment upcomingRidesFragment = new UpcomingRidesFragment();
+                transaction.replace(R.id.fragment_container, upcomingRidesFragment);
             }
             //transaction.addToBackStack(null);
             transaction.commit();

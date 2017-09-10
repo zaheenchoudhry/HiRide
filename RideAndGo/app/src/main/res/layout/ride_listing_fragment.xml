@@ -70,7 +70,8 @@
                 android:layout_gravity="top"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:contentInsetStart="0dp" >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
