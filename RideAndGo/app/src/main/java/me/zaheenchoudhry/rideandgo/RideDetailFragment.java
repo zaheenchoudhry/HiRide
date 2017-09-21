@@ -1,5 +1,7 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -7,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -16,6 +19,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.facebook.CallbackManager;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 import java.text.DecimalFormat;
 
@@ -33,21 +40,24 @@ public class RideDetailFragment extends Fragment {
 
     private RidePost ridePost;
 
-    private RelativeLayout rideDetailContainer, menuButton, borderBottom, rideSeparator;
-    private RelativeLayout dateContainer, timeContainer, rideCitiesContainer;
+    private RelativeLayout rideDetailContainer, menuButton, borderBottom, rideSeparator, seatsBookedContainer, seatsRemainingContainer;
+    private RelativeLayout dateContainer, timeContainer, rideCitiesContainer, driverImageHolder;
     private RelativeLayout priceContainer, rideButtonsContainer, pickupContainer, dropoffContainer;
     private RelativeLayout ratingContainer, messageButtonsContainer, messengerButtonContainer;
     private RelativeLayout profileAndMessageContainer, paymentMethodsContainer, paymentMethodsTop, paymentMethodsBottom;
     private RelativeLayout cashMethodHolder, inappMethodHolder, paymentMethodsDivider, preferenceHolder;
     private RelativeLayout[] preferences, preferencesIconsHolders;
-    private TextView dateDayText, dateDateText, dateMonthText, timeText, timeAmPmText;
-    private TextView startCityText, endCityText, priceText, driverNameText, ratingText;
+    private TextView dateDayText, dateDateText, dateMonthText, timeText, timeAmPmText, seatsBookedTitleText, seatsBookedText;
+    private TextView startCityText, endCityText, priceText, driverNameText, ratingText, seatsRemainingTitleText, seatsRemainingText;
     private TextView pickupTitleText, dropoffTitleText, pickupAddressText, dropoffAddressText;
     private TextView paymentMethodsTitleText, cashMethodText, inappMethodText, driverPreferencesTitle;
     private TextView[] preferencesTexts, preferencesNoTexts;
     private ImageView cityArrow, driverImage, ratingIcon, messengerIcon, cashMethodIcon, inappMethodIcon;
     private ImageView[] preferencesIcons;
-    private Button shortlistButton, bookRideButton, messageButton, messengerButton;
+    private Button shortlistButton, bookRideButton, shareToFacebookButton, editRideButton, messageButton, messengerButton;
+
+    private CallbackManager callbackManager;
+    private ShareDialog shareDialog;
 
     public RideDetailFragment(int accessor, RidePost ridePost) {
         this.accessor = accessor;
@@ -58,6 +68,8 @@ public class RideDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AppActivity)getActivity()).setCurrentPageNumber(AppActivity.RIDE_DETAIL_PAGE);
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
     }
 
     @Override
@@ -90,13 +102,22 @@ public class RideDetailFragment extends Fragment {
         rideButtonsContainer = (RelativeLayout)view.findViewById(R.id.ride_detail_ride_button_container);
         shortlistButton = (Button)view.findViewById(R.id.ride_detail_shortlist_button);
         bookRideButton = (Button)view.findViewById(R.id.ride_detail_book_button);
+        shareToFacebookButton = (Button)view.findViewById(R.id.ride_detail_share_facebook_button);
+        editRideButton = (Button)view.findViewById(R.id.ride_detail_edit_ride_button);
         pickupContainer = (RelativeLayout)view.findViewById(R.id.ride_detail_pickup_container);
         dropoffContainer = (RelativeLayout)view.findViewById(R.id.ride_detail_dropoff_container);
         pickupTitleText = (TextView)view.findViewById(R.id.ride_detail_pickup_title);
         dropoffTitleText = (TextView)view.findViewById(R.id.ride_detail_dropoff_title);
         pickupAddressText = (TextView)view.findViewById(R.id.ride_detail_pickup_address);
         dropoffAddressText = (TextView)view.findViewById(R.id.ride_detail_dropoff_address);
+        seatsBookedContainer = (RelativeLayout)view.findViewById(R.id.ride_detail_seats_booked_container);
+        seatsBookedTitleText = (TextView)view.findViewById(R.id.ride_detail_seats_booked_title);
+        seatsBookedText = (TextView)view.findViewById(R.id.ride_detail_seats_booked);
+        seatsRemainingContainer = (RelativeLayout)view.findViewById(R.id.ride_detail_seats_remaining_container);
+        seatsRemainingTitleText = (TextView)view.findViewById(R.id.ride_detail_seats_remaining_title);
+        seatsRemainingText = (TextView)view.findViewById(R.id.ride_detail_seats_remaining);
         rideSeparator = (RelativeLayout)view.findViewById(R.id.ride_detail_ride_separator);
+        driverImageHolder = (RelativeLayout)view.findViewById(R.id.ride_detail_driver_image_holder);
         driverImage = (ImageView)view.findViewById(R.id.ride_detail_driver_image);
         driverNameText = (TextView)view.findViewById(R.id.ride_detail_driver_name);
         ratingContainer = (RelativeLayout)view.findViewById(R.id.ride_detail_rating_container);
@@ -190,6 +211,7 @@ public class RideDetailFragment extends Fragment {
         initializePriceDisplay();
         initializeRideButtons();
         initializeAddressDisplay();
+        initializeSeatsDisplay();
         initializeRideSeparator();
         initializeDriverProfile();
         initializeRatingDisplay();
@@ -273,6 +295,7 @@ public class RideDetailFragment extends Fragment {
 
     private void initializeRideButtons() {
         RelativeLayout.LayoutParams rideButtonsContainerParams = (RelativeLayout.LayoutParams)rideButtonsContainer.getLayoutParams();
+
         RelativeLayout.LayoutParams shortlistButtonParams = (RelativeLayout.LayoutParams)shortlistButton.getLayoutParams();
         RelativeLayout.LayoutParams bookRideButtonParams = (RelativeLayout.LayoutParams)bookRideButton.getLayoutParams();
         rideButtonsContainerParams.topMargin = (int)(screenY * 0.01f);
@@ -283,6 +306,44 @@ public class RideDetailFragment extends Fragment {
         bookRideButtonParams.setMarginStart((int)(screenX * 0.02f));
         shortlistButton.setTextSize(screenX * 0.007f);
         bookRideButton.setTextSize(screenX * 0.007f);
+
+        RelativeLayout.LayoutParams shareToFacebookButtonParams = (RelativeLayout.LayoutParams)shareToFacebookButton.getLayoutParams();
+        RelativeLayout.LayoutParams editRideButtonParams = (RelativeLayout.LayoutParams)editRideButton.getLayoutParams();
+        shareToFacebookButtonParams.width = (int)(screenX * 0.42f);
+        editRideButtonParams.width = (int)(screenX * 0.42f);
+        shareToFacebookButtonParams.height = (int)(screenY * 0.06f);
+        editRideButtonParams.height = (int)(screenY * 0.06f);
+        editRideButtonParams.setMarginStart((int)(screenX * 0.02f));
+        shareToFacebookButton.setTextSize(screenX * 0.007f);
+        editRideButton.setTextSize(screenX * 0.007f);
+
+        if (accessor == ACCESSOR_DRIVER) {
+            shareToFacebookButton.setVisibility(View.VISIBLE);
+            editRideButton.setVisibility(View.VISIBLE);
+
+            shareToFacebookButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ShareDialog.canShow(ShareLinkContent.class)) {
+                        ShareLinkContent content = new ShareLinkContent.Builder()
+                                .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                                .build();
+
+                        shareDialog.show(content);
+                    }
+                }
+            });
+
+            editRideButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    CreateRideFragment createRideFragment = new CreateRideFragment(ridePost);
+                    transaction.replace(R.id.fragment_container, createRideFragment);
+                    transaction.commit();
+                }
+            });
+        }
     }
 
     private void initializeAddressDisplay() {
@@ -300,6 +361,36 @@ public class RideDetailFragment extends Fragment {
         dropoffAddressTextParams.setMarginStart((int)(screenX * 0.015f));
     }
 
+    private void initializeSeatsDisplay() {
+        RelativeLayout.LayoutParams seatsBookedContainerParams = (RelativeLayout.LayoutParams)seatsBookedContainer.getLayoutParams();
+        RelativeLayout.LayoutParams seatsBookedTextParams = (RelativeLayout.LayoutParams)seatsBookedText.getLayoutParams();
+        RelativeLayout.LayoutParams seatsRemainingContainerParams = (RelativeLayout.LayoutParams)seatsRemainingContainer.getLayoutParams();
+        RelativeLayout.LayoutParams seatsRemainingTextParams = (RelativeLayout.LayoutParams)seatsRemainingText.getLayoutParams();
+        seatsBookedContainerParams.topMargin = (int)(screenY * 0.01f);
+        seatsBookedTitleText.setTextSize(screenX * 0.0095f);
+        seatsBookedText.setTextSize(screenX * 0.0095f);
+        seatsBookedTextParams.setMarginStart((int)(screenX * 0.015f));
+        seatsRemainingContainerParams.topMargin = (int)(screenY * 0.01f);
+        seatsBookedTitleText.setTextSize(screenX * 0.0095f);
+        seatsRemainingText.setTextSize(screenX * 0.0095f);
+        seatsRemainingTextParams.setMarginStart((int)(screenX * 0.015f));
+
+        if (accessor == ACCESSOR_DRIVER) {
+            seatsBookedContainer.setVisibility(View.VISIBLE);
+            seatsBookedText.setText(ridePost.getSeatsBooked() + " / " + ridePost.getSeatsTotal());
+        } else if (accessor == ACCESSOR_VIEWER) {
+            seatsRemainingContainer.setVisibility(View.VISIBLE);
+            seatsRemainingText.setText((ridePost.getSeatsTotal() - ridePost.getSeatsBooked()) + " / " + ridePost.getSeatsTotal());
+        } else if (accessor == ACCESSOR_PASSENGER) {
+            seatsBookedContainer.setVisibility(View.VISIBLE);
+            seatsRemainingContainer.setVisibility(View.VISIBLE);
+            seatsRemainingContainerParams.topMargin = (int)(screenY * 0.01f);
+            seatsBookedTitleText.setText("Seats Booked By You:");
+            seatsRemainingText.setText((ridePost.getSeatsTotal() - ridePost.getSeatsBooked()) + " / " + ridePost.getSeatsTotal());
+            // set seats booked by you text
+        }
+    }
+
     private void initializeRideSeparator() {
         RelativeLayout.LayoutParams rideSeparatorParams = (RelativeLayout.LayoutParams)rideSeparator.getLayoutParams();
         rideSeparatorParams.height = (int)(screenY * 0.01f);
@@ -307,10 +398,24 @@ public class RideDetailFragment extends Fragment {
     }
 
     private void initializeDriverProfile() {
+        UserAccount userAccount = ((AppActivity)getActivity()).getUserAccount();
+        if (accessor == ACCESSOR_DRIVER) {
+            if (userAccount.isLoggedIn() && userAccount.getAccountType() == UserAccount.ACCOUNT_TYPE_FACEBOOK_ACCOUNT) {
+                SetProfileImageAsyncTask setProfileImageAsyncTask = new SetProfileImageAsyncTask(driverImage);
+                setProfileImageAsyncTask.execute(userAccount.getFacebookProfilePicURI());
+            } else {
+                driverImage.setImageResource(R.drawable.user_icon_white);
+            }
+            driverNameText.setText(userAccount.getName());
+        }
+
         RelativeLayout.LayoutParams profileAndMessageContainerParams = (RelativeLayout.LayoutParams)profileAndMessageContainer.getLayoutParams();
+        RelativeLayout.LayoutParams driverImageHolderParams = (RelativeLayout.LayoutParams)driverImageHolder.getLayoutParams();
         RelativeLayout.LayoutParams driverImageParams = (RelativeLayout.LayoutParams)driverImage.getLayoutParams();
         RelativeLayout.LayoutParams driverNameTextParams = (RelativeLayout.LayoutParams)driverNameText.getLayoutParams();
         profileAndMessageContainerParams.topMargin = (int)(screenY * 0.02f);
+        driverImageHolderParams.width = (int)(screenY * 0.075f);
+        driverImageHolderParams.height = (int)(screenY * 0.075f);
         driverImageParams.width = (int)(screenY * 0.075f);
         driverImageParams.height = (int)(screenY * 0.075f);
         driverNameText.setTextSize((int)(screenX * 0.009f));
@@ -473,5 +578,11 @@ public class RideDetailFragment extends Fragment {
                 resources.getDisplayMetrics()
         );
         return pixel;
+    }
+
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

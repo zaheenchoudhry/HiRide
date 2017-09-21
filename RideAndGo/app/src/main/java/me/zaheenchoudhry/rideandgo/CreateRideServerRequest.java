@@ -25,6 +25,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
     private String pickupAddressFull, dropoffAddressFull, pickupAddressDisplay, dropoffAddressDisplay;
     private String pickupCity, dropoffCity, pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude;
     private String acceptsCash, acceptsInappPayments, prefersMusic, prefersDrinks, prefersLuggage, prefersPets;
+    private String rideId;
 
     public CreateRideServerRequest(Context context) {
         super();
@@ -58,6 +59,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
         prefersDrinks = args[22];
         prefersLuggage = args[23];
         prefersPets = args[24];
+        rideId = args[25];
         String signup_request_url = context.getString(R.string.ride_request_url);;
 
         try {
@@ -105,8 +107,12 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
                 rideParameters += "&prefersPets=" + URLEncoder.encode(prefersPets, "UTF-8");
             }
 
-            System.out.println("pickupLatitude string : " + pickupLatitude);
-            System.out.println("pickupLongitude string : " + pickupLongitude);
+            if (!rideId.equals("-1")) {
+                rideParameters += "&rideId=" + rideId;
+            }
+
+            System.out.println("THIS IS RIDE ID !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            System.out.println("Ride ID: " + rideId);
 
             URL url = new URL(signup_request_url);
             URLConnection connection = url.openConnection();
@@ -147,7 +153,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
     @Override
     protected void onPreExecute() {
         pleaseWaitDialog = new ProgressDialog(context);
-        pleaseWaitDialog.setTitle("Creating Account");
+        pleaseWaitDialog.setTitle("Creating Ride");
         pleaseWaitDialog.setMessage("Please wait...");
         pleaseWaitDialog.setCanceledOnTouchOutside(false);
         pleaseWaitDialog.show();
@@ -169,7 +175,10 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
             splitResult = result.split("\\s+");
         }
 
-        if (result == null || result.equals("") || result.equals("failed")) {
+        System.out.println("THIS IS RESULT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println("Result: " + result);
+
+        if (result == null || result.equals("") || result.equals("failed") || (splitResult != null && splitResult[0].equals("failed"))) {
             alertDialog.setTitle("Something went wrong");
             alertDialog.setMessage("Could not create ride");
             alertDialog.show();
@@ -178,7 +187,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
             ridePost.setRideAndOwnerId(Integer.parseInt(splitResult[1]), Integer.parseInt(ownerUserId));
             ridePost.setDate(Integer.parseInt(day), Integer.parseInt(date), Integer.parseInt(month), Integer.parseInt(year));
             ridePost.setTime(Integer.parseInt(hour), Integer.parseInt(minute));
-            ridePost.setSeats(Integer.parseInt(seats));
+            ridePost.setSeats(Integer.parseInt(seats), Integer.parseInt(splitResult[2]));
             ridePost.setPrice(Double.parseDouble(price));
             ridePost.setPickupAddress(pickupAddressFull, pickupAddressDisplay, pickupCity);
             ridePost.setDropoffAddress(dropoffAddressFull, dropoffAddressDisplay, dropoffCity);

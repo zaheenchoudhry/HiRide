@@ -9,10 +9,9 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class RideListingsAdapter extends RecyclerView.Adapter<RideListingsAdapter.RidePostHolder> {
+public class OfferedRidesAdapter extends RecyclerView.Adapter<OfferedRidesAdapter.RidePostHolder> {
 
     private List<RidePost> ridePostList;
-    private RideListingFragment rideListingFragment;
 
     public static class RidePostHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -66,27 +65,19 @@ public class RideListingsAdapter extends RecyclerView.Adapter<RideListingsAdapte
         }
     }
 
-    public RideListingsAdapter(RideListingFragment rideListingFragment, List<RidePost> ridePostList) {
+    public OfferedRidesAdapter(List<RidePost> ridePostList) {
         this.ridePostList = ridePostList;
-        this.rideListingFragment = rideListingFragment;
     }
 
     @Override
     public RidePostHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
-        // create a new view holder
-        //layout.setElevation(30);
-
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.ride_listing_card, viewGroup, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.offered_rides_card, viewGroup, false);
         return new RidePostHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(RidePostHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         holder.initializeRidePost(ridePostList.get(position));
-        //System.out.println("ADDED A CARD");
     }
 
     @Override

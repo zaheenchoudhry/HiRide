@@ -17,10 +17,12 @@ public class UpcomingRidesViewPagerAdapter extends FragmentStatePagerAdapter {
     private static final String TAB_OFFERED_RIDES_TITLE = "Offered";
 
     private Context context;
+    private UpcomingRidesFragment upcomingRidesFragment;
 
-    public UpcomingRidesViewPagerAdapter(FragmentManager fragmentManager, Context context) {
+    public UpcomingRidesViewPagerAdapter(FragmentManager fragmentManager, Context context, UpcomingRidesFragment upcomingRidesFragment) {
         super(fragmentManager);
         this.context = context;
+        this.upcomingRidesFragment = upcomingRidesFragment;
     }
 
     @Override
@@ -45,14 +47,11 @@ public class UpcomingRidesViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case TAB_SHORTLISTED_RIDES_INDEX:
-                //return new FragmentA();
                 return new ShortlistFragment();
             case TAB_BOOKED_RIDES_INDEX:
-                //return new FragmentB();
                 return new ShortlistFragment();
             case TAB_OFFERED_RIDES_INDEX:
-                //return new FragmentC();
-                return new ShortlistFragment();
+                return new OfferedRidesFragment(upcomingRidesFragment);
         }
         return null;
     }

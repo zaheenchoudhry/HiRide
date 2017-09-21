@@ -31,19 +31,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-                <ImageView
-                    android:id="@+id/menu_profile_image"
+                <RelativeLayout
+                    android:id="@+id/menu_profile_image_holder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/akshat_profile_pic"/>
+                    android:background="#aaaaaa">
+
+                    <ImageView
+                        android:id="@+id/menu_profile_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/menu_profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/menu_profile_image"
+                    android:layout_below="@+id/menu_profile_image_holder"
                     android:textColor="#404040"
                     android:text="Akshat Soni"/>
 

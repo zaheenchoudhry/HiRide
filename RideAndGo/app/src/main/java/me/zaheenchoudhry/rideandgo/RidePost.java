@@ -2,7 +2,7 @@ package me.zaheenchoudhry.rideandgo;
 
 public class RidePost {
 
-    private int rideId, ownerUserId, day, date, month, year, hour, minute, seats;
+    private int rideId, ownerUserId, day, date, month, year, hour, minute, seatsTotal, seatsBooked;
     private double price, pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude;
     private String pickupAddressFull, dropoffAddressFull, pickupAddressDisplay, dropoffAddressDisplay, pickupCity, dropoffCity;
 
@@ -25,8 +25,9 @@ public class RidePost {
         this.minute = minute;
     }
 
-    public void setSeats(int seats) {
-        this.seats = seats;
+    public void setSeats(int seatsTotal, int seatsBooked) {
+        this.seatsTotal = seatsTotal;
+        this.seatsBooked = seatsBooked;
     }
 
     public void setPrice(double price) {
@@ -55,6 +56,18 @@ public class RidePost {
         this.dropoffLongitude = longitude;
     }
 
+    public void setSeatsTotal(int seatsTotal) {
+        this.seatsTotal = seatsTotal;
+    }
+
+    public void setSeatsBooked(int seatsBooked) {
+        this.seatsBooked = seatsBooked;
+    }
+
+    public int getRideId() {
+        return rideId;
+    }
+
     public int getDay() {
         return this.day;
     }
@@ -79,8 +92,12 @@ public class RidePost {
         return this.minute;
     }
 
-    public int getSeats() {
-        return this.seats;
+    public int getSeatsTotal() {
+        return this.seatsTotal;
+    }
+
+    public int getSeatsBooked() {
+        return this.seatsBooked;
     }
 
     public double getPrice() {
@@ -109,6 +126,22 @@ public class RidePost {
 
     public String getDropoffCity() {
         return this.dropoffCity;
+    }
+
+    public double getPickupLatitude() {
+        return pickupLatitude;
+    }
+
+    public double getPickupLongitude() {
+        return pickupLongitude;
+    }
+
+    public double getDropoffLatitude() {
+        return dropoffLatitude;
+    }
+
+    public double getDropoffLongitude() {
+        return dropoffLongitude;
     }
 
     /*

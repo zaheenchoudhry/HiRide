@@ -73,5 +73,5 @@
         android:id="@+id/upcoming_rides_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white" />
+        android:background="#f1f5f8" />
 </LinearLayout>

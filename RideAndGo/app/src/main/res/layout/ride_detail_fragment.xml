@@ -192,7 +192,8 @@
                         android:background="#1777CD"
                         android:textColor="#ffffff"
                         android:textSize="12sp"
-                        android:text="Shortlist"/>
+                        android:text="Shortlist"
+                        android:visibility="gone"/>
 
                     <Button
                         android:id="@+id/ride_detail_book_button"
@@ -202,7 +203,29 @@
                         android:background="@drawable/ride_detail_button_border"
                         android:textColor="#1777CD"
                         android:textSize="12sp"
-                        android:text="Book Ride"/>
+                        android:text="Book Ride"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/ride_detail_share_facebook_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#1777CD"
+                        android:textColor="#ffffff"
+                        android:textSize="12sp"
+                        android:text="Share to Facebook"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/ride_detail_edit_ride_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/ride_detail_share_facebook_button"
+                        android:background="@drawable/ride_detail_button_border"
+                        android:textColor="#1777CD"
+                        android:textSize="12sp"
+                        android:text="Edit Ride"
+                        android:visibility="gone"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -256,10 +279,60 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/ride_detail_seats_booked_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ride_detail_dropoff_container"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/ride_detail_seats_booked_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:text="Seats Booked:"/>
+
+                    <TextView
+                        android:id="@+id/ride_detail_seats_booked"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#808080"
+                        android:textSize="14sp"
+                        android:layout_toEndOf="@id/ride_detail_seats_booked_title" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_seats_remaining_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ride_detail_seats_booked_container"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/ride_detail_seats_remaining_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:text="Seats Remaining:"/>
+
+                    <TextView
+                        android:id="@+id/ride_detail_seats_remaining"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#808080"
+                        android:textSize="14sp"
+                        android:layout_toEndOf="@id/ride_detail_seats_remaining_title" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/ride_detail_ride_separator"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ride_detail_dropoff_container"
+                    android:layout_below="@+id/ride_detail_seats_remaining_container"
                     android:background="#f0f4f7"/>
 
                 <RelativeLayout
@@ -275,21 +348,26 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true">
 
-                        <ImageView
-                            android:id="@+id/ride_detail_driver_image"
+                        <RelativeLayout
+                            android:id="@+id/ride_detail_driver_image_holder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:src="@drawable/akshat_profile_pic"/>
+                            android:background="#aaaaaa" >
+
+                            <ImageView
+                                android:id="@+id/ride_detail_driver_image"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </RelativeLayout>
 
                         <TextView
                             android:id="@+id/ride_detail_driver_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:layout_below="@+id/ride_detail_driver_image"
-                            android:textColor="#404040"
-                            android:text="Akshat Soni"/>
+                            android:layout_below="@+id/ride_detail_driver_image_holder"
+                            android:textColor="#404040" />
 
                         <RelativeLayout
                             android:id="@+id/ride_detail_rating_container"

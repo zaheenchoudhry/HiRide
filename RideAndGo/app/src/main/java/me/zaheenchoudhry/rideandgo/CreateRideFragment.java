@@ -87,6 +87,16 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
     private ImageView[] preferencesIcons;
     private TextView[] preferencesTexts, preferencesNoTexts;
 
+    private RidePost ridePost;
+
+    public CreateRideFragment() {
+        this(null);
+    }
+
+    public CreateRideFragment(RidePost ridePost) {
+        this.ridePost = ridePost;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -237,36 +247,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         createRideButtonContainer = (RelativeLayout)view.findViewById(R.id.create_ride_button_container);
         createRideButton = (Button)view.findViewById(R.id.create_ride_button);
 
-        final Calendar calendar = Calendar.getInstance();
-        date = calendar.get(Calendar.DAY_OF_MONTH);
-        month = calendar.get(Calendar.MONTH) + 1;
-        year = calendar.get(Calendar.YEAR);
-        hour = 12;
-        minute = 0;
-        seats = 3;
-        price = 10.00;
-        pickupAddressFull = "";
-        dropoffAddressFull = "";
-        pickupAddressDisplay = "";
-        dropoffAddressDisplay = "";
-        pickupCity = "";
-        dropoffCity = "";
-        pickupLatitude = 0;
-        pickupLongitude = 0;
-        dropoffLatitude = 0;
-        dropoffLongitude = 0;
-
-        GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month - 1, date - 1);
-        int dayOfWeekNum = gregorianCalendar.get(GregorianCalendar.DAY_OF_WEEK);
-        day = dayOfWeekNum;
-        dateDayText.setText(dayOfWeek[dayOfWeekNum - 1]);
-        dateMonthText.setText(dayOfMonth[month - 1]);
-        dateDateText.setText(Integer.toString(date));
-        timeText.setText("12:00");
-        timeAmPmText.setText("PM");
-        seatsText.setText("3");
-        priceInput.setText("10.00");
-
+        initializeValues();
         initializeToolbarAndMenuButton();
         initializeLocationsContainer();
         initializePickupEdittext();
@@ -282,6 +263,77 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         initializeCreateRideButton();
 
         return view;
+    }
+
+    private void initializeValues() {
+        if (ridePost == null) {
+            final Calendar calendar = Calendar.getInstance();
+            date = calendar.get(Calendar.DAY_OF_MONTH);
+            month = calendar.get(Calendar.MONTH) + 1;
+            year = calendar.get(Calendar.YEAR);
+            hour = 12;
+            minute = 0;
+            seats = 3;
+            price = 10.00;
+            pickupAddressFull = "";
+            dropoffAddressFull = "";
+            pickupAddressDisplay = "";
+            dropoffAddressDisplay = "";
+            pickupCity = "";
+            dropoffCity = "";
+            pickupLatitude = 0;
+            pickupLongitude = 0;
+            dropoffLatitude = 0;
+            dropoffLongitude = 0;
+
+            GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month - 1, date - 1);
+            day = gregorianCalendar.get(GregorianCalendar.DAY_OF_WEEK);
+            dateDayText.setText(dayOfWeek[day - 1]);
+            dateMonthText.setText(dayOfMonth[month - 1]);
+            dateDateText.setText(Integer.toString(date));
+            timeText.setText("12:00");
+            timeAmPmText.setText("PM");
+            seatsText.setText("3");
+            priceInput.setText("10.00");
+        } else {
+            date = ridePost.getDate();
+            month = ridePost.getMonth();
+            year = ridePost.getYear();
+            hour = ridePost.getHour();
+            minute = ridePost.getMinute();
+            seats = ridePost.getSeatsTotal();
+            price = ridePost.getPrice();
+            pickupAddressFull = ridePost.getPickupAddressFull();
+            dropoffAddressFull = ridePost.getDropoffAddressFull();
+            pickupAddressDisplay = ridePost.getPickupAddressDisplay();
+            dropoffAddressDisplay = ridePost.getDropoffAddressDisplay();
+            pickupCity = ridePost.getPickupCity();
+            dropoffCity = ridePost.getDropoffCity();
+            pickupLatitude = ridePost.getPickupLatitude();
+            pickupLongitude = ridePost.getPickupLongitude();
+            dropoffLatitude = ridePost.getDropoffLatitude();
+            dropoffLongitude = ridePost.getDropoffLongitude();
+
+            int hourFormat12 = (hour > 12) ? (hour - 12) : hour;
+            hourFormat12 = (hourFormat12 == 0) ? 12 : hourFormat12;
+            String timeString = Integer.toString(hourFormat12) + ":";
+            timeString += (minute < 10) ? ("0" + Integer.toString(minute)) : Integer.toString(minute);
+            timeText.setText(timeString);
+            timeAmPmText.setText((hour >= 12) ? "PM" : "AM");
+
+            DecimalFormat df = new DecimalFormat("#.00");
+            String priceString = (price != 0) ? df.format(price) : "0.00";
+            priceInput.setText(priceString);
+
+            day = ridePost.getDay();
+            dateDayText.setText(dayOfWeek[day - 1]);
+            dateMonthText.setText(dayOfMonth[month - 1]);
+            dateDateText.setText(Integer.toString(date));
+            seatsText.setText(Integer.toString(seats));
+
+            pickupInput.setText(pickupAddressDisplay);
+            dropoffInput.setText(dropoffAddressDisplay);
+        }
     }
 
     private void initializeToolbarAndMenuButton() {
@@ -390,7 +442,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
-                pickupInput.setText(place.getAddress());
+                pickupInput.setText(place.getName());
                 CreateRideFragment.pickupAddressFull = place.getAddress().toString();
                 CreateRideFragment.pickupAddressDisplay = place.getName().toString();
                 CreateRideFragment.pickupLatitude = place.getLatLng().latitude;
@@ -426,7 +478,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
-                dropoffInput.setText(place.getAddress());
+                dropoffInput.setText(place.getName());
                 CreateRideFragment.dropoffAddressFull = place.getAddress().toString();
                 CreateRideFragment.dropoffAddressDisplay = place.getName().toString();
                 CreateRideFragment.dropoffLatitude = place.getLatLng().latitude;
@@ -436,7 +488,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
                     List<Address> addresses = geocoder.getFromLocation(place.getLatLng().latitude, place.getLatLng().longitude, 1);
                     if (addresses != null && addresses.size() > 0) {
                         String city = addresses.get(0).getLocality();
-                        if (city == null || city.equals("")) {
+                        if (city == null || city.equals("") || city.equals(" ")) {
                             city = addresses.get(0).getAddressLine(0).split(", ")[1];
                         }
                         CreateRideFragment.dropoffCity = city;
@@ -834,6 +886,12 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         createRideButtonParams.height = (int)(screenY * 0.08f);
         createRideButton.setTextSize((int)(screenX * 0.0095f));
 
+        if (ridePost == null) {
+            createRideButton.setText("Post Ride");
+        } else {
+            createRideButton.setText("Save Changes");
+        }
+
         final UserAccount userAccount = ((AppActivity)getActivity()).getUserAccount();
         createRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -883,16 +941,39 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
                         String prefersLuggageStr = (userAccount.doesPreferExtraLuggage() == prefersPreference[2]) ? "-1" : Integer.toString(prefersLuggageInt);
                         String prefersPetsStr = (userAccount.doesPreferPets() == prefersPreference[3]) ? "-1" : Integer.toString(prefersPetsInt);
 
+                        String rideId = "-1";
+                        if (ridePost != null) {
+                            rideId = Integer.toString(ridePost.getRideId());
+                        }
+
                         CreateRideServerRequest createRideServerRequest = new CreateRideServerRequest(getActivity());
-                        createRideServerRequest.execute(Integer.toString(userAccount.getUserId()),
-                                Integer.toString(CreateRideFragment.day), Integer.toString(CreateRideFragment.date),
-                                Integer.toString(CreateRideFragment.month), Integer.toString(CreateRideFragment.year),
-                                Integer.toString(CreateRideFragment.hour), Integer.toString(CreateRideFragment.minute),
-                                Integer.toString(CreateRideFragment.seats), Double.toString(CreateRideFragment.price),
-                                pickupAddressFull, dropoffAddressFull, pickupAddressDisplay, dropoffAddressDisplay, pickupCity, dropoffCity,
-                                Double.toString(CreateRideFragment.pickupLatitude), Double.toString(CreateRideFragment.pickupLongitude),
-                                Double.toString(CreateRideFragment.dropoffLatitude), Double.toString(CreateRideFragment.dropoffLongitude),
-                                acceptsCashStr, acceptsInAppPaymentsStr, prefersMusicStr, prefersDrinksStr, prefersLuggageStr, prefersPetsStr);
+                        createRideServerRequest.execute(
+                                Integer.toString(userAccount.getUserId()),
+                                Integer.toString(CreateRideFragment.day),
+                                Integer.toString(CreateRideFragment.date),
+                                Integer.toString(CreateRideFragment.month),
+                                Integer.toString(CreateRideFragment.year),
+                                Integer.toString(CreateRideFragment.hour),
+                                Integer.toString(CreateRideFragment.minute),
+                                Integer.toString(CreateRideFragment.seats),
+                                Double.toString(CreateRideFragment.price),
+                                pickupAddressFull,
+                                dropoffAddressFull,
+                                pickupAddressDisplay,
+                                dropoffAddressDisplay,
+                                pickupCity,
+                                dropoffCity,
+                                Double.toString(CreateRideFragment.pickupLatitude),
+                                Double.toString(CreateRideFragment.pickupLongitude),
+                                Double.toString(CreateRideFragment.dropoffLatitude),
+                                Double.toString(CreateRideFragment.dropoffLongitude),
+                                acceptsCashStr,
+                                acceptsInAppPaymentsStr,
+                                prefersMusicStr,
+                                prefersDrinksStr,
+                                prefersLuggageStr,
+                                prefersPetsStr,
+                                rideId);
                     }
                 } else {
                     alertDialog.setTitle("You are not logged in");

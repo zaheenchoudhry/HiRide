@@ -126,7 +126,7 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
                     RidePost ridePost = new RidePost();
                     ridePost.setDate(ride.getInt("day"), ride.getInt("date"), ride.getInt("month"), ride.getInt("year"));
                     ridePost.setTime(ride.getInt("hour"), ride.getInt("minute"));
-                    ridePost.setSeats(ride.getInt("seats"));
+                    ridePost.setSeats(ride.getInt("seatsTotal"), ride.getInt("seatsBooked"));
                     ridePost.setPrice(ride.getDouble("price"));
                     ridePost.setPickupAddress(ride.getString("pickupAddressFull"), ride.getString("pickupAddressDisplay"), ride.getString("pickupCity"));
                     ridePost.setDropoffAddress(ride.getString("dropoffAddressFull"), ride.getString("dropoffAddressDisplay"), ride.getString("dropoffCity"));

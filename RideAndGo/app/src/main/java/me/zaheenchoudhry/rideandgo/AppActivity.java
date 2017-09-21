@@ -37,7 +37,7 @@ public class AppActivity extends FragmentActivity {
 
     private UserAccount userAccount;
 
-    private RelativeLayout menuProfileHolder;
+    private RelativeLayout menuProfileHolder, menuProfileImageHolder;
     private RelativeLayout[] menuOptions, menuOptionsIndicator;
     private NavigationView menu;
     private DrawerLayout appDrawerLayout;
@@ -79,6 +79,7 @@ public class AppActivity extends FragmentActivity {
         menuOptionsText[2] = (TextView)findViewById(R.id.upcoming_rides_option_text);
         menuOptionsText[3] = (TextView)findViewById(R.id.create_ride_option_text);
         menuOptionsText[4] = (TextView)findViewById(R.id.history_stats_option_text);
+        menuProfileImageHolder = (RelativeLayout)findViewById(R.id.menu_profile_image_holder);
         menuProfileImage = (ImageView)findViewById(R.id.menu_profile_image);
         menuProfileName = (TextView)findViewById(R.id.menu_profile_name);
 
@@ -86,10 +87,11 @@ public class AppActivity extends FragmentActivity {
         initializeMenuOptions();
         initializeMenuActions();
 
-        menuOptions[MENU_OPTION_UPCOMING_RIDES].setBackgroundColor(Color.parseColor("#e3ebee"));
-        menuOptionsIndicator[MENU_OPTION_UPCOMING_RIDES].setBackgroundColor(Color.parseColor("#22409A"));
-        menuOptionsText[MENU_OPTION_UPCOMING_RIDES].setTextColor(Color.parseColor("#303030"));
-        switchToPage(MENU_OPTION_UPCOMING_RIDES);
+        int pageToDisplay = MENU_OPTION_CREATE_RIDE;
+        menuOptions[pageToDisplay].setBackgroundColor(Color.parseColor("#e3ebee"));
+        menuOptionsIndicator[pageToDisplay].setBackgroundColor(Color.parseColor("#22409A"));
+        menuOptionsText[pageToDisplay].setTextColor(Color.parseColor("#303030"));
+        switchToPage(pageToDisplay);
     }
 
     @Override
@@ -134,16 +136,29 @@ public class AppActivity extends FragmentActivity {
     }
 
     private void initializeMenuAndProfileDisplay() {
+        if (userAccount.isLoggedIn() && userAccount.getAccountType() == UserAccount.ACCOUNT_TYPE_FACEBOOK_ACCOUNT) {
+            SetProfileImageAsyncTask setProfileImageAsyncTask = new SetProfileImageAsyncTask(menuProfileImage);
+            setProfileImageAsyncTask.execute(userAccount.getFacebookProfilePicURI());
+        } else {
+            menuProfileImage.setImageResource(R.drawable.user_icon_white);
+        }
+        menuProfileName.setText(userAccount.getName());
+
+
         ViewGroup.LayoutParams menuParams = menu.getLayoutParams();
         menuParams.width = (int)(screenX * 0.75f);
 
         ViewGroup.LayoutParams nameMenuHolderParams = menuProfileHolder.getLayoutParams();
         nameMenuHolderParams.height = (int)(screenY * 0.3f);
 
+        RelativeLayout.LayoutParams menuProfileImageHolderParams = (RelativeLayout.LayoutParams)menuProfileImageHolder.getLayoutParams();
+        menuProfileImageHolderParams.width = (int)(screenY * 0.09f);
+        menuProfileImageHolderParams.height = (int)(screenY * 0.09f);
+        menuProfileImageHolderParams.topMargin = (int)(screenY * 0.1f);
+
         RelativeLayout.LayoutParams menuProfileImageParams = (RelativeLayout.LayoutParams)menuProfileImage.getLayoutParams();
         menuProfileImageParams.width = (int)(screenY * 0.09f);
         menuProfileImageParams.height = (int)(screenY * 0.09f);
-        menuProfileImageParams.topMargin = (int)(screenY * 0.1f);
 
         RelativeLayout.LayoutParams menuProfileNameParams = (RelativeLayout.LayoutParams)menuProfileName.getLayoutParams();
         menuProfileName.setTextSize((int)(screenX * 0.0115f));

@@ -19,7 +19,7 @@ public class UpcomingRidesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.upcoming_rides_fragment, container, false);
 
-        UpcomingRidesViewPagerAdapter adapter = new UpcomingRidesViewPagerAdapter(getChildFragmentManager(), getActivity());
+        UpcomingRidesViewPagerAdapter adapter = new UpcomingRidesViewPagerAdapter(getChildFragmentManager(), getActivity(), this);
         ViewPager viewPager = (ViewPager)view.findViewById(R.id.upcoming_rides_viewpager);
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout)view.findViewById(R.id.upcoming_rides_tablayout);
