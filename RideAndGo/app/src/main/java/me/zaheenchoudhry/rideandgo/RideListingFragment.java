@@ -124,17 +124,18 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
                     JSONObject ride = rideList.getJSONObject(i);
                     // Pulling items from the array
                     RidePost ridePost = new RidePost();
-                    ridePost.setDate(ride.getInt("day"), ride.getInt("date"), ride.getInt("month"), ride.getInt("year"));
-                    ridePost.setTime(ride.getInt("hour"), ride.getInt("minute"));
-                    ridePost.setSeats(ride.getInt("seatsTotal"), ride.getInt("seatsBooked"));
-                    ridePost.setPrice(ride.getDouble("price"));
-                    ridePost.setPickupAddress(ride.getString("pickupAddressFull"), ride.getString("pickupAddressDisplay"), ride.getString("pickupCity"));
-                    ridePost.setDropoffAddress(ride.getString("dropoffAddressFull"), ride.getString("dropoffAddressDisplay"), ride.getString("dropoffCity"));
-                    ridePost.setPickupAddressCoordinates(ride.getDouble("pickupLatitude"), ride.getDouble("pickupLongitude"));
-                    ridePost.setDropoffAddressCoordinates(ride.getDouble("dropoffLatitude"), ride.getDouble("dropoffLongitude"));
+                    ridePost.setDate(ride.getInt("Day"), ride.getInt("Date"), ride.getInt("Month"), ride.getInt("Year"));
+                    ridePost.setTime(ride.getInt("Hour"), ride.getInt("Minute"));
+                    ridePost.setSeats(ride.getInt("SeatsTotal"), ride.getInt("SeatsBooked"));
+                    ridePost.setPrice(ride.getDouble("Price"));
+                    ridePost.setPickupAddress(ride.getString("PickupAddressFull"), ride.getString("PickupAddressDisplay"), ride.getString("PickupCity"));
+                    ridePost.setDropoffAddress(ride.getString("DropoffAddressFull"), ride.getString("DropoffAddressDisplay"), ride.getString("DropoffCity"));
+                    ridePost.setPickupAddressCoordinates(ride.getDouble("PickupLatitude"), ride.getDouble("PickupLongitude"));
+                    ridePost.setDropoffAddressCoordinates(ride.getDouble("DropoffLatitude"), ride.getDouble("DropoffLongitude"));
+                    System.out.println(ridePost);
                     ridePostList.add(ridePost);
                 } catch (JSONException e) {
-                    // Oops
+                    System.out.println(e);
                 }
             }
         } catch (Exception e) {
@@ -200,9 +201,10 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
         @Override
         protected String doInBackground(Void... voids) {
             String result = "";
+            String string_url = getActivity().getString(R.string.get_all_rides_list_request_url);
 
             try {
-                URL url = new URL("http://zaheenchoudhry.me/rideandgo/getRideList.php");
+                URL url = new URL(string_url);
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                 connection.setRequestProperty("User-Agent", "");
                 connection.setRequestMethod("POST");
@@ -221,6 +223,8 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
 
                 bufferedReader.close();
                 inputStream.close();
+
+                System.out.println(result);
 
                 return result;
             } catch (IOException e) {
