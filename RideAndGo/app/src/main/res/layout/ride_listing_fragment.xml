@@ -110,35 +110,53 @@
                         android:layout_marginTop="60dp"
                         android:visibility="invisible"/>
                 </RelativeLayout>
-
             </android.support.v7.widget.Toolbar>
+
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/ic_settings_white_24dp" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/listing_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:visibility="visible"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:tabGravity="fill"
-                app:tabMode="fixed"
-                app:tabIndicatorHeight="4dp">
+                app:tabIndicatorHeight="4dp"
+                app:tabMode="fixed">
 
-                <android.support.design.widget.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="List" />
+                <!--<android.support.design.widget.TabItem-->
+                    <!--android:id="@+id/main_tab"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="List"-->
+                    <!--app:tabGravity="fill"-->
+                    <!--app:tabMaxWidth="0dp"-->
+                    <!--app:tabMode="fixed" />-->
 
-                <android.support.design.widget.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Map"/>
+                <!--<android.support.design.widget.TabItem-->
+                    <!--android:id="@+id/dummy_tab"-->
+                    <!--android:visibility="gone" />-->
             </android.support.design.widget.TabLayout>
-
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <include layout="@layout/ride_listing_recycler_view" />
+
 
 </android.support.design.widget.CoordinatorLayout>
