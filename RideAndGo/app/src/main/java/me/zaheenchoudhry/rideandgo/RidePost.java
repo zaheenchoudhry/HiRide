@@ -1,10 +1,13 @@
 package me.zaheenchoudhry.rideandgo;
 
+import org.json.JSONArray;
+
 public class RidePost {
 
     private int rideId, ownerUserId, day, date, month, year, hour, minute, seatsTotal, seatsBooked;
     private double price, pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude;
     private String pickupAddressFull, dropoffAddressFull, pickupAddressDisplay, dropoffAddressDisplay, pickupCity, dropoffCity;
+    private JSONArray Driver;
 
     public RidePost() {}
 

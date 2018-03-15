@@ -1,6 +1,9 @@
 package me.zaheenchoudhry.rideandgo;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -27,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
+import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 
@@ -40,6 +44,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Driver;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +89,7 @@ public class RideDetailFragment extends Fragment {
     private List<Booking> userBookingList;
     private Booking isBooked;
     private UserAccount userAccount;
+    private UserAccount driverAccount;
     private CallbackManager callbackManager;
     private ShareDialog shareDialog;
 
@@ -101,7 +107,11 @@ public class RideDetailFragment extends Fragment {
         shareDialog = new ShareDialog(this);
         userBookingList = new ArrayList<Booking>();
         String[] filters = {"passengerUserId=" + userAccount.getUserId()};
-        fetchRideListFromServer(filters);
+        fetchBookedListFromServer(filters);
+
+        GetUserServerRequest getUserServerRequest = new GetUserServerRequest();
+        getUserServerRequest.execute();
+
     }
 
     @Override
@@ -266,13 +276,11 @@ public class RideDetailFragment extends Fragment {
         initializeAddressDisplay();
         initializeSeatsDisplay();
         initializeRideSeparator();
-        initializeDriverProfile();
         initializeRatingDisplay();
         initializeMessageButtons();
         initializeSeatsPriceContainers();
         initializeSeatsContainer();
         initializePriceContainer();
-        initializePaymentMethodsDisplay();
         initializeDriverPreferencesDisplay();
 
         return view;
@@ -493,8 +501,14 @@ public class RideDetailFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     if (ShareDialog.canShow(ShareLinkContent.class)) {
+                        String day = dayOfWeek[ridePost.getDay() - 1];
+                        String Month = dayOfMonth[ridePost.getMonth() - 1];
+                        String dateText = (ridePost.getDate() < 10) ? ("0" + Integer.toString(ridePost.getDate())) : Integer.toString(ridePost.getDate());
+                        String quoteText = "I am driving from " + ridePost.getPickupCity() + " to " + ridePost.getDropoffCity() + " on " + dateText + ", " + Month + " " + day + "! Message for more info. ";
+
                         ShareLinkContent content = new ShareLinkContent.Builder()
                                 .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                                .setQuote(quoteText)
                                 .build();
 
                         shareDialog.show(content);
@@ -520,12 +534,12 @@ public class RideDetailFragment extends Fragment {
                     View alertLayout = inflater.inflate(R.layout.phone_number_layout, null);
                     final EditText etPhoneNumber = alertLayout.findViewById(R.id.et_phoneNumber);
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                    alert.setTitle("Add Phone Number");
+                    alert.setTitle("Please verify/add your Phone Number");
                     // this is set the view from XML inside AlertDialog
                     alert.setView(alertLayout);
                     // disallow cancel of AlertDialog on click of back button and outside touch
 //                alert.setCancelable(false);
-                    if (userAccount.getPhoneNumber() != 0) {
+                    if (userAccount.getPhoneNumber() != "0") {
                         etPhoneNumber.setText(String.valueOf(userAccount.getPhoneNumber()));
                     }
 
@@ -616,7 +630,7 @@ public class RideDetailFragment extends Fragment {
         dropoffAddressTextParams.setMarginStart((int)(screenX * 0.015f));
     }
 
-    private void fetchRideListFromServer(String[] params) {
+    private void fetchBookedListFromServer(String[] params) {
         if (params != null) {
             GetBookingListServerRequest getBookingListServerRequest = new GetBookingListServerRequest(params);
             getBookingListServerRequest.execute();
@@ -727,6 +741,12 @@ public class RideDetailFragment extends Fragment {
             }
             driverNameText.setText(userAccount.getName());
         }
+        else if (accessor == ACCESSOR_VIEWER || accessor == ACCESSOR_PASSENGER) {
+            SetProfileImageAsyncTask setProfileImageAsyncTask = new SetProfileImageAsyncTask(driverImage);
+            setProfileImageAsyncTask.execute(driverAccount.getFacebookProfilePicURI());
+
+            driverNameText.setText(driverAccount.getName());
+        }
 
         RelativeLayout.LayoutParams profileAndMessageContainerParams = (RelativeLayout.LayoutParams)profileAndMessageContainer.getLayoutParams();
         RelativeLayout.LayoutParams driverImageHolderParams = (RelativeLayout.LayoutParams)driverImageHolder.getLayoutParams();
@@ -767,15 +787,28 @@ public class RideDetailFragment extends Fragment {
         messageButtonParams.height = (int)(screenY * 0.06f);
         messengerButtonParams.height = (int)(screenY * 0.06f);
         messengerButtonContainerParams.topMargin = (int)(screenY * 0.01f);
-        messageButton.setTextSize(screenX * 0.007f);
+        messageButton.setTextSize(screenX * 0.013f);
         messengerButton.setTextSize(screenX * 0.007f);
         messengerIconParams.height = (int)(screenY * 0.035f);
         messengerIconParams.width = (int)(screenY * 0.035f);
         messengerIconParams.setMarginStart((int)(screenX * 0.03f));
+        messengerButtonContainer.setVisibility(View.GONE);
 
         if (accessor == ACCESSOR_DRIVER) {
             messageButtonsContainer.setVisibility(View.GONE);
         }
+
+        messageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Phone Number", driverAccount.getPhoneNumber());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getApplicationContext(), "Copied " + driverAccount.getPhoneNumber() + " Clip Board", Toast.LENGTH_SHORT).show();
+
+                messageButton.setText(driverAccount.getPhoneNumber());
+            }
+            });
     }
 
     private void initializePaymentMethodsDisplay() {
@@ -788,8 +821,8 @@ public class RideDetailFragment extends Fragment {
             acceptsInAppPayments = userAccount.doesAcceptInAppPayments();
         }
 
-        cashMethodIcon.setImageResource((acceptsCash) ? R.drawable.check_mark_icon_2 : R.drawable.cross_icon_2);
-        inappMethodIcon.setImageResource((acceptsInAppPayments) ? R.drawable.check_mark_icon_2 : R.drawable.cross_icon_2);
+        cashMethodIcon.setImageResource((driverAccount.doesAcceptCash()) ? R.drawable.check_mark_icon_2 : R.drawable.cross_icon_2);
+        inappMethodIcon.setImageResource((driverAccount.doesAcceptInAppPayments()) ? R.drawable.check_mark_icon_2 : R.drawable.cross_icon_2);
 
         RelativeLayout.LayoutParams paymentMethodsContainerParams = (RelativeLayout.LayoutParams)paymentMethodsContainer.getLayoutParams();
         RelativeLayout.LayoutParams paymentMethodsTopParams = (RelativeLayout.LayoutParams)paymentMethodsTop.getLayoutParams();
@@ -929,6 +962,8 @@ public class RideDetailFragment extends Fragment {
                 }
             }
 
+            string_url += "&driverId=" + String.valueOf(ridePost.getOwnerUserId());
+
             try {
                 URL url = new URL(string_url);
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -965,6 +1000,75 @@ public class RideDetailFragment extends Fragment {
         protected void onPostExecute(String result){
             jsonResultString = result;
             initializeUserBookingList();
+        }
+    }
+
+    class GetUserServerRequest extends AsyncTask<Void, Void, String> {
+
+        public GetUserServerRequest() {}
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String result = "";
+            String string_url = getActivity().getString(R.string.get_user_request_url);
+
+
+            string_url += "?UserId=" + String.valueOf(ridePost.getOwnerUserId());
+
+            try {
+                URL url = new URL(string_url);
+                HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                connection.setRequestProperty("User-Agent", "");
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.connect();
+
+                InputStream inputStream = connection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
+
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                result = stringBuilder.toString();
+
+                bufferedReader.close();
+                inputStream.close();
+
+                System.out.println(result);
+
+                return result;
+            } catch (IOException e) {
+                // Writing exception to log
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            try {
+                JSONObject jsonResponse = new JSONObject(result);
+                JSONArray user = jsonResponse.getJSONArray("user");
+
+                JSONObject driverArray = user.getJSONObject(0);
+                driverAccount = new UserAccount(driverArray.getInt("UserId"), driverArray.getInt("AccountType"), driverArray.getString("Name"), driverArray.getString("PhoneNumber"));
+                driverAccount.setFacebookAccountNumber(driverArray.getString("FacebookAccountNumber"));
+                driverAccount.setFacebookProfileLinkURI(driverArray.getString("FacebookProfileLinkURI"));
+                driverAccount.setFacebookProfilePicURI(driverArray.getString("FacebookProfilePicURI"));
+                driverAccount.setAcceptsCash(driverArray.getInt("AcceptsCash"));
+                driverAccount.setAcceptsInAppPayments(driverArray.getInt("AcceptsInAppPayments"));
+
+
+                initializeDriverProfile();
+                initializePaymentMethodsDisplay();
+
+            } catch (JSONException e) {
+                System.out.println(e);
+            }
+
         }
     }
 }

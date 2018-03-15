@@ -1,6 +1,7 @@
 package me.zaheenchoudhry.rideandgo;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 @SuppressWarnings("serial")
 public class UserAccount implements Serializable {
@@ -13,29 +14,30 @@ public class UserAccount implements Serializable {
     public static final int PREFERENCE_EXTRA_LUGGAGE = 2;
     public static final int PREFERENCE_PETS = 3;
 
-    private int userId, accountType, phoneNumber, facebookAccountNumber;
+    private String phoneNumber, facebookAccountNumber;
+    private int userId, accountType;
     private String name, emailId, facebookProfilePicURI, facebookProfileLinkURI;
     private boolean wasLogginSuccessful;
     private boolean acceptsCash, acceptsInAppPayments;
     private boolean prefersMusic, prefersDrinks, prefersExtraLuggage, prefersPets;
 
     public UserAccount(String name) {
-        this(-1, -1, name, -1);
+        this(-1, -1, name, "-1");
         this.wasLogginSuccessful = false;
     }
 
-    public UserAccount(int userId, int accountType, String name, int phoneNumber) {
+    public UserAccount(int userId, int accountType, String name, String phoneNumber) {
         this.userId = userId;
         this.accountType = accountType;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.facebookAccountNumber = -1;
+        this.facebookAccountNumber = String.valueOf(-1);
         this.emailId = "";
         this.facebookProfilePicURI = "";
         this.wasLogginSuccessful = true;
     }
 
-    public void setFacebookUserSpecificDetails(int facebookAccountNumber, String facebookProfileLinkURI, String facebookProfilePicURI) {
+    public void setFacebookUserSpecificDetails(String facebookAccountNumber, String facebookProfileLinkURI, String facebookProfilePicURI) {
         this.facebookAccountNumber = facebookAccountNumber;
         this.facebookProfileLinkURI = facebookProfileLinkURI;
         this.facebookProfilePicURI = facebookProfilePicURI;
@@ -61,13 +63,9 @@ public class UserAccount implements Serializable {
         return accountType;
     }
 
-    public int getPhoneNumber() {
-        return phoneNumber;
-    }
+    public String getPhoneNumber() { return phoneNumber;  }
 
-    public int getFacebookAccountNumber() {
-        return facebookAccountNumber;
-    }
+    public String getFacebookAccountNumber() { return facebookAccountNumber; }
 
     public String getName() {
         return name;
@@ -121,11 +119,11 @@ public class UserAccount implements Serializable {
         this.accountType = accountType;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setFacebookAccountNumber(int facebookAccountNumber) {
+    public void setFacebookAccountNumber(String facebookAccountNumber) {
         this.facebookAccountNumber = facebookAccountNumber;
     }
 

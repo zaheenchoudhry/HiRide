@@ -34,6 +34,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -933,13 +934,13 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
                         View alertLayout = inflater.inflate(R.layout.phone_number_layout, null);
                         final EditText etPhoneNumber = alertLayout.findViewById(R.id.et_phoneNumber);
                         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                        alert.setTitle("Add Phone Number");
-                        // this is set the view from XML inside AlertDialog
+                        alert.setTitle("Please verify/add your Phone Number");
+                        // this is set the view from XML inside AlertDialogf
                         alert.setView(alertLayout);
                         // disallow cancel of AlertDialog on click of back button and outside touch
 //                alert.setCancelable(false);
-                        if (userAccount.getPhoneNumber() != 0) {
-                            etPhoneNumber.setText(String.valueOf(userAccount.getPhoneNumber()));
+                        if (userAccount.getPhoneNumber() != "0") {
+                            etPhoneNumber.setText(userAccount.getPhoneNumber());
                         }
 
                         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
