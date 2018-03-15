@@ -64,6 +64,8 @@ public class RidePost {
         this.seatsBooked = seatsBooked;
     }
 
+    public int getOwnerUserId() { return ownerUserId; }
+
     public int getRideId() {
         return rideId;
     }

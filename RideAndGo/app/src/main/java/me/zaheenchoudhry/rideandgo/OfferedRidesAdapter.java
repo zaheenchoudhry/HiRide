@@ -1,5 +1,6 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,15 @@ public class OfferedRidesAdapter extends RecyclerView.Adapter<OfferedRidesAdapte
             timeText = (TextView)itemView.findViewById(R.id.time_num);
             timeAmPmText = (TextView)itemView.findViewById(R.id.time_num_am_pm);
             //itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentTransaction transaction = ((AppActivity)view.getContext()).getSupportFragmentManager().beginTransaction();
+                    RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_DRIVER, ridePost);
+                    transaction.replace(R.id.fragment_container, rideDetailFragment);
+                    transaction.commit();
+                }
+            });
         }
 
         public void initializeRidePost(RidePost ridePost) {

@@ -3,7 +3,9 @@
     <string name="google_api_key">AIzaSyBNYhZT4Vwn_g-zCzLfhmzmidsI-wX3gO4</string>
     <string name="facebook_app_id">109169366465923</string>
     <string name="ride_request_url">http://35.185.15.124/newRideRequest.php</string>
+    <string name="booking_request_url">http://35.185.15.124/newBookingRequest.php</string>
     <string name="get_all_rides_list_request_url">http://35.185.15.124/getRideList.php</string>
+    <string name="get_booking_list_request_url">http://35.185.15.124/getBookedRidesList.php</string>
     <string name="drivers_rides_request_url">http://35.185.15.124/getDriversRides.php</string>
     <string name="new_account_request_url">http://35.185.15.124/newAccountRequest.php</string>
     <string name="login_request_url">http://35.185.15.124/loginRequest.php</string>
