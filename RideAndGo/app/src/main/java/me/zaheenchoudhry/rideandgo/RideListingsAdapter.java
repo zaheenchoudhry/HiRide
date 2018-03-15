@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class RideListingsAdapter extends RecyclerView.Adapter<RideListingsAdapter.RidePostHolder> {
 
@@ -62,6 +65,7 @@ public class RideListingsAdapter extends RecyclerView.Adapter<RideListingsAdapte
 
         @Override
         public void onClick(View view) {
+             Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
 
         }
     }
