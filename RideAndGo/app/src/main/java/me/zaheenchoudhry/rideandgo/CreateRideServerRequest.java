@@ -230,7 +230,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
             ((AppActivity)context).setUserAccount(userAccount);
 
             FragmentTransaction transaction = ((AppActivity)context).getSupportFragmentManager().beginTransaction();
-            RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_DRIVER, ridePost);
+            RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_DRIVER, ridePost, false);
             transaction.replace(R.id.fragment_container, rideDetailFragment);
             transaction.commit();
         }

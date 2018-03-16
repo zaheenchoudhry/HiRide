@@ -30,9 +30,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.onesignal.OSPermissionSubscriptionState;
+import com.onesignal.OneSignal;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,9 +96,17 @@ public class RideDetailFragment extends Fragment {
     private CallbackManager callbackManager;
     private ShareDialog shareDialog;
 
+    Boolean bookedSuccessful;
+
     public RideDetailFragment(int accessor, RidePost ridePost) {
         this.accessor = accessor;
         this.ridePost = ridePost;
+    }
+
+    public RideDetailFragment(int accessor, RidePost ridePost, Boolean bookedSuccessful) {
+        this.accessor = accessor;
+        this.ridePost = ridePost;
+        this.bookedSuccessful = bookedSuccessful;
     }
 
     @Override
@@ -504,11 +515,14 @@ public class RideDetailFragment extends Fragment {
                         String day = dayOfWeek[ridePost.getDay() - 1];
                         String Month = dayOfMonth[ridePost.getMonth() - 1];
                         String dateText = (ridePost.getDate() < 10) ? ("0" + Integer.toString(ridePost.getDate())) : Integer.toString(ridePost.getDate());
-                        String quoteText = "I am driving from " + ridePost.getPickupCity() + " to " + ridePost.getDropoffCity() + " on " + dateText + ", " + Month + " " + day + "! Message for more info. ";
+
 
                         ShareLinkContent content = new ShareLinkContent.Builder()
                                 .setContentUrl(Uri.parse("https://developers.facebook.com"))
-                                .setQuote(quoteText)
+                                .setQuote("I am driving from" + ridePost.getPickupCity() + " to " + ridePost.getDropoffCity() + " on " + dateText + ", " + Month + " " + day)
+//                                .setShareHashtag(new ShareHashtag.Builder()
+//                                        .setHashtag("#ConnectTheWorld")
+//                                        .build())
                                 .build();
 
                         shareDialog.show(content);
@@ -640,6 +654,33 @@ public class RideDetailFragment extends Fragment {
             getBookingListServerRequest.execute();
         }
     }
+
+    private void sendNotificationIfBookedSuccessful() {
+
+
+        if (bookedSuccessful == true) {
+            OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+            String userId = status.getSubscriptionStatus().getUserId();
+            System.out.println("onesignal userId:" + userId);
+            boolean isSubscribed = status.getSubscriptionStatus().getSubscribed();
+
+            if (!isSubscribed)
+                return;
+
+            try {
+                JSONObject notificationContent = new JSONObject(
+                        "{'contents': {'en': '" + userAccount.getName() + " has requested to book your ride'}," +
+                        "'include_player_ids': ['" + userId + "'], " +
+                        "'headings': {'en': 'Booking Requested'}, " +
+                        "'big_picture': ''}");
+                OneSignal.postNotification(notificationContent, null);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
     private void initializeUserBookingList() {
         System.out.println("INITIALIZING BOOKING LIST");
@@ -1061,7 +1102,7 @@ public class RideDetailFragment extends Fragment {
                 driverAccount.setAcceptsCash(driverArray.getInt("AcceptsCash"));
                 driverAccount.setAcceptsInAppPayments(driverArray.getInt("AcceptsInAppPayments"));
 
-
+                sendNotificationIfBookedSuccessful();
                 initializeDriverProfile();
                 initializePaymentMethodsDisplay();
 

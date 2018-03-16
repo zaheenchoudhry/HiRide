@@ -51,7 +51,7 @@ public class RideListingsAdapter extends RecyclerView.Adapter<RideListingsAdapte
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction transaction = ((AppActivity)view.getContext()).getSupportFragmentManager().beginTransaction();
-                    RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_VIEWER, ridePost);
+                    RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_VIEWER, ridePost, false);
                     transaction.replace(R.id.fragment_container, rideDetailFragment);
                     transaction.commit();
                 }

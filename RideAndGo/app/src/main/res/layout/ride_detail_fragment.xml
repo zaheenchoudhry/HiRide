@@ -431,8 +431,8 @@
 
                                 <ImageView
                                     android:id="@+id/ride_detail_cash_method_icon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:layout_centerVertical="true"
                                     android:src="@drawable/check_mark_icon_2"/>
 
@@ -468,8 +468,8 @@
 
                                 <ImageView
                                     android:id="@+id/ride_detail_inapp_method_icon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:layout_centerVertical="true"
                                     android:src="@drawable/cross_icon_2"/>
 

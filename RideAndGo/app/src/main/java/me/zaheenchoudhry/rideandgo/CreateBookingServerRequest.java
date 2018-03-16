@@ -137,8 +137,9 @@ public class CreateBookingServerRequest extends AsyncTask<String, Void, String> 
 //            Toast.makeText(getApplicationContext(), "finished booking", Toast.LENGTH_SHORT).show();
         }
 
+
         FragmentTransaction transaction = ((AppActivity)context).getSupportFragmentManager().beginTransaction();
-        RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_PASSENGER, ridePost);
+        RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_PASSENGER, ridePost, true);
         transaction.replace(R.id.fragment_container, rideDetailFragment);
         transaction.commit();
     }

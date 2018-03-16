@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class OfferedRidesAdapter extends RecyclerView.Adapter<OfferedRidesAdapter.RidePostHolder> {
+public class BookedRidesAdapter extends RecyclerView.Adapter<BookedRidesAdapter.RidePostHolder> {
 
     private List<RidePost> ridePostList;
 
@@ -41,7 +41,7 @@ public class OfferedRidesAdapter extends RecyclerView.Adapter<OfferedRidesAdapte
                 @Override
                 public void onClick(View view) {
                     FragmentTransaction transaction = ((AppActivity)view.getContext()).getSupportFragmentManager().beginTransaction();
-                    RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_DRIVER, ridePost, false);
+                    RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_PASSENGER, ridePost, false);
                     transaction.replace(R.id.fragment_container, rideDetailFragment);
                     transaction.commit();
                 }
@@ -75,7 +75,7 @@ public class OfferedRidesAdapter extends RecyclerView.Adapter<OfferedRidesAdapte
         }
     }
 
-    public OfferedRidesAdapter(List<RidePost> ridePostList) {
+    public BookedRidesAdapter(List<RidePost> ridePostList) {
         this.ridePostList = ridePostList;
     }
 

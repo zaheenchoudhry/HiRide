@@ -7,13 +7,21 @@ public class RidePost {
     private int rideId, ownerUserId, day, date, month, year, hour, minute, seatsTotal, seatsBooked;
     private double price, pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude;
     private String pickupAddressFull, dropoffAddressFull, pickupAddressDisplay, dropoffAddressDisplay, pickupCity, dropoffCity;
-    private JSONArray Driver;
+    private UserAccount passenger;
 
     public RidePost() {}
 
     public void setRideAndOwnerId(int rideId, int ownerUserId) {
         this.rideId = rideId;
         this.ownerUserId = ownerUserId;
+    }
+
+    public void setPassenger(UserAccount account) {
+        this.passenger = account;
+    }
+
+    public UserAccount getPassenger() {
+        return this.passenger;
     }
 
     public void setDate(int day, int date, int month, int year) {
