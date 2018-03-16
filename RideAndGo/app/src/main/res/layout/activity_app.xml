@@ -53,6 +53,8 @@
                     android:textColor="#404040"
                     android:text="Akshat Soni"/>
 
+
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -195,6 +197,24 @@
                     android:text="History and Stats" />
 
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                >
+
+                <Button
+                    android:id="@+id/share_location_button"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="#00CE5B"
+                    android:textColor="#ffffff"
+                    android:text="Share Location"/>
+            </RelativeLayout>
+
         </LinearLayout>
     </android.support.design.widget.NavigationView>
 

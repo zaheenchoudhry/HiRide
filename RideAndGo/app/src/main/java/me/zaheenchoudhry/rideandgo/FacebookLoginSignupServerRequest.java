@@ -6,8 +6,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import com.hypertrack.lib.HyperTrack;
+import com.hypertrack.lib.callbacks.HyperTrackCallback;
+import com.hypertrack.lib.models.ErrorResponse;
+import com.hypertrack.lib.models.SuccessResponse;
+import com.hypertrack.lib.models.User;
+import com.hypertrack.lib.models.UserParams;
 import com.onesignal.OSPermissionSubscriptionState;
 import com.onesignal.OneSignal;
 
@@ -23,6 +32,8 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+
+import static java.lang.System.in;
 
 public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, String> {
 
@@ -173,6 +184,18 @@ public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, St
                         editor.apply();
                         //}
 
+                        /**
+                         * Get or Create a User for given lookupId on HyperTrack Server here to
+                         * login your user &amp; configure HyperTrack SDK with this generated
+                         * HyperTrack UserId.
+                         * OR
+                         * Implement your API call for User Login and get back a HyperTrack
+                         * UserId from your API Server to be configured in the HyperTrack SDK.
+                         */
+
+
+
+
                         if (alertDialog.isShowing()) {
                             alertDialog.dismiss();
                         }
@@ -200,6 +223,7 @@ public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, St
             ((LoginSignupActivity)context).changeToAppActivity(userAccount);
         }
     }
+
 
     private UserAccount getNewOfflineUserAccount() {
         SharedPreferences prefs =  context.getSharedPreferences(context.getString(R.string.saved_data_preferences_name), Context.MODE_PRIVATE);

@@ -1,5 +1,7 @@
 package me.zaheenchoudhry.rideandgo;
 
+import com.hypertrack.lib.models.User;
+
 import java.io.Serializable;
 import java.math.BigInteger;
 
@@ -20,6 +22,18 @@ public class UserAccount implements Serializable {
     private boolean wasLogginSuccessful;
     private boolean acceptsCash, acceptsInAppPayments;
     private boolean prefersMusic, prefersDrinks, prefersExtraLuggage, prefersPets;
+    User hyperTrackUser;
+
+
+
+    public User getHyperTrackUser() {
+        return this.hyperTrackUser;
+    }
+
+    public void setHyperTrackUser(User hyperTrackUser) {
+        this.hyperTrackUser = hyperTrackUser;
+    }
+
 
     public UserAccount(String name) {
         this(-1, -1, name, "-1");

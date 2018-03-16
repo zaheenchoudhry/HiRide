@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">HiRide</string>
-    <string name="google_api_key">AIzaSyBNYhZT4Vwn_g-zCzLfhmzmidsI-wX3gO4</string>
+    <!--<string name="google_api_key">AIzaSyBNYhZT4Vwn_g-zCzLfhmzmidsI-wX3gO4</string>-->
     <string name="facebook_app_id">109169366465923</string>
     <string name="ride_request_url">http://35.185.15.124/newRideRequest.php</string>
     <string name="booking_request_url">http://35.185.15.124/newBookingRequest.php</string>

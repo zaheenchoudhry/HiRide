@@ -1,5 +1,6 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,10 +18,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.facebook.share.Share;
+import com.hypertrack.lib.HyperTrack;
+import com.hypertrack.lib.callbacks.HyperTrackCallback;
+import com.hypertrack.lib.models.ErrorResponse;
+import com.hypertrack.lib.models.SuccessResponse;
+import com.hypertrack.lib.models.User;
+import com.hypertrack.lib.models.UserParams;
 
 public class AppActivity extends FragmentActivity {
 
@@ -44,6 +55,7 @@ public class AppActivity extends FragmentActivity {
     private TextView[] menuOptionsText;
     private ImageView menuProfileImage;
     private TextView menuProfileName;
+    private Button ShareLocationButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +95,23 @@ public class AppActivity extends FragmentActivity {
         menuProfileImage = (ImageView)findViewById(R.id.menu_profile_image);
         menuProfileName = (TextView)findViewById(R.id.menu_profile_name);
 
+
+        ShareLocationButton = findViewById(R.id.share_location_button);
+        ShareLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ShareLocationButton.getText().equals("Share Location")) {
+                    ShareLocationButton.setText("Stop Sharing");
+                    ShareLocationButton.setBackgroundColor(Color.parseColor("#FC576B"));
+                    HyperTrack.startTracking();
+                } else if (ShareLocationButton.getText().equals("Stop Sharing")) {
+                    ShareLocationButton.setText("Share Location");
+                    ShareLocationButton.setBackgroundColor(Color.parseColor("#00CE5B"));
+                    HyperTrack.stopTracking();
+                }
+            }
+        });
+
         initializeMenuAndProfileDisplay();
         initializeMenuOptions();
         initializeMenuActions();
@@ -92,7 +121,67 @@ public class AppActivity extends FragmentActivity {
         menuOptionsIndicator[pageToDisplay].setBackgroundColor(Color.parseColor("#22409A"));
         menuOptionsText[pageToDisplay].setTextColor(Color.parseColor("#303030"));
         switchToPage(pageToDisplay);
+
+        createHyperTrackUser();
     }
+
+    public void createHyperTrackUser() {
+        UserParams userParams = new UserParams().setName(userAccount.getName()).setPhone(userAccount.getPhoneNumber()).setLookupId(String.valueOf(userAccount.getUserId()));
+
+        /**
+         * Get or Create a User for given lookupId on HyperTrack Server here to
+         * login your user &amp; configure HyperTrack SDK with this generated
+         * HyperTrack UserId.
+         * OR
+         * Implement your API call for User Login and get back a HyperTrack
+         * UserId from your API Server to be configured in the HyperTrack SDK.
+         */
+        HyperTrack.getOrCreateUser(userParams, new HyperTrackCallback() {
+            @Override
+            public void onSuccess(@NonNull SuccessResponse successResponse) {
+                User user = (User) successResponse.getResponseObject();
+                // Handle createUser success here, if required
+                // HyperTrack SDK auto-configures UserId on createUser API call,
+                // so no need to call HyperTrack.setUserId() API
+                System.out.println(user);
+
+                HyperTrack.stopTracking();
+                // On UserLogin success
+            }
+
+            @Override
+            public void onError(@NonNull ErrorResponse errorResponse) {
+                // Hide Login Button loader
+                System.out.println(errorResponse.getErrorMessage());
+//                loginBtnLoader.setVisibility(View.GONE);
+//
+//                Toast.makeText(LoginActivity.this, R.string.login_error_msg
+//                        + &quot; &quot; + errorResponse.getErrorMessage(),
+//                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+                //        HyperTrack.getOrCreateUser(userParams, new HyperTrackCallback() {
+//            @Override
+//            public void onSuccess(@NonNull SuccessResponse successResponse) {
+//                User user = (User) successResponse.getResponseObject();
+//                // Handle createUser success here, if required
+//                // HyperTrack SDK auto-configures UserId on createUser API call,
+//                // so no need to call HyperTrack.setUserId() API
+//
+//                // On UserLogin success
+//                userAccount.setHyperTrackUser(user);
+//            }
+//
+//            @Override
+//            public void onError(@NonNull ErrorResponse errorResponse) {
+//                // Hide Login Button loader
+////                                loginBtnLoader.setVisibility(View.GONE);
+//                System.out.println(errorResponse);
+//            }
+//        });
+    }
+
 
     @Override
     public void onBackPressed() {

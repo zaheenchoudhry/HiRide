@@ -27,6 +27,7 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.hypertrack.lib.HyperTrack;
 
 import java.util.Arrays;
 
@@ -177,6 +178,7 @@ public class IntroFragment extends Fragment {
         facebookLoginImageParams.topMargin = (int)(screenY * 0.2f);
         facebookLoginImageParams.setMarginStart((int)(screenX * 0.1f + screenY * 0.02f));
 
+
         //facebookLoginButton.setReadPermissions("email");
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -213,6 +215,24 @@ public class IntroFragment extends Fragment {
                 }
             }
         });
+
+
+
+        // Check for Location permission
+        if (!HyperTrack.checkLocationPermission(this.getContext())) {
+            HyperTrack.requestPermissions(this.getActivity());
+            return;
+        }
+
+        // Check for Location settings
+        if (!HyperTrack.checkLocationServices(this.getContext())) {
+            HyperTrack.requestLocationServices(this.getActivity());
+        }
+
+        // Location Permissions and Settings have been enabled
+        // Proceed with your app logic here i.e User Login in this case
+
+
     }
 
     private void initializeTermsText() {
@@ -236,6 +256,7 @@ public class IntroFragment extends Fragment {
             attemptFacebookServerRequest();
         }
     }
+
 
     private void attemptFacebookServerRequest() {
         //AccessToken accessToken = loginResult.getAccessToken();
