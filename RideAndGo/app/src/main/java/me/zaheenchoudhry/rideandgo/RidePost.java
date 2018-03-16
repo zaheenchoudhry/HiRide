@@ -1,16 +1,44 @@
 package me.zaheenchoudhry.rideandgo;
 
+import org.json.JSONArray;
+
 public class RidePost {
 
-    private int rideId, ownerUserId, day, date, month, year, hour, minute, seatsTotal, seatsBooked;
+    private int rideId, ownerUserId, day, date, month, year, hour, minute, seatsTotal, seatsBooked, bookingId;
     private double price, pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude;
-    private String pickupAddressFull, dropoffAddressFull, pickupAddressDisplay, dropoffAddressDisplay, pickupCity, dropoffCity;
+    private String pickupAddressFull, dropoffAddressFull, pickupAddressDisplay, dropoffAddressDisplay, pickupCity, dropoffCity, IsAccepted;
+    private UserAccount passenger;
+
 
     public RidePost() {}
 
     public void setRideAndOwnerId(int rideId, int ownerUserId) {
         this.rideId = rideId;
         this.ownerUserId = ownerUserId;
+    }
+
+    public void setPassenger(UserAccount account) {
+        this.passenger = account;
+    }
+
+    public UserAccount getPassenger() {
+        return this.passenger;
+    }
+
+    public void setBookingId(int bookingId){
+        this.bookingId = bookingId;
+    }
+
+    public int getBookingId() {
+        return this.bookingId;
+    }
+
+    public String getIsAccepted() {
+        return this.IsAccepted;
+    }
+
+    public void setIsAccepted(String isAccepted) {
+        this.IsAccepted = isAccepted;
     }
 
     public void setDate(int day, int date, int month, int year) {
@@ -63,6 +91,8 @@ public class RidePost {
     public void setSeatsBooked(int seatsBooked) {
         this.seatsBooked = seatsBooked;
     }
+
+    public int getOwnerUserId() { return ownerUserId; }
 
     public int getRideId() {
         return rideId;

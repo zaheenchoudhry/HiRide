@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.onesignal.OSPermissionSubscriptionState;
+import com.onesignal.OneSignal;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,11 +46,15 @@ public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, St
         String signup_request_url = context.getString(R.string.facebook_account_request_url);
 
         try {
+            OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+            String oneSignalId = status.getSubscriptionStatus().getUserId();
+
             String accountParameters = "&accountType=" + accountType;
             accountParameters += "&name=" + URLEncoder.encode(name, "UTF-8");
             accountParameters += "&facebookAccountNumber=" + facebookAccountNumber;
             accountParameters += "&facebookProfileLinkURI=" + URLEncoder.encode(facebookProfileLinkURI, "UTF-8");
             accountParameters += "&facebookProfilePicURI=" + URLEncoder.encode(facebookProfilePicURI, "UTF-8");
+            accountParameters += "&oneSignalId=" + oneSignalId;
 
             URL url = new URL(signup_request_url);
             URLConnection connection = url.openConnection();
@@ -147,8 +154,8 @@ public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, St
                 for (int i = 0; i < rideList.length(); ++i) {
                     try {
                         JSONObject jsonAccount = rideList.getJSONObject(i);
-                        userAccount = new UserAccount(jsonAccount.getInt("UserId"), jsonAccount.getInt("AccountType"), jsonAccount.getString("Name"), jsonAccount.getInt("PhoneNumber"));
-                        userAccount.setFacebookUserSpecificDetails(jsonAccount.getInt("FacebookAccountNumber"), jsonAccount.getString("FacebookProfileLinkURI"), jsonAccount.getString("FacebookProfilePicURI"));
+                        userAccount = new UserAccount(jsonAccount.getInt("UserId"), jsonAccount.getInt("AccountType"), jsonAccount.getString("Name"), jsonAccount.getString("PhoneNumber"));
+                        userAccount.setFacebookUserSpecificDetails(jsonAccount.getString("FacebookAccountNumber"), jsonAccount.getString("FacebookProfileLinkURI"), jsonAccount.getString("FacebookProfilePicURI"));
                         userAccount.setAcceptedPaymentMethods(jsonAccount.getInt("AcceptsCash"), jsonAccount.getInt("AcceptsInAppPayments"));
                         userAccount.setPreferences(jsonAccount.getInt("PrefersMusic"), jsonAccount.getInt("PrefersDrinks"), jsonAccount.getInt("PrefersExtraLuggage"), jsonAccount.getInt("PrefersPets"));
 

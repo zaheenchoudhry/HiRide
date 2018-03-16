@@ -791,6 +791,7 @@
                 </RelativeLayout>
             </RelativeLayout>
 
+
             <RelativeLayout
                 android:id="@+id/create_ride_button_container"
                 android:layout_width="wrap_content"

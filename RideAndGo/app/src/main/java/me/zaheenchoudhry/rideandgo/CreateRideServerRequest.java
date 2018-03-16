@@ -26,6 +26,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
     private String pickupCity, dropoffCity, pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude;
     private String acceptsCash, acceptsInappPayments, prefersMusic, prefersDrinks, prefersLuggage, prefersPets;
     private String rideId;
+    private String phoneNumber;
 
     public CreateRideServerRequest(Context context) {
         super();
@@ -60,7 +61,8 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
         prefersLuggage = args[23];
         prefersPets = args[24];
         rideId = args[25];
-        String signup_request_url = context.getString(R.string.ride_request_url);;
+        phoneNumber = args[26];
+        String signup_request_url = context.getString(R.string.ride_request_url);
 
         try {
             String rideParameters = "&ownerUserId=" + ownerUserId;
@@ -71,6 +73,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
             rideParameters += "&hour=" + hour;
             rideParameters += "&minute=" + minute;
             rideParameters += "&seats=" + seats;
+            rideParameters += "&phoneNumber=" + phoneNumber;
             rideParameters += "&price=" + URLEncoder.encode(price, "UTF-8");
             rideParameters += "&pickupAddressFull=" + URLEncoder.encode(pickupAddressFull, "UTF-8");
             rideParameters += "&dropoffAddressFull=" + URLEncoder.encode(dropoffAddressFull, "UTF-8");
@@ -82,6 +85,7 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
             rideParameters += "&pickupLongitude=" + URLEncoder.encode(pickupLongitude, "UTF-8");
             rideParameters += "&dropoffLatitude=" + URLEncoder.encode(dropoffLatitude, "UTF-8");
             rideParameters += "&dropoffLongitude=" + URLEncoder.encode(dropoffLongitude, "UTF-8");
+
 
             if (!acceptsCash.equals("-1")) {
                 rideParameters += "&acceptsCash=" + URLEncoder.encode(acceptsCash, "UTF-8");
@@ -221,11 +225,12 @@ public class CreateRideServerRequest extends AsyncTask<String, Void, String> {
                 userAccount.setPrefersPets(Integer.parseInt(prefersPets));
                 editor.putBoolean(context.getString(R.string.saved_data_prefers_pets_name), Integer.parseInt(prefersPets) != 0);
             }
+
             editor.apply();
             ((AppActivity)context).setUserAccount(userAccount);
 
             FragmentTransaction transaction = ((AppActivity)context).getSupportFragmentManager().beginTransaction();
-            RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_DRIVER, ridePost);
+            RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_DRIVER, ridePost, false);
             transaction.replace(R.id.fragment_container, rideDetailFragment);
             transaction.commit();
         }

@@ -12,9 +12,11 @@ import android.graphics.Rect;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -29,10 +31,10 @@ import android.widget.DatePicker;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -40,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
@@ -86,6 +89,8 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
     private RelativeLayout[] preferences, preferencesIconsHolders;
     private ImageView[] preferencesIcons;
     private TextView[] preferencesTexts, preferencesNoTexts;
+
+    private String phoneNumber;
 
     private RidePost ridePost;
 
@@ -925,55 +930,42 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
                         alertDialog.setMessage("At least 1 payment method must be selected");
                         alertDialog.show();
                     } else {
-                        UserAccount userAccount = ((AppActivity)getActivity()).getUserAccount();
-
-                        int acceptsCashInt = (acceptsCash) ? 1 : 0;
-                        int acceptsInAppPaymentsInt = (acceptsInAppPayments) ? 1 : 0;
-                        int prefersMusicInt = (prefersPreference[0]) ? 1 : 0;
-                        int prefersDrinksInt = (prefersPreference[1]) ? 1 : 0;
-                        int prefersLuggageInt = (prefersPreference[2]) ? 1 : 0;
-                        int prefersPetsInt = (prefersPreference[3]) ? 1 : 0;
-
-                        String acceptsCashStr = (userAccount.doesAcceptCash() == acceptsCash) ? "-1" : Integer.toString(acceptsCashInt);
-                        String acceptsInAppPaymentsStr = (userAccount.doesAcceptInAppPayments() == acceptsInAppPayments) ? "-1" : Integer.toString(acceptsInAppPaymentsInt);
-                        String prefersMusicStr = (userAccount.doesPreferMusic() == prefersPreference[0]) ? "-1" : Integer.toString(prefersMusicInt);
-                        String prefersDrinksStr = (userAccount.doesPreferDrinks() == prefersPreference[1]) ? "-1" : Integer.toString(prefersDrinksInt);
-                        String prefersLuggageStr = (userAccount.doesPreferExtraLuggage() == prefersPreference[2]) ? "-1" : Integer.toString(prefersLuggageInt);
-                        String prefersPetsStr = (userAccount.doesPreferPets() == prefersPreference[3]) ? "-1" : Integer.toString(prefersPetsInt);
-
-                        String rideId = "-1";
-                        if (ridePost != null) {
-                            rideId = Integer.toString(ridePost.getRideId());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View alertLayout = inflater.inflate(R.layout.phone_number_layout, null);
+                        final EditText etPhoneNumber = alertLayout.findViewById(R.id.et_phoneNumber);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                        alert.setTitle("Please verify/add your Phone Number");
+                        // this is set the view from XML inside AlertDialogf
+                        alert.setView(alertLayout);
+                        // disallow cancel of AlertDialog on click of back button and outside touch
+//                alert.setCancelable(false);
+                        if (userAccount.getPhoneNumber() != "0") {
+                            etPhoneNumber.setText(userAccount.getPhoneNumber());
                         }
 
-                        CreateRideServerRequest createRideServerRequest = new CreateRideServerRequest(getActivity());
-                        createRideServerRequest.execute(
-                                Integer.toString(userAccount.getUserId()),
-                                Integer.toString(CreateRideFragment.day),
-                                Integer.toString(CreateRideFragment.date),
-                                Integer.toString(CreateRideFragment.month),
-                                Integer.toString(CreateRideFragment.year),
-                                Integer.toString(CreateRideFragment.hour),
-                                Integer.toString(CreateRideFragment.minute),
-                                Integer.toString(CreateRideFragment.seats),
-                                Double.toString(CreateRideFragment.price),
-                                pickupAddressFull,
-                                dropoffAddressFull,
-                                pickupAddressDisplay,
-                                dropoffAddressDisplay,
-                                pickupCity,
-                                dropoffCity,
-                                Double.toString(CreateRideFragment.pickupLatitude),
-                                Double.toString(CreateRideFragment.pickupLongitude),
-                                Double.toString(CreateRideFragment.dropoffLatitude),
-                                Double.toString(CreateRideFragment.dropoffLongitude),
-                                acceptsCashStr,
-                                acceptsInAppPaymentsStr,
-                                prefersMusicStr,
-                                prefersDrinksStr,
-                                prefersLuggageStr,
-                                prefersPetsStr,
-                                rideId);
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(), "Cancelled Ride Post", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                if (!(etPhoneNumber.getText().toString().equals(""))) {
+                                   phoneNumber = etPhoneNumber.getText().toString();
+                                   runCreateRide();
+                                }
+                            }
+                        });
+                        AlertDialog dialog = alert.create();
+                        dialog.show();
+
+
                     }
                 } else {
                     alertDialog.setTitle("You are not logged in");
@@ -982,6 +974,63 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
                 }
             }
         });
+    }
+
+    private void runCreateRide() {
+        UserAccount userAccount = ((AppActivity)getActivity()).getUserAccount();
+
+        if (phoneNumber == null) {
+            phoneNumber = String.valueOf(userAccount.getPhoneNumber());
+        }
+
+        int acceptsCashInt = (acceptsCash) ? 1 : 0;
+        int acceptsInAppPaymentsInt = (acceptsInAppPayments) ? 1 : 0;
+        int prefersMusicInt = (prefersPreference[0]) ? 1 : 0;
+        int prefersDrinksInt = (prefersPreference[1]) ? 1 : 0;
+        int prefersLuggageInt = (prefersPreference[2]) ? 1 : 0;
+        int prefersPetsInt = (prefersPreference[3]) ? 1 : 0;
+
+        String acceptsCashStr = (userAccount.doesAcceptCash() == acceptsCash) ? "-1" : Integer.toString(acceptsCashInt);
+        String acceptsInAppPaymentsStr = (userAccount.doesAcceptInAppPayments() == acceptsInAppPayments) ? "-1" : Integer.toString(acceptsInAppPaymentsInt);
+        String prefersMusicStr = (userAccount.doesPreferMusic() == prefersPreference[0]) ? "-1" : Integer.toString(prefersMusicInt);
+        String prefersDrinksStr = (userAccount.doesPreferDrinks() == prefersPreference[1]) ? "-1" : Integer.toString(prefersDrinksInt);
+        String prefersLuggageStr = (userAccount.doesPreferExtraLuggage() == prefersPreference[2]) ? "-1" : Integer.toString(prefersLuggageInt);
+        String prefersPetsStr = (userAccount.doesPreferPets() == prefersPreference[3]) ? "-1" : Integer.toString(prefersPetsInt);
+
+        String rideId = "-1";
+        if (ridePost != null) {
+            rideId = Integer.toString(ridePost.getRideId());
+        }
+
+        CreateRideServerRequest createRideServerRequest = new CreateRideServerRequest(getActivity());
+        createRideServerRequest.execute(
+                Integer.toString(userAccount.getUserId()),
+                Integer.toString(CreateRideFragment.day),
+                Integer.toString(CreateRideFragment.date),
+                Integer.toString(CreateRideFragment.month),
+                Integer.toString(CreateRideFragment.year),
+                Integer.toString(CreateRideFragment.hour),
+                Integer.toString(CreateRideFragment.minute),
+                Integer.toString(CreateRideFragment.seats),
+                Double.toString(CreateRideFragment.price),
+                pickupAddressFull,
+                dropoffAddressFull,
+                pickupAddressDisplay,
+                dropoffAddressDisplay,
+                pickupCity,
+                dropoffCity,
+                Double.toString(CreateRideFragment.pickupLatitude),
+                Double.toString(CreateRideFragment.pickupLongitude),
+                Double.toString(CreateRideFragment.dropoffLatitude),
+                Double.toString(CreateRideFragment.dropoffLongitude),
+                acceptsCashStr,
+                acceptsInAppPaymentsStr,
+                prefersMusicStr,
+                prefersDrinksStr,
+                prefersLuggageStr,
+                prefersPetsStr,
+                rideId,
+                phoneNumber);
     }
 
     private boolean isValidDate() {

@@ -191,6 +191,7 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
                     JSONObject ride = rideList.getJSONObject(i);
                     // Pulling items from the array
                     RidePost ridePost = new RidePost();
+                    ridePost.setRideAndOwnerId(ride.getInt("RideId"),ride.getInt("OwnerUserId") );
                     ridePost.setDate(ride.getInt("Day"), ride.getInt("Date"), ride.getInt("Month"), ride.getInt("Year"));
                     ridePost.setTime(ride.getInt("Hour"), ride.getInt("Minute"));
                     ridePost.setSeats(ride.getInt("SeatsTotal"), ride.getInt("SeatsBooked"));
