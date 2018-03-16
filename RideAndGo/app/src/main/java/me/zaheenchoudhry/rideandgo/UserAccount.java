@@ -14,7 +14,7 @@ public class UserAccount implements Serializable {
     public static final int PREFERENCE_EXTRA_LUGGAGE = 2;
     public static final int PREFERENCE_PETS = 3;
 
-    private String phoneNumber, facebookAccountNumber;
+    private String phoneNumber, facebookAccountNumber, oneSignalId;
     private int userId, accountType;
     private String name, emailId, facebookProfilePicURI, facebookProfileLinkURI;
     private boolean wasLogginSuccessful;
@@ -35,6 +35,26 @@ public class UserAccount implements Serializable {
         this.emailId = "";
         this.facebookProfilePicURI = "";
         this.wasLogginSuccessful = true;
+    }
+
+    public UserAccount(int userId, int accountType, String name, String phoneNumber, String oneSignalId) {
+        this.userId = userId;
+        this.accountType = accountType;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.facebookAccountNumber = String.valueOf(-1);
+        this.emailId = "";
+        this.facebookProfilePicURI = "";
+        this.wasLogginSuccessful = true;
+        this.oneSignalId = oneSignalId;
+    }
+
+    public String getOneSignalId() {
+        return oneSignalId;
+    }
+
+    public void setOneSignalId(String oneSignalId) {
+        this.oneSignalId = oneSignalId;
     }
 
     public void setFacebookUserSpecificDetails(String facebookAccountNumber, String facebookProfileLinkURI, String facebookProfilePicURI) {

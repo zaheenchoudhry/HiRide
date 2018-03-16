@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.onesignal.OSPermissionSubscriptionState;
+import com.onesignal.OneSignal;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,11 +46,15 @@ public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, St
         String signup_request_url = context.getString(R.string.facebook_account_request_url);
 
         try {
+            OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+            String oneSignalId = status.getSubscriptionStatus().getUserId();
+
             String accountParameters = "&accountType=" + accountType;
             accountParameters += "&name=" + URLEncoder.encode(name, "UTF-8");
             accountParameters += "&facebookAccountNumber=" + facebookAccountNumber;
             accountParameters += "&facebookProfileLinkURI=" + URLEncoder.encode(facebookProfileLinkURI, "UTF-8");
             accountParameters += "&facebookProfilePicURI=" + URLEncoder.encode(facebookProfilePicURI, "UTF-8");
+            accountParameters += "&oneSignalId=" + oneSignalId;
 
             URL url = new URL(signup_request_url);
             URLConnection connection = url.openConnection();

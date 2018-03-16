@@ -73,7 +73,7 @@ public class RequestsFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        requestsAdapter = new RequestsAdapter(ridePostList, screenX, screenY);
+        requestsAdapter = new RequestsAdapter(ridePostList, screenX, screenY, getActivity());
         recyclerView.setAdapter(requestsAdapter);
 
         return view;
@@ -110,11 +110,12 @@ public class RequestsFragment extends Fragment {
                     ridePost.setDropoffAddress(ride.getString("DropoffAddressFull"), ride.getString("DropoffAddressDisplay"), ride.getString("DropoffCity"));
                     ridePost.setPickupAddressCoordinates(ride.getDouble("PickupLatitude"), ride.getDouble("PickupLongitude"));
                     ridePost.setDropoffAddressCoordinates(ride.getDouble("DropoffLatitude"), ride.getDouble("DropoffLongitude"));
-
+                    ridePost.setBookingId(ride.getInt("BookingId"));
+                    ridePost.setIsAccepted(ride.getString("IsAccepted"));
 
                     JSONArray passengerArray = ride.getJSONArray("Passenger");
                     JSONObject passenger = passengerArray.getJSONObject(0);
-                    ridePost.setPassenger(new UserAccount(passenger.getInt("UserId"), passenger.getInt("AccountType"), passenger.getString("Name"), passenger.getString("PhoneNumber")));
+                    ridePost.setPassenger(new UserAccount(passenger.getInt("UserId"), passenger.getInt("AccountType"), passenger.getString("Name"), passenger.getString("PhoneNumber"), passenger.getString("OneSignalId")));
                     ridePost.getPassenger().setFacebookProfilePicURI(passenger.getString("FacebookProfilePicURI"));
                     ridePost.getPassenger().setFacebookProfileLinkURI(passenger.getString("FacebookProfileLinkURI"));
 

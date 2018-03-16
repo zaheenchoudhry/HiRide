@@ -670,7 +670,7 @@ public class RideDetailFragment extends Fragment {
             try {
                 JSONObject notificationContent = new JSONObject(
                         "{'contents': {'en': '" + userAccount.getName() + " has requested to book your ride'}," +
-                        "'include_player_ids': ['" + userId + "'], " +
+                        "'include_player_ids': ['" + driverAccount.getOneSignalId() + "'], " +
                         "'headings': {'en': 'Booking Requested'}, " +
                         "'big_picture': ''}");
                 OneSignal.postNotification(notificationContent, null);
@@ -800,6 +800,17 @@ public class RideDetailFragment extends Fragment {
         driverImageParams.height = (int)(screenY * 0.075f);
         driverNameText.setTextSize((int)(screenX * 0.009f));
         driverNameTextParams.topMargin = (int)(screenY * 0.002f);
+
+        driverImageHolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = driverAccount.getFacebookProfileLinkURI();
+
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
     }
 
     private void initializeRatingDisplay() {
@@ -1095,12 +1106,13 @@ public class RideDetailFragment extends Fragment {
                 JSONArray user = jsonResponse.getJSONArray("user");
 
                 JSONObject driverArray = user.getJSONObject(0);
-                driverAccount = new UserAccount(driverArray.getInt("UserId"), driverArray.getInt("AccountType"), driverArray.getString("Name"), driverArray.getString("PhoneNumber"));
+                driverAccount = new UserAccount(driverArray.getInt("UserId"), driverArray.getInt("AccountType"), driverArray.getString("Name"), driverArray.getString("PhoneNumber"), driverArray.getString("OneSignalId"));
                 driverAccount.setFacebookAccountNumber(driverArray.getString("FacebookAccountNumber"));
                 driverAccount.setFacebookProfileLinkURI(driverArray.getString("FacebookProfileLinkURI"));
                 driverAccount.setFacebookProfilePicURI(driverArray.getString("FacebookProfilePicURI"));
                 driverAccount.setAcceptsCash(driverArray.getInt("AcceptsCash"));
                 driverAccount.setAcceptsInAppPayments(driverArray.getInt("AcceptsInAppPayments"));
+
 
                 sendNotificationIfBookedSuccessful();
                 initializeDriverProfile();
