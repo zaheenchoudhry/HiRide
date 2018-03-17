@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="0dp"
+        card_view:cardElevation="0dp"
+        card_view:cardCornerRadius="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp">
+
+            <RelativeLayout
+                android:id="@+id/city_start_end_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/start_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#404040"
+                    android:layout_marginStart="20dp"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/arrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/arrow_right_darkgrey"
+                    android:layout_marginTop="4dp"
+                    android:layout_toEndOf="@id/start_city"
+                    android:layout_marginStart="10dp" />
+
+                <TextView
+                    android:id="@+id/end_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#404040"
+                    android:layout_marginStart="10dp"
+                    android:textSize="18sp"
+                    android:layout_toEndOf="@id/arrow" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/date_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="54dp"
+                android:layout_marginStart="20dp">
+
+                <TextView
+                    android:id="@+id/date_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="#808080"
+                    android:layout_marginTop="0dp"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/date_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="#1777CD"
+                    android:layout_marginTop="14dp"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/date_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="#808080"
+                    android:layout_marginTop="50dp"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_toEndOf="@+id/date_container"
+                android:id="@+id/fb_user_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:layout_marginStart="30dp">
+
+                <RelativeLayout
+                    android:id="@+id/ride_detail_driver_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true">
+
+                    <RelativeLayout
+                        android:id="@+id/ride_detail_driver_image_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:background="#aaaaaa" >
+
+                        <ImageView
+                            android:id="@+id/ride_detail_driver_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/ride_detail_driver_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/ride_detail_driver_image_holder"
+                        android:textColor="#404040" />
+
+                    <RelativeLayout
+                        android:id="@+id/ride_detail_rating_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/ride_detail_driver_name">
+
+                        <!--<ImageView-->
+                            <!--android:id="@+id/ride_detail_rating_icon"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:src="@drawable/star_gold"/>-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/ride_detail_rating"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:layout_toEndOf="@+id/ride_detail_rating_icon"-->
+                            <!--android:textColor="#404040"-->
+                            <!--android:text="4.5"/>-->
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <!--<TextView-->
+                    <!--android:id="@+id/pickup_text"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="14dp"-->
+                    <!--android:layout_marginTop="8dp"-->
+                    <!--android:textColor="@android:color/black"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:text="Pickup" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/pickup_address_text"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="14dp"-->
+                    <!--android:layout_marginTop="26dp"-->
+                    <!--android:textColor="#808080"-->
+                    <!--android:textSize="14sp" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dropoff_text"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="14dp"-->
+                    <!--android:layout_marginTop="50dp"-->
+                    <!--android:textColor="@android:color/black"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:text="Dropoff" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/dropoff_address_text"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="14dp"-->
+                    <!--android:layout_marginTop="68dp"-->
+                    <!--android:textColor="#808080"-->
+                    <!--android:textSize="14sp" />-->
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/seats_container"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="145dp">
+
+                <!--<TextView-->
+                    <!--android:id="@+id/time_text"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="#404040"-->
+                    <!--android:layout_marginStart="22dp"-->
+                    <!--android:textSize="15sp"-->
+                    <!--android:text="Time:"/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/time_num"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="#606060"-->
+                    <!--android:layout_toEndOf="@id/time_text"-->
+                    <!--android:layout_marginStart="6dp"-->
+                    <!--android:layout_marginTop="1dp"-->
+                    <!--android:textSize="14sp" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/time_num_am_pm"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="#606060"-->
+                    <!--android:layout_toEndOf="@id/time_num"-->
+                    <!--android:layout_marginStart="3dp"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:textSize="13sp" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/time_seat_spacer"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="#b0b0b0"-->
+                    <!--android:layout_toEndOf="@id/time_num_am_pm"-->
+                    <!--android:layout_marginStart="15dp"-->
+                    <!--android:layout_marginTop="-29dp"-->
+                    <!--android:textSize="40sp"-->
+                    <!--android:text="."/>-->
+
+                <TextView
+                    android:id="@+id/seat_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#404040"
+                    android:layout_toEndOf="@id/time_seat_spacer"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="1dp"
+                    android:textSize="14sp"
+                    android:text="Seats:"/>
+
+                <TextView
+                    android:id="@+id/seat_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#606060"
+                    android:layout_toEndOf="@id/seat_text"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="1dp"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/right_anchor"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_alignParentEnd="true" />-->
+
+            <RelativeLayout
+                android:id="@+id/accept_request_button"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:layout_toEndOf="@id/seats_container"
+                android:layout_marginStart="150dp"
+                android:layout_marginTop="135dp">
+
+                    <Button
+                        android:id="@+id/accept_click"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:background="#444A5A"
+                        android:textColor="#ffffff"
+                        android:text="Accept"
+                        android:clickable="false"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/reject_request_button"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:layout_toEndOf="@id/accept_request_button"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="135dp">
+
+                <Button
+                    android:id="@+id/reject_click"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="#444A5A"
+                    android:textColor="#ffffff"
+                    android:text="Reject"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/right_anchor"
+                android:layout_marginStart="-70dp"
+                android:layout_marginTop="17dp">
+
+                <TextView
+                    android:id="@+id/price_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#1366AE"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

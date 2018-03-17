@@ -1,18 +1,29 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.content.Context;
+import android.graphics.Point;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class RideListingsAdapter extends RecyclerView.Adapter<RideListingsAdapter.RidePostHolder> {
 
     private List<RidePost> ridePostList;
     private RideListingFragment rideListingFragment;
+    private Context context;
 
     public static class RidePostHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -36,11 +47,20 @@ public class RideListingsAdapter extends RecyclerView.Adapter<RideListingsAdapte
             seatsText = (TextView)itemView.findViewById(R.id.seat_num);
             timeText = (TextView)itemView.findViewById(R.id.time_num);
             timeAmPmText = (TextView)itemView.findViewById(R.id.time_num_am_pm);
-            //itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentTransaction transaction = ((AppActivity)view.getContext()).getSupportFragmentManager().beginTransaction();
+                    RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_VIEWER, ridePost, false);
+                    transaction.replace(R.id.fragment_container, rideDetailFragment);
+                    transaction.commit();
+                }
+            });
         }
 
-        public void initializeRidePost(RidePost ridePost) {
+        public void initializeRidePost(final RidePost ridePost) {
             this.ridePost = ridePost;
+
             int hourFormat12 = (ridePost.getHour() > 12) ? (ridePost.getHour() - 12) : ridePost.getHour();
             hourFormat12 = (hourFormat12 == 0) ? 12 : hourFormat12;
             String timeString = Integer.toString(hourFormat12) + ":";
@@ -58,13 +78,19 @@ public class RideListingsAdapter extends RecyclerView.Adapter<RideListingsAdapte
             dayText.setText(dayOfWeek[ridePost.getDay() - 1]);
             monthText.setText(dayOfMonth[ridePost.getMonth() - 1]);
             dateText.setText((ridePost.getDate() < 10) ? ("0" + Integer.toString(ridePost.getDate())) : Integer.toString(ridePost.getDate()));
+
         }
 
         @Override
         public void onClick(View view) {
-
+            FragmentTransaction transaction = ((AppActivity)view.getContext()).getSupportFragmentManager().beginTransaction();
+            RideDetailFragment rideDetailFragment = new RideDetailFragment(RideDetailFragment.ACCESSOR_VIEWER, ridePost);
+            transaction.replace(R.id.fragment_container, rideDetailFragment);
+            transaction.commit();
         }
     }
+
+
 
     public RideListingsAdapter(RideListingFragment rideListingFragment, List<RidePost> ridePostList) {
         this.ridePostList = ridePostList;
@@ -76,7 +102,6 @@ public class RideListingsAdapter extends RecyclerView.Adapter<RideListingsAdapte
         // View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
         // create a new view holder
         //layout.setElevation(30);
-
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.ride_listing_card, viewGroup, false);
         return new RidePostHolder(itemView);
     }

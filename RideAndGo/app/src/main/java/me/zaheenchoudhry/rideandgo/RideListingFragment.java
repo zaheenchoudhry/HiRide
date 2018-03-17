@@ -1,5 +1,9 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.AsyncTask;
@@ -10,14 +14,19 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +40,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class RideListingFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
@@ -59,7 +70,7 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ridePostList = new ArrayList<RidePost>();
-        fetchRideListFromServer();
+        fetchRideListFromServer(null);
     }
 
     @Override
@@ -97,24 +108,80 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
             @Override
             public void onClick(View view) {
                 // Create new fragment and transaction
-                CreateRideFragment createRideFragment = new CreateRideFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, createRideFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+//                CreateRideFragment createRideFragment = new CreateRideFragment();
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.replace(R.id.fragment_container, createRideFragment);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
+                ((AppActivity)getActivity()).openMenu();
+            }
+        });
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = getLayoutInflater();
+                View alertLayout = inflater.inflate(R.layout.filter_layout, null);
+                final EditText etPickup = alertLayout.findViewById(R.id.et_pickup);
+                final EditText etDropoff = alertLayout.findViewById(R.id.et_dropoff);
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle("Add Filters To Ride Listings");
+                // this is set the view from XML inside AlertDialog
+                alert.setView(alertLayout);
+                // disallow cancel of AlertDialog on click of back button and outside touch
+//                alert.setCancelable(false);
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String pickup = etPickup.getText().toString();
+                        String dropoff = etDropoff.getText().toString();
+
+                        if (pickup.equals("") || dropoff.equals("")) {
+                            Toast.makeText(getApplicationContext(), "Pickup / Dropoff City cannot be empty", Toast.LENGTH_SHORT).show();
+                            fetchRideListFromServer(null);
+                        }
+                        else {
+                            String[] filters = {"PickupCity=" + pickup, "DropoffCity=" + dropoff};
+                            fetchRideListFromServer(filters);
+                        }
+                        initializeRidePostList();
+                        rideListingsAdapter = new RideListingsAdapter(RideListingFragment.this, ridePostList);
+                        recyclerView.setAdapter(rideListingsAdapter);
+                    }
+                });
+                AlertDialog dialog = alert.create();
+                dialog.show();
             }
         });
 
         return view;
     }
 
-    private void fetchRideListFromServer() {
-        GetRideListServerRequest getRideListServerRequest = new GetRideListServerRequest();
-        getRideListServerRequest.execute();
+
+    private void fetchRideListFromServer(String[] params) {
+        if (params != null) {
+            GetRideListServerRequest getRideListServerRequest = new GetRideListServerRequest(params);
+            getRideListServerRequest.execute();
+        }
+        else {
+            GetRideListServerRequest getRideListServerRequest = new GetRideListServerRequest();
+            getRideListServerRequest.execute();
+        }
     }
 
     private void initializeRidePostList() {
         System.out.println("INITIALIZING RIDE POST LIST");
+        ridePostList.clear();
 
         try {
             JSONObject jsonResponse = new JSONObject(jsonResultString);
@@ -124,6 +191,7 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
                     JSONObject ride = rideList.getJSONObject(i);
                     // Pulling items from the array
                     RidePost ridePost = new RidePost();
+                    ridePost.setRideAndOwnerId(ride.getInt("RideId"),ride.getInt("OwnerUserId") );
                     ridePost.setDate(ride.getInt("Day"), ride.getInt("Date"), ride.getInt("Month"), ride.getInt("Year"));
                     ridePost.setTime(ride.getInt("Hour"), ride.getInt("Minute"));
                     ridePost.setSeats(ride.getInt("SeatsTotal"), ride.getInt("SeatsBooked"));
@@ -143,6 +211,14 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
         }
 
         Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+
+        for(Fragment fragment: getActivity().getSupportFragmentManager().getFragments()){
+            if (currentFragment instanceof RideDetailFragment) {
+                getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        }
+
         if (currentFragment instanceof RideListingFragment) {
             FragmentTransaction fragTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             fragTransaction.detach(currentFragment);
@@ -197,12 +273,30 @@ public class RideListingFragment extends Fragment implements AppBarLayout.OnOffs
     }
 
     class GetRideListServerRequest extends AsyncTask<Void, Void, String> {
+        String[] filters;
+
+        public GetRideListServerRequest() {
+            filters = null;
+        }
+
+        public GetRideListServerRequest(String[] inputFilters) {
+            filters = inputFilters;
+        }
 
         @Override
         protected String doInBackground(Void... voids) {
             String result = "";
             String string_url = getActivity().getString(R.string.get_all_rides_list_request_url);
 
+            if (filters != null) {
+                string_url += "?";
+
+                for (String filter: filters) {
+                    string_url += filter + "&";
+                }
+            }
+
+//          string_url = string_url + "?DropoffCity=Waterloo";
             try {
                 URL url = new URL(string_url);
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
