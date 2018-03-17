@@ -50,6 +50,7 @@ public class IntroFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         callbackManager = CallbackManager.Factory.create();
+
     }
 
     @Override
@@ -216,18 +217,6 @@ public class IntroFragment extends Fragment {
             }
         });
 
-
-
-        // Check for Location permission
-        if (!HyperTrack.checkLocationPermission(this.getContext())) {
-            HyperTrack.requestPermissions(this.getActivity());
-            return;
-        }
-
-        // Check for Location settings
-        if (!HyperTrack.checkLocationServices(this.getContext())) {
-            HyperTrack.requestLocationServices(this.getActivity());
-        }
 
         // Location Permissions and Settings have been enabled
         // Proceed with your app logic here i.e User Login in this case

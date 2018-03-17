@@ -3,6 +3,7 @@ package me.zaheenchoudhry.rideandgo;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.AppBarLayout;
@@ -33,6 +35,7 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
+import com.hypertrack.lib.HyperTrack;
 
 import java.math.BigInteger;
 import java.text.DecimalFormat;
@@ -91,9 +94,10 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
     private TextView[] preferencesTexts, preferencesNoTexts;
 
     private String phoneNumber;
-
+    Context context;
     private RidePost ridePost;
-
+    LocationManager locationManager ;
+    Boolean GpsStatus;
     public CreateRideFragment() {
         this(null);
     }
@@ -105,6 +109,18 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
+        // Check for Location permission
+        if (!HyperTrack.checkLocationPermission(this.getContext())) {
+            HyperTrack.requestPermissions(this.getActivity());
+            return;
+        }
+
+        // Check for Location settings
+        if (!HyperTrack.checkLocationServices(this.getContext())) {
+            HyperTrack.requestLocationServices(this.getActivity());
+            HyperTrack.initialize(getContext(), "pk_test_5799c7ab4f653bfbc475d180e4128306e16b9301");
+        }
     }
 
     @Override

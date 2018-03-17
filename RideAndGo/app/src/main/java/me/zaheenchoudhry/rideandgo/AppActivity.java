@@ -1,5 +1,7 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +34,8 @@ import com.hypertrack.lib.models.ErrorResponse;
 import com.hypertrack.lib.models.SuccessResponse;
 import com.hypertrack.lib.models.User;
 import com.hypertrack.lib.models.UserParams;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AppActivity extends FragmentActivity {
 
@@ -104,6 +108,13 @@ public class AppActivity extends FragmentActivity {
                     ShareLocationButton.setText("Stop Sharing");
                     ShareLocationButton.setBackgroundColor(Color.parseColor("#FC576B"));
                     HyperTrack.startTracking();
+                    ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    String hpID = HyperTrack.getUserId();
+
+                    String url = "file:///C:/Users/lorsk/Desktop/landing%20pages/location_map.html?userId=" + hpID;
+                    ClipData clip = ClipData.newPlainText("Phone Number", url);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(getApplicationContext(), "Copied Link for sharing to clip board", Toast.LENGTH_SHORT).show();
                 } else if (ShareLocationButton.getText().equals("Stop Sharing")) {
                     ShareLocationButton.setText("Share Location");
                     ShareLocationButton.setBackgroundColor(Color.parseColor("#00CE5B"));

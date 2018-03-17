@@ -1,5 +1,6 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.res.Configuration;
 
@@ -17,10 +18,12 @@ public class HiRide extends Application {
         super.onConfigurationChanged(newConfig);
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
 
+        // Check for Location settings
         HyperTrack.initialize(this, "pk_test_5799c7ab4f653bfbc475d180e4128306e16b9301");
 
         OneSignal.startInit(this)
