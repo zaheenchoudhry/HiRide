@@ -147,8 +147,8 @@ public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, St
                 for (int i = 0; i < rideList.length(); ++i) {
                     try {
                         JSONObject jsonAccount = rideList.getJSONObject(i);
-                        userAccount = new UserAccount(jsonAccount.getInt("UserId"), jsonAccount.getInt("AccountType"), jsonAccount.getString("Name"), jsonAccount.getInt("PhoneNumber"));
-                        userAccount.setFacebookUserSpecificDetails(jsonAccount.getInt("FacebookAccountNumber"), jsonAccount.getString("FacebookProfileLinkURI"), jsonAccount.getString("FacebookProfilePicURI"));
+                        userAccount = new UserAccount(jsonAccount.getInt("UserId"), jsonAccount.getInt("AccountType"), jsonAccount.getString("Name"), jsonAccount.getString("PhoneNumber"));
+                        userAccount.setFacebookUserSpecificDetails(jsonAccount.getString("FacebookAccountNumber"), jsonAccount.getString("FacebookProfileLinkURI"), jsonAccount.getString("FacebookProfilePicURI"));
                         userAccount.setAcceptedPaymentMethods(jsonAccount.getInt("AcceptsCash"), jsonAccount.getInt("AcceptsInAppPayments"));
                         userAccount.setPreferences(jsonAccount.getInt("PrefersMusic"), jsonAccount.getInt("PrefersDrinks"), jsonAccount.getInt("PrefersExtraLuggage"), jsonAccount.getInt("PrefersPets"));
 

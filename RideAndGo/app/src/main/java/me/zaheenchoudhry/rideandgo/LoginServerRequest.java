@@ -152,7 +152,7 @@ public class LoginServerRequest extends AsyncTask<String, Void, String> {
                 for (int i = 0; i < rideList.length(); ++i) {
                     try {
                         JSONObject jsonAccount = rideList.getJSONObject(i);
-                        userAccount = new UserAccount(jsonAccount.getInt("UserId"), jsonAccount.getInt("AccountType"), jsonAccount.getString("Name"), jsonAccount.getInt("PhoneNumber"));
+                        userAccount = new UserAccount(jsonAccount.getInt("UserId"), jsonAccount.getInt("AccountType"), jsonAccount.getString("Name"), jsonAccount.getString("PhoneNumber"));
                         userAccount.setAcceptedPaymentMethods(jsonAccount.getInt("AcceptsCash"), jsonAccount.getInt("AcceptsInAppPayments"));
                         userAccount.setPreferences(jsonAccount.getInt("PrefersMusic"), jsonAccount.getInt("PrefersDrinks"), jsonAccount.getInt("PrefersExtraLuggage"), jsonAccount.getInt("PrefersPets"));
 
