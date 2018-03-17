@@ -45,7 +45,6 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
-import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
