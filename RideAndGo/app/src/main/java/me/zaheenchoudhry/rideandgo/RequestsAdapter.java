@@ -1,6 +1,8 @@
 package me.zaheenchoudhry.rideandgo;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -21,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.onesignal.OSPermissionSubscriptionState;
 import com.onesignal.OneSignal;
@@ -40,6 +43,7 @@ import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static me.zaheenchoudhry.rideandgo.RideDetailFragment.ACCESSOR_DRIVER;
 import static me.zaheenchoudhry.rideandgo.RideDetailFragment.ACCESSOR_PASSENGER;
 import static me.zaheenchoudhry.rideandgo.RideDetailFragment.ACCESSOR_VIEWER;
@@ -53,7 +57,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.RidePo
     private SetBookingStatusServerRequest setBookingStatusNull;
     private SetBookingStatusServerRequest setBookingStatusAccepted;
     private SetBookingStatusServerRequest setBookingStatusRejected;
-
+    View alertLayout;
 
     public static class RidePostHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -108,7 +112,8 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.RidePo
 //            });
         }
 
-        public void initializeRidePost(final RidePost ridePost, Context context) {
+        public void initializeRidePost(final RidePost ridePost, final Context context, View alertLayout) {
+            final View confirmLayout = alertLayout;
             this.ridePost = ridePost;
             final Context appContext = context;
             int hourFormat12 = (ridePost.getHour() > 12) ? (ridePost.getHour() - 12) : ridePost.getHour();
@@ -128,6 +133,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.RidePo
             dayText.setText(dayOfWeek[ridePost.getDay() - 1]);
             monthText.setText(dayOfMonth[ridePost.getMonth() - 1]);
             dateText.setText((ridePost.getDate() < 10) ? ("0" + Integer.toString(ridePost.getDate())) : Integer.toString(ridePost.getDate()));
+            acceptClick.setClickable(false);
 
 
             if (ridePost.getIsAccepted().equals("1")) {
@@ -135,88 +141,133 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.RidePo
                 acceptClick.setText("Accepted");
                 acceptClick.setTextColor(Color.parseColor("#444A5A"));
 
-                rejectClick.setText("Edit");
+                rejectClick.setVisibility(View.GONE);
                 acceptClick.setClickable(false);
             } else if (ridePost.getIsAccepted().equals("2")) {
                 acceptClick.setBackground(itemView.getContext().getDrawable(R.drawable.ride_detail_button_border));
                 acceptClick.setTextColor(Color.parseColor("#444A5A"));
 
                 acceptClick.setText("Rejected");
-                rejectClick.setText("Edit");
 
-                acceptClick.setClickable(false);
+                rejectClick.setVisibility(View.GONE);
+            } else {
+                acceptClick.setClickable(true);
             }
 
+            if (!((acceptClick.getText().equals("Accepted")) || (acceptClick.getText().equals("Rejected")))) {
+                acceptClick.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-            acceptClick.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                        alert.setTitle("Are you sure you want to accept this user?");
+                        // this is set the view from XML inside AlertDialog
+//                    alert.setView(confirmLayout);
+                        // disallow cancel of AlertDialog on click of back button and outside touch
+//                alert.setCancelable(false);
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
-                    acceptClick.setBackground(itemView.getContext().getDrawable(R.drawable.ride_detail_button_border));
-                    acceptClick.setText("Accepted");
-                    acceptClick.setTextColor(Color.parseColor("#444A5A"));
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-                    rejectClick.setText("Edit");
-                    acceptClick.setClickable(false);
+                        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 
-                    OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
-                    System.out.println("CURR OSID:" + status.getSubscriptionStatus().getUserId());
-                    System.out.println("SENDING OSID:" + ridePost.getPassenger().getOneSignalId()  + ridePost.getPassenger().getUserId());
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                acceptClick.setBackground(itemView.getContext().getDrawable(R.drawable.ride_detail_button_border));
+                                acceptClick.setText("Accepted");
+                                acceptClick.setTextColor(Color.parseColor("#444A5A"));
+
+                                rejectClick.setVisibility(View.GONE);
+                                acceptClick.setClickable(false);
+
+                                OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+                                System.out.println("CURR OSID:" + status.getSubscriptionStatus().getUserId());
+                                System.out.println("SENDING OSID:" + ridePost.getPassenger().getOneSignalId()  + ridePost.getPassenger().getUserId());
+
+                                if (!(ridePost.getIsAccepted().equals("1"))) {
+                                    try {
+                                        JSONObject notificationContent = new JSONObject(
+                                                "{'contents': {'en': 'Your booking request for ride going from " + ridePost.getPickupCity() + " to " + ridePost.getDropoffCity() + " has been accepted.'}," +
+                                                        "'include_player_ids': ['" + ridePost.getPassenger().getOneSignalId() + "'], " +
+                                                        "'headings': {'en': 'Booking Request Accepted'}, " +
+                                                        "'big_picture': ''}");
+                                        OneSignal.postNotification(notificationContent, null);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                setAccepted.execute(String.valueOf(ridePost.getBookingId()));
+                            }
+                        });
+                        AlertDialog dialog = alert.create();
+                        dialog.show();
 
 
-                    try {
-                        JSONObject notificationContent = new JSONObject(
-                                "{'contents': {'en': 'Your booking request for ride going from " + ridePost.getPickupCity() + " to " + ridePost.getDropoffCity() + " has been accepted.'}," +
-                                        "'include_player_ids': ['" + ridePost.getPassenger().getOneSignalId() + "'], " +
-                                        "'headings': {'en': 'Booking Request Accepted'}, " +
-                                        "'big_picture': ''}");
-                        OneSignal.postNotification(notificationContent, null);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-                    setAccepted.execute(String.valueOf(ridePost.getBookingId()));
-                }
-            });
-
-            rejectClick.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (rejectClick.getText().equals("Reject")) {
-
-                        acceptClick.setBackground(itemView.getContext().getDrawable(R.drawable.ride_detail_button_border));
-                        acceptClick.setTextColor(Color.parseColor("#444A5A"));
-
-                        acceptClick.setText("Rejected");
-                        rejectClick.setText("Edit");
-
-                        acceptClick.setClickable(false);
-
-                        try {
-                            JSONObject notificationContent = new JSONObject(
-                                    "{'contents': {'en': 'Your booking request for ride going from " + ridePost.getPickupCity() + " to " + ridePost.getDropoffCity() + " has been rejected.'}," +
-                                            "'include_player_ids': ['" + ridePost.getPassenger().getOneSignalId() + "'], " +
-                                            "'headings': {'en': 'Booking Request Rejected'}, " +
-                                            "'big_picture': ''}");
-                            OneSignal.postNotification(notificationContent, null);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        setRejected.execute(String.valueOf(ridePost.getBookingId()));
-
-                    } else if (rejectClick.getText().equals("Edit")) {
-
-                        acceptClick.setBackgroundColor(Color.parseColor("#444A5A"));
-                        acceptClick.setTextColor(Color.parseColor("#ffffff"));
-                        acceptClick.setClickable(true);
-                        acceptClick.setText("Accept");
-                        rejectClick.setText("Reject");
 
                     }
+                });
 
-                }
-            });
+                rejectClick.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                        alert.setTitle("Are you sure you want to reject this user?");
+                        // this is set the view from XML inside AlertDialog
+//                    alert.setView(confirmLayout);
+                        // disallow cancel of AlertDialog on click of back button and outside touch
+//                alert.setCancelable(false);
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                acceptClick.setBackground(itemView.getContext().getDrawable(R.drawable.ride_detail_button_border));
+                                acceptClick.setTextColor(Color.parseColor("#444A5A"));
+
+                                acceptClick.setText("Rejected");
+                                rejectClick.setVisibility(View.GONE);
+
+                                acceptClick.setClickable(false);
+
+                                if (!(ridePost.getIsAccepted().equals("2"))) {
+                                    try {
+                                        JSONObject notificationContent = new JSONObject(
+                                                "{'contents': {'en': 'Your booking request for ride going from " + ridePost.getPickupCity() + " to " + ridePost.getDropoffCity() + " has been rejected.'}," +
+                                                        "'include_player_ids': ['" + ridePost.getPassenger().getOneSignalId() + "'], " +
+                                                        "'headings': {'en': 'Booking Request Rejected'}, " +
+                                                        "'big_picture': ''}");
+                                        OneSignal.postNotification(notificationContent, null);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                System.out.println(setRejected.getStatus());
+                                if (!(setRejected.getStatus().equals(AsyncTask.Status.RUNNING))) {
+
+                                    setRejected.execute(String.valueOf(ridePost.getBookingId()));
+                                }
+                            }
+                        });
+                        AlertDialog dialog = alert.create();
+                        dialog.show();
+
+                    }
+                });
+            }
+
 
             SetProfileImageAsyncTask setProfileImageAsyncTask = new SetProfileImageAsyncTask(driverImage);
             setProfileImageAsyncTask.execute(ridePost.getPassenger().getFacebookProfilePicURI());
@@ -310,7 +361,8 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.RidePo
         }
     }
 
-    public RequestsAdapter(List<RidePost> ridePostList, float screenX, float screenY, Context context) {
+    public RequestsAdapter(List<RidePost> ridePostList, float screenX, float screenY, Context context,View alertLayout) {
+        this.alertLayout = alertLayout;
         this.ridePostList = ridePostList;
         this.screenX = screenX;
         this.screenY = screenY;
@@ -329,7 +381,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.RidePo
 
     @Override
     public void onBindViewHolder(RidePostHolder holder, int position) {
-        holder.initializeRidePost(ridePostList.get(position), context);
+        holder.initializeRidePost(ridePostList.get(position), context, alertLayout);
     }
 
     @Override

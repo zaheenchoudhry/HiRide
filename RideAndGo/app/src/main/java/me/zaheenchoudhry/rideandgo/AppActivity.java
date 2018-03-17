@@ -241,6 +241,9 @@ public class AppActivity extends FragmentActivity {
             } else if (pageNumber == MENU_OPTION_UPCOMING_RIDES) {
                 UpcomingRidesFragment upcomingRidesFragment = new UpcomingRidesFragment();
                 transaction.replace(R.id.fragment_container, upcomingRidesFragment);
+            } else if (pageNumber == MENU_OPTION_ACCOUNT) {
+                AccountFragment accountFragment = new AccountFragment();
+                transaction.replace(R.id.fragment_container, accountFragment);
             }
             //transaction.addToBackStack(null);
             transaction.commit();

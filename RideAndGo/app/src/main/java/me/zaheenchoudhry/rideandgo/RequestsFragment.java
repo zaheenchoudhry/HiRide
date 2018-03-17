@@ -72,8 +72,10 @@ public class RequestsFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        View alertLayout = inflater.inflate(R.layout.confirm_choice, null);
 
-        requestsAdapter = new RequestsAdapter(ridePostList, screenX, screenY, getActivity());
+
+        requestsAdapter = new RequestsAdapter(ridePostList, screenX, screenY, getActivity(), alertLayout);
         recyclerView.setAdapter(requestsAdapter);
 
         return view;
