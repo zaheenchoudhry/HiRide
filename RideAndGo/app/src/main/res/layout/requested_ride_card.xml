@@ -280,7 +280,8 @@
                         android:layout_centerHorizontal="true"
                         android:background="#444A5A"
                         android:textColor="#ffffff"
-                        android:text="Accept"/>
+                        android:text="Accept"
+                        android:clickable="false"/>
 
             </RelativeLayout>
 

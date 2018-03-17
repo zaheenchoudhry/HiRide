@@ -16,6 +16,9 @@ public class UserAccount implements Serializable {
     public static final int PREFERENCE_EXTRA_LUGGAGE = 2;
     public static final int PREFERENCE_PETS = 3;
 
+
+    private double rating;
+    private int numOfTrips, numOfKm, numOfRiders;
     private String phoneNumber, facebookAccountNumber, oneSignalId;
     private int userId, accountType;
     private String name, emailId, facebookProfilePicURI, facebookProfileLinkURI;
@@ -45,10 +48,35 @@ public class UserAccount implements Serializable {
         this.accountType = accountType;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.facebookAccountNumber = String.valueOf(-1);
+        this.facebookAccountNumber = "-1";
+
         this.emailId = "";
         this.facebookProfilePicURI = "";
         this.wasLogginSuccessful = true;
+    }
+
+    public void setTrips(int trips){
+        this.numOfTrips = trips;
+    }
+
+    public void setKm(int km){
+        this.numOfKm = km;
+    }
+
+    public void setRiders(int riders){
+        this.numOfRiders = riders;
+    }
+
+    public int getTrips() {
+        return this.numOfTrips;
+    }
+
+    public int getKm() {
+        return this.numOfKm;
+    }
+
+    public int getRiders() {
+        return this.numOfRiders;
     }
 
     public UserAccount(int userId, int accountType, String name, String phoneNumber, String oneSignalId) {
@@ -96,6 +124,7 @@ public class UserAccount implements Serializable {
     public int getAccountType() {
         return accountType;
     }
+
 
     public String getPhoneNumber() { return phoneNumber;  }
 

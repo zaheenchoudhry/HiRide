@@ -5,6 +5,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/hiride_logo_white"/>
+            android:src="@drawable/logo_hiride"/>
     </item>
 </layer-list>
