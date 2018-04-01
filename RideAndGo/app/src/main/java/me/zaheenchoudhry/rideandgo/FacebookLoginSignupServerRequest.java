@@ -157,7 +157,7 @@ public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, St
                         userAccount = new UserAccount(jsonAccount.getInt("UserId"), jsonAccount.getInt("AccountType"), jsonAccount.getString("Name"), jsonAccount.getString("PhoneNumber"));
                         userAccount.setFacebookUserSpecificDetails(jsonAccount.getString("FacebookAccountNumber"), jsonAccount.getString("FacebookProfileLinkURI"), jsonAccount.getString("FacebookProfilePicURI"));
                         userAccount.setAcceptedPaymentMethods(jsonAccount.getInt("AcceptsCash"), jsonAccount.getInt("AcceptsInAppPayments"));
-                        userAccount.setPreferences(jsonAccount.getInt("PrefersMusic"), jsonAccount.getInt("PrefersDrinks"), jsonAccount.getInt("PrefersExtraLuggage"), jsonAccount.getInt("PrefersPets"));
+                        userAccount.setPreferences(jsonAccount.getInt("PrefersMusic"), jsonAccount.getInt("PrefersDrinks"), jsonAccount.getInt("PrefersExtraLuggage"), jsonAccount.getInt("PrefersPets"), jsonAccount.getInt("PrefersGender"));
 
                         //if (shouldShowDialogs) {
                         SharedPreferences.Editor editor = context.getSharedPreferences(context.getString(R.string.saved_data_preferences_name), Context.MODE_PRIVATE).edit();
@@ -211,8 +211,9 @@ public class FacebookLoginSignupServerRequest extends AsyncTask<String, Void, St
         int prefersDrinks = (prefs.getBoolean(context.getString(R.string.saved_data_accepts_cash_name), false)) ? 1 : 0;
         int prefersLuggage = (prefs.getBoolean(context.getString(R.string.saved_data_accepts_cash_name), false)) ? 1 : 0;
         int prefersPets = (prefs.getBoolean(context.getString(R.string.saved_data_accepts_cash_name), false)) ? 1 : 0;
+        int prefersGender = (prefs.getBoolean("acceptsCash", true)) ? 1 : 0;
         userAccount.setAcceptedPaymentMethods(acceptsCash, acceptsInappPayments);
-        userAccount.setPreferences(prefersMusic, prefersDrinks, prefersLuggage, prefersPets);
+        userAccount.setPreferences(prefersMusic, prefersDrinks, prefersLuggage, prefersPets, prefersGender);
         return userAccount;
     }
 

@@ -37,12 +37,12 @@ public class AppActivity extends FragmentActivity {
 
     private UserAccount userAccount;
 
-    private RelativeLayout menuProfileHolder, menuProfileImageHolder;
+    private RelativeLayout menuProfileHolder, menuProfileImageHolder, arrowHolder;
     private RelativeLayout[] menuOptions, menuOptionsIndicator;
     private NavigationView menu;
     private DrawerLayout appDrawerLayout;
     private TextView[] menuOptionsText;
-    private ImageView menuProfileImage;
+    private ImageView menuProfileImage, arrowImage;
     private TextView menuProfileName;
 
     @Override
@@ -82,16 +82,25 @@ public class AppActivity extends FragmentActivity {
         menuProfileImageHolder = (RelativeLayout)findViewById(R.id.menu_profile_image_holder);
         menuProfileImage = (ImageView)findViewById(R.id.menu_profile_image);
         menuProfileName = (TextView)findViewById(R.id.menu_profile_name);
+        arrowHolder = (RelativeLayout)findViewById(R.id.activity_app_arrow_tab_container);
+        arrowImage = (ImageView)findViewById(R.id.activity_app_arrow_tab_icon);
 
         initializeMenuAndProfileDisplay();
         initializeMenuOptions();
         initializeMenuActions();
+        initializeArrowTab();
 
         int pageToDisplay = MENU_OPTION_CREATE_RIDE;
         menuOptions[pageToDisplay].setBackgroundColor(Color.parseColor("#e3ebee"));
         menuOptionsIndicator[pageToDisplay].setBackgroundColor(Color.parseColor("#22409A"));
         menuOptionsText[pageToDisplay].setTextColor(Color.parseColor("#303030"));
         switchToPage(pageToDisplay);
+    }
+
+    private void initializeArrowTab() {
+        RelativeLayout.LayoutParams arrowParams = (RelativeLayout.LayoutParams)arrowImage.getLayoutParams();
+        arrowParams.width = (int)(screenY * 0.02f);
+        arrowParams.height = (int)(screenY * 0.08f);
     }
 
     @Override
