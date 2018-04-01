@@ -8,11 +8,12 @@ public class UserAccount implements Serializable {
 
     public static final int ACCOUNT_TYPE_APP = 0;
     public static final int ACCOUNT_TYPE_FACEBOOK_ACCOUNT = 1;
-    public static final int NUM_OF_PREFERENCES = 4;
+    public static final int NUM_OF_PREFERENCES = 5;
     public static final int PREFERENCE_MUSIC = 0;
     public static final int PREFERENCE_FOOD_DRINKS = 1;
     public static final int PREFERENCE_EXTRA_LUGGAGE = 2;
     public static final int PREFERENCE_PETS = 3;
+    public static final int PREFERENCE_GENDER = 4;
 
 
     private double rating;
@@ -22,7 +23,7 @@ public class UserAccount implements Serializable {
     private String name, emailId, facebookProfilePicURI, facebookProfileLinkURI;
     private boolean wasLogginSuccessful;
     private boolean acceptsCash, acceptsInAppPayments;
-    private boolean prefersMusic, prefersDrinks, prefersExtraLuggage, prefersPets;
+    private boolean prefersMusic, prefersDrinks, prefersExtraLuggage, prefersPets, prefersGender;
 
     public UserAccount(String name) {
         this(-1, -1, name, "-1");
@@ -96,11 +97,12 @@ public class UserAccount implements Serializable {
         this.acceptsInAppPayments = (acceptsInAppPayments != 0);
     }
 
-    public void setPreferences(int prefersMusic, int prefersDrinks, int prefersExtraLuggage, int prefersPets) {
+    public void setPreferences(int prefersMusic, int prefersDrinks, int prefersExtraLuggage, int prefersPets, int prefersGender) {
         this.prefersMusic = (prefersMusic != 0);
         this.prefersDrinks = (prefersDrinks != 0);
         this.prefersExtraLuggage = (prefersExtraLuggage != 0);
         this.prefersPets = (prefersPets != 0);
+        this.prefersGender = (prefersGender != 0);
     }
 
     public int getUserId() {
@@ -154,6 +156,10 @@ public class UserAccount implements Serializable {
 
     public boolean doesPreferPets() {
         return prefersPets;
+    }
+
+    public boolean doesPreferGender() {
+        return prefersGender;
     }
 
     public boolean isLoggedIn() {

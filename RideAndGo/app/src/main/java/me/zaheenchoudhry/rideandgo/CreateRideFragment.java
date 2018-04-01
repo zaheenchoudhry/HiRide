@@ -123,6 +123,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
             this.prefersPreference[1] = userAccount.doesPreferDrinks();
             this.prefersPreference[2] = userAccount.doesPreferExtraLuggage();
             this.prefersPreference[3] = userAccount.doesPreferPets();
+            this.prefersPreference[4] = userAccount.doesPreferGender();
         } else {
             this.acceptsCash = true;
             this.acceptsInAppPayments = true;
@@ -130,6 +131,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
             this.prefersPreference[1] = false;
             this.prefersPreference[2] = false;
             this.prefersPreference[3] = false;
+            this.prefersPreference[4] = true;
         }
 
         preferenceIconResourceWhite = new int[UserAccount.NUM_OF_PREFERENCES];
@@ -138,10 +140,12 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         preferenceIconResourceWhite[1] = R.drawable.drinks_icon_white;
         preferenceIconResourceWhite[2] = R.drawable.luggage_icon_white;
         preferenceIconResourceWhite[3] = R.drawable.pet_icon_white;
+        preferenceIconResourceWhite[4] = R.drawable.male_icon_white;
         preferenceIconResourceBlue[0] = R.drawable.music_icon_blue;
         preferenceIconResourceBlue[1] = R.drawable.drinks_icon_blue;
         preferenceIconResourceBlue[2] = R.drawable.luggage_icon_blue;
         preferenceIconResourceBlue[3] = R.drawable.pet_icon_blue;
+        preferenceIconResourceBlue[4] = R.drawable.male_icon_blue;
 
         View view = inflater.inflate(R.layout.create_ride_fragment, container, false);
         setUnit();
@@ -232,22 +236,27 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         preferences[1] = (RelativeLayout)view.findViewById(R.id.create_ride_prefs_drinks_holder);
         preferences[2] = (RelativeLayout)view.findViewById(R.id.create_ride_prefs_luggage_holder);
         preferences[3] = (RelativeLayout)view.findViewById(R.id.create_ride_prefs_pets_holder);
+        preferences[4] = (RelativeLayout)view.findViewById(R.id.create_ride_prefs_gender_holder);
         preferencesIcons[0] = (ImageView)view.findViewById(R.id.create_ride_prefs_music_icon);
         preferencesIcons[1] = (ImageView)view.findViewById(R.id.create_ride_prefs_drinks_icon);
         preferencesIcons[2] = (ImageView)view.findViewById(R.id.create_ride_prefs_luggage_icon);
         preferencesIcons[3] = (ImageView)view.findViewById(R.id.create_ride_prefs_pets_icon);
+        preferencesIcons[4] = (ImageView)view.findViewById(R.id.create_ride_prefs_gender_icon);
         preferencesTexts[0] = (TextView)view.findViewById(R.id.create_ride_prefs_music_text);
         preferencesTexts[1] = (TextView)view.findViewById(R.id.create_ride_prefs_drinks_text);
         preferencesTexts[2] = (TextView)view.findViewById(R.id.create_ride_prefs_luggage_text);
         preferencesTexts[3] = (TextView)view.findViewById(R.id.create_ride_prefs_pets_text);
+        preferencesTexts[4] = (TextView)view.findViewById(R.id.create_ride_prefs_gender_text);
         preferencesIconsHolders[0] = (RelativeLayout)view.findViewById(R.id.create_ride_prefs_music_icon_holder);
         preferencesIconsHolders[1] = (RelativeLayout)view.findViewById(R.id.create_ride_prefs_drinks_icon_holder);
         preferencesIconsHolders[2] = (RelativeLayout)view.findViewById(R.id.create_ride_prefs_luggage_icon_holder);
         preferencesIconsHolders[3] = (RelativeLayout)view.findViewById(R.id.create_ride_prefs_pets_icon_holder);
+        preferencesIconsHolders[4] = (RelativeLayout)view.findViewById(R.id.create_ride_prefs_gender_icon_holder);
         preferencesNoTexts[0] = (TextView)view.findViewById(R.id.create_ride_prefs_music_no_text);
         preferencesNoTexts[1] = (TextView)view.findViewById(R.id.create_ride_prefs_drinks_no_text);
         preferencesNoTexts[2] = (TextView)view.findViewById(R.id.create_ride_prefs_luggage_no_text);
         preferencesNoTexts[3] = (TextView)view.findViewById(R.id.create_ride_prefs_pets_no_text);
+        preferencesNoTexts[4] = (TextView)view.findViewById(R.id.create_ride_prefs_gender_no_text);
 
         createRideButtonContainer = (RelativeLayout)view.findViewById(R.id.create_ride_button_container);
         createRideButton = (Button)view.findViewById(R.id.create_ride_button);
@@ -820,6 +829,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         RelativeLayout.LayoutParams driverPreferencesTitleParams = (RelativeLayout.LayoutParams)driverPreferencesTitle.getLayoutParams();
         RelativeLayout.LayoutParams preferenceHolderParams = (RelativeLayout.LayoutParams)preferenceHolder.getLayoutParams();
         driverPrefsContainerParams.width = (int)(screenX * 0.96f);
+        driverPrefsContainerParams.height = (int)(screenX * 0.50f);
         driverPrefsContainer.setPadding(0, 0, 0, (int)(screenY * 0.035f));
         driverPreferencesTitleParams.topMargin = (int)(screenY * 0.02f);
         driverPreferencesTitle.setTextSize(screenX * 0.01f);
@@ -989,6 +999,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         int prefersDrinksInt = (prefersPreference[1]) ? 1 : 0;
         int prefersLuggageInt = (prefersPreference[2]) ? 1 : 0;
         int prefersPetsInt = (prefersPreference[3]) ? 1 : 0;
+        int prefersGenderInt = (prefersPreference[4]) ? 1 : 0;
 
         String acceptsCashStr = (userAccount.doesAcceptCash() == acceptsCash) ? "-1" : Integer.toString(acceptsCashInt);
         String acceptsInAppPaymentsStr = (userAccount.doesAcceptInAppPayments() == acceptsInAppPayments) ? "-1" : Integer.toString(acceptsInAppPaymentsInt);
@@ -996,6 +1007,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
         String prefersDrinksStr = (userAccount.doesPreferDrinks() == prefersPreference[1]) ? "-1" : Integer.toString(prefersDrinksInt);
         String prefersLuggageStr = (userAccount.doesPreferExtraLuggage() == prefersPreference[2]) ? "-1" : Integer.toString(prefersLuggageInt);
         String prefersPetsStr = (userAccount.doesPreferPets() == prefersPreference[3]) ? "-1" : Integer.toString(prefersPetsInt);
+        String prefersGenderStr = (userAccount.doesPreferGender() == prefersPreference[4]) ? "-1" : Integer.toString(prefersGenderInt);
 
         String rideId = "-1";
         if (ridePost != null) {
@@ -1029,6 +1041,7 @@ public class CreateRideFragment extends Fragment implements AppBarLayout.OnOffse
                 prefersDrinksStr,
                 prefersLuggageStr,
                 prefersPetsStr,
+                prefersGenderStr,
                 rideId,
                 phoneNumber);
     }

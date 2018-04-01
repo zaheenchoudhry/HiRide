@@ -224,22 +224,27 @@ public class RideDetailFragment extends Fragment {
         preferences[1] = (RelativeLayout)view.findViewById(R.id.ride_details_prefs_drinks_holder);
         preferences[2] = (RelativeLayout)view.findViewById(R.id.ride_details_prefs_luggage_holder);
         preferences[3] = (RelativeLayout)view.findViewById(R.id.ride_details_prefs_pets_holder);
+        preferences[4] = (RelativeLayout)view.findViewById(R.id.ride_details_prefs_gender_holder);
         preferencesIcons[0] = (ImageView)view.findViewById(R.id.ride_details_prefs_music_icon);
         preferencesIcons[1] = (ImageView)view.findViewById(R.id.ride_details_prefs_drinks_icon);
         preferencesIcons[2] = (ImageView)view.findViewById(R.id.ride_details_prefs_luggage_icon);
         preferencesIcons[3] = (ImageView)view.findViewById(R.id.ride_details_prefs_pets_icon);
+        preferencesIcons[4] = (ImageView)view.findViewById(R.id.ride_details_prefs_gender_icon);
         preferencesTexts[0] = (TextView)view.findViewById(R.id.ride_details_prefs_music_text);
         preferencesTexts[1] = (TextView)view.findViewById(R.id.ride_details_prefs_drinks_text);
         preferencesTexts[2] = (TextView)view.findViewById(R.id.ride_details_prefs_luggage_text);
         preferencesTexts[3] = (TextView)view.findViewById(R.id.ride_details_prefs_pets_text);
+        preferencesTexts[4] = (TextView)view.findViewById(R.id.ride_details_prefs_gender_text);
         preferencesIconsHolders[0] = (RelativeLayout)view.findViewById(R.id.ride_details_prefs_music_icon_holder);
         preferencesIconsHolders[1] = (RelativeLayout)view.findViewById(R.id.ride_details_prefs_drinks_icon_holder);
         preferencesIconsHolders[2] = (RelativeLayout)view.findViewById(R.id.ride_details_prefs_luggage_icon_holder);
         preferencesIconsHolders[3] = (RelativeLayout)view.findViewById(R.id.ride_details_prefs_pets_icon_holder);
+        preferencesIconsHolders[4] = (RelativeLayout)view.findViewById(R.id.ride_details_prefs_gender_icon_holder);
         preferencesNoTexts[0] = (TextView)view.findViewById(R.id.ride_details_prefs_music_no_text);
         preferencesNoTexts[1] = (TextView)view.findViewById(R.id.ride_details_prefs_drinks_no_text);
         preferencesNoTexts[2] = (TextView)view.findViewById(R.id.ride_details_prefs_luggage_no_text);
         preferencesNoTexts[3] = (TextView)view.findViewById(R.id.ride_details_prefs_pets_no_text);
+        preferencesNoTexts[4] = (TextView)view.findViewById(R.id.ride_details_prefs_gender_no_text);
 
         dateDayText.setText(dayOfWeek[ridePost.getDay() - 1]);
         dateMonthText.setText(dayOfMonth[ridePost.getMonth() - 1]);
@@ -914,6 +919,9 @@ public class RideDetailFragment extends Fragment {
     private void initializeDriverPreferencesDisplay() {
         RelativeLayout.LayoutParams driverPreferencesTitleParams = (RelativeLayout.LayoutParams)driverPreferencesTitle.getLayoutParams();
         RelativeLayout.LayoutParams preferenceHolderParams = (RelativeLayout.LayoutParams)preferenceHolder.getLayoutParams();
+        preferenceHolderParams.width = (int)(screenX * 0.96f);
+        preferenceHolderParams.height = (int)(screenX * 0.40f);
+        preferenceHolder.setPadding(0, 0, 0, (int)(screenY * 0.035f));
         driverPreferencesTitleParams.topMargin = (int)(screenY * 0.02f);
         driverPreferencesTitle.setTextSize(screenX * 0.01f);
         preferenceHolderParams.topMargin = (int)(screenY * 0.015f);
@@ -925,11 +933,13 @@ public class RideDetailFragment extends Fragment {
             prefersPreference[1] = userAccount.doesPreferDrinks();
             prefersPreference[2] = userAccount.doesPreferExtraLuggage();
             prefersPreference[3] = userAccount.doesPreferPets();
+            prefersPreference[4] = userAccount.doesPreferGender();
         } else {
             prefersPreference[0] = true;
             prefersPreference[1] = false;
             prefersPreference[2] = false;
             prefersPreference[3] = false;
+            prefersPreference[4] = false;
         }
 
         int[] preferenceIconResourceWhite = new int[UserAccount.NUM_OF_PREFERENCES];
@@ -938,10 +948,12 @@ public class RideDetailFragment extends Fragment {
         preferenceIconResourceWhite[1] = R.drawable.drinks_icon_white;
         preferenceIconResourceWhite[2] = R.drawable.luggage_icon_white;
         preferenceIconResourceWhite[3] = R.drawable.pet_icon_white;
+        preferenceIconResourceWhite[4] = R.drawable.male_icon_white;
         preferenceIconResourceBlue[0] = R.drawable.music_icon_blue;
         preferenceIconResourceBlue[1] = R.drawable.drinks_icon_blue;
         preferenceIconResourceBlue[2] = R.drawable.luggage_icon_blue;
         preferenceIconResourceBlue[3] = R.drawable.pet_icon_blue;
+        preferenceIconResourceBlue[4] = R.drawable.male_icon_blue;
 
         for (int i = 0; i < UserAccount.NUM_OF_PREFERENCES; ++i) {
             if (prefersPreference[i]) {
@@ -961,10 +973,15 @@ public class RideDetailFragment extends Fragment {
             RelativeLayout.LayoutParams preferencesIconsHoldersParams = (RelativeLayout.LayoutParams)preferencesIconsHolders[i].getLayoutParams();
             preferencesParams.width = (int)(screenX * 0.2f);
             preferencesParams.height = (int)(screenX * 0.16f);
-            preferencesParams.setMarginStart((int)(screenX * 0.028f));
+            // preferencesParams.setMarginStart((int)(screenX * 0.028f));
+            if (i == 0) {
+                preferencesParams.setMarginStart((int)(screenX * 0.05f));
+            } else {
+                preferencesParams.setMarginStart((int)(screenX * 0.02f));
+            }
             preferencesIconsParams.width = (int)(screenX * 0.07f);
             preferencesIconsParams.height = (int)(screenX * 0.07f);
-            //preferencesIconsParams.topMargin = (int)(screenY * 0.015f);
+            preferencesIconsParams.topMargin = (int)(screenY * 0.015f);
             preferencesTexts[i].setTextSize(screenX * 0.0065f);
             preferencesTexts[i].setPadding(0, 0, 0, (int)(screenY * 0.002f));
             preferencesIconsHoldersParams.height = (int)(screenX * 0.09f);
