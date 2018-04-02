@@ -509,9 +509,51 @@
                     android:layout_below="@id/ride_details_driver_prefs_title">
 
                     <RelativeLayout
+                        android:id="@+id/ride_details_prefs_drinks_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/driver_preferences_container_border"
+                        android:layout_centerHorizontal="true">
+                        <!--android:layout_toEndOf="@id/ride_details_prefs_music_holder"-->
+
+                        <RelativeLayout
+                            android:id="@+id/ride_details_prefs_drinks_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/ride_details_prefs_drinks_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/drinks_icon_blue"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_drinks_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#1366ae"
+                            android:text="Food / Drinks"/>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_drinks_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@+id/ride_details_prefs_drinks_text"
+                            android:textColor="#1366ae"
+                            android:text="No"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:id="@+id/ride_details_prefs_music_holder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/ride_details_prefs_drinks_holder"
                         android:background="#1777CD">
 
                         <RelativeLayout
@@ -546,46 +588,6 @@
                             android:textColor="#ffffff"
                             android:text="No"
                             android:visibility="invisible"/>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/ride_details_prefs_drinks_holder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/driver_preferences_container_border"
-                        android:layout_toEndOf="@id/ride_details_prefs_music_holder">
-
-                        <RelativeLayout
-                            android:id="@+id/ride_details_prefs_drinks_icon_holder"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:id="@+id/ride_details_prefs_drinks_icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_alignParentBottom="true"
-                                android:src="@drawable/drinks_icon_blue"/>
-                        </RelativeLayout>
-
-                        <TextView
-                            android:id="@+id/ride_details_prefs_drinks_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_alignParentBottom="true"
-                            android:textColor="#1366ae"
-                            android:text="Food / Drinks"/>
-
-                        <TextView
-                            android:id="@+id/ride_details_prefs_drinks_no_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_above="@id/ride_details_prefs_drinks_text"
-                            android:textColor="#1366ae"
-                            android:text="No"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -633,7 +635,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/driver_preferences_container_border"
-                        android:layout_toEndOf="@id/ride_details_prefs_luggage_holder">
+                        android:layout_alignParentBottom="true"
+                        android:layout_toLeftOf="@+id/ride_details_placeholder">
+                        <!--android:layout_toEndOf="@id/ride_details_prefs_luggage_holder">-->
 
                         <RelativeLayout
                             android:id="@+id/ride_details_prefs_pets_icon_holder"
@@ -667,6 +671,55 @@
                             android:textColor="#1366ae"
                             android:text="No"/>
                     </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/ride_details_prefs_gender_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/driver_preferences_container_border"
+                        android:layout_alignParentBottom="true"
+                        android:layout_toRightOf="@id/ride_details_placeholder">
+
+                        <RelativeLayout
+                            android:id="@+id/ride_details_prefs_gender_icon_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/ride_details_prefs_gender_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_alignParentBottom="true"
+                                android:src="@drawable/male_icon_blue"/>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_gender_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:textColor="#1366ae"
+                            android:text="Males Allowed"/>
+
+                        <TextView
+                            android:id="@+id/ride_details_prefs_gender_no_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@id/ride_details_prefs_gender_text"
+                            android:textColor="#1366ae"
+                            android:text="No"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/ride_details_placeholder"
+                        android:layout_width="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_height="0dp">
+                    </RelativeLayout>
+
                 </RelativeLayout>
 
 

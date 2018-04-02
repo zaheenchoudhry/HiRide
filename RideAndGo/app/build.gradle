@@ -16,8 +16,8 @@ android {
         applicationId "me.zaheenchoudhry.rideandgo"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [onesignal_app_id: "a9bc73ef-a842-43c8-ba93-2b6cf91b2f10",
                                 // Project number pulled from dashboard, local value is ignored.

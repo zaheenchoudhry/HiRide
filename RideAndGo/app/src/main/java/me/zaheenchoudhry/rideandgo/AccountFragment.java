@@ -112,12 +112,11 @@ public class AccountFragment extends Fragment implements AppBarLayout.OnOffsetCh
         km = (TextView)view.findViewById(R.id.num_of_km);
         riders = (TextView)view.findViewById(R.id.num_of_riders);
 
-        checkoutfb = (TextView)view.findViewById(R.id.fbbutton);
+        // checkoutfb = (TextView)view.findViewById(R.id.fbbutton);
 
         requestedUserAccount = ((AppActivity)getActivity()).getUserAccount();
         GetUserServerRequest getUserServerRequest = new GetUserServerRequest(requestedUserAccount.getUserId());
         getUserServerRequest.execute();
-
 
         return view;
     }
@@ -134,7 +133,7 @@ public class AccountFragment extends Fragment implements AppBarLayout.OnOffsetCh
         km.setText(Integer.toString(requestedUserAccount.getKm()));
         riders.setText(Integer.toString(requestedUserAccount.getRiders()));
 
-        checkoutfb.setText("Checkout "+requestedUserAccount.getName()+"'s Facebook Profile");
+        // checkoutfb.setText("Checkout "+requestedUserAccount.getName()+"'s Facebook Profile");
     }
 
     private void initializeToolbarAndMenuButton() {

@@ -121,7 +121,7 @@ public class CreateAccountServerRequest extends AsyncTask<String, Void, String> 
                         userAccount = new UserAccount(jsonAccount.getInt("UserId"), jsonAccount.getInt("AccountType"), jsonAccount.getString("Name"), jsonAccount.getString("PhoneNumber"));
                         userAccount.setEmailId(jsonAccount.getString("EmailId"));
                         userAccount.setAcceptedPaymentMethods(jsonAccount.getInt("AcceptsCash"), jsonAccount.getInt("AcceptsInAppPayments"));
-                        userAccount.setPreferences(jsonAccount.getInt("PrefersMusic"), jsonAccount.getInt("PrefersDrinks"), jsonAccount.getInt("PrefersExtraLuggage"), jsonAccount.getInt("PrefersPets"));
+                        userAccount.setPreferences(jsonAccount.getInt("PrefersMusic"), jsonAccount.getInt("PrefersDrinks"), jsonAccount.getInt("PrefersExtraLuggage"), jsonAccount.getInt("PrefersPets"), jsonAccount.getInt("PrefersGender"));
 
                         SharedPreferences.Editor editor = context.getSharedPreferences(context.getString(R.string.saved_data_preferences_name), Context.MODE_PRIVATE).edit();
                         editor.putBoolean(context.getString(R.string.saved_data_is_logged_in_email_preference_name), true);
@@ -134,6 +134,7 @@ public class CreateAccountServerRequest extends AsyncTask<String, Void, String> 
                         editor.putBoolean(context.getString(R.string.saved_data_prefers_drinks_food_name), jsonAccount.getInt("PrefersDrinks") != 0);
                         editor.putBoolean(context.getString(R.string.saved_data_prefers_extra_luggage_name), jsonAccount.getInt("PrefersExtraLuggage") != 0);
                         editor.putBoolean(context.getString(R.string.saved_data_prefers_pets_name), jsonAccount.getInt("PrefersPets") != 0);
+                        editor.putBoolean("prefersGender", jsonAccount.getInt("PrefersGender") != 0);
                         editor.apply();
 
                         if (alertDialog.isShowing()) {

@@ -139,7 +139,7 @@
             <!--android:src="@drawable/create_icon_white"-->
         </LinearLayout>
 
-        <Button
+        <!--<Button
             android:id="@+id/fbbutton"
             android:layout_width="match_parent"
             android:layout_height="125dp"
@@ -151,7 +151,7 @@
             android:textSize="20sp"
             android:textColor="#ffffff">
 
-        </Button>
+        </Button>-->
 
     </RelativeLayout>
 
@@ -212,8 +212,8 @@
 
                     <ImageView
                         android:id="@+id/profile_picture"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginTop="0dp"
                         android:scaleType="centerInside" />
                     <!--android:src="@drawable/create_icon_white"-->
@@ -238,7 +238,8 @@
                         android:layout_height="22dp"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/menu_icon_white_2" />
+                        android:src="@drawable/menu_icon_white_2"
+                        android:visibility="invisible"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
