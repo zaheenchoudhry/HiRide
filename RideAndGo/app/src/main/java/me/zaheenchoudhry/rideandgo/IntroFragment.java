@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -222,6 +223,15 @@ public class IntroFragment extends Fragment {
         termsText.setTextSize(screenX * 0.008f);
         termsTextHolderParams.topMargin = (int)(screenY * 0.285f);
         termsTextParams.topMargin = (int)(screenY * 0.025f);
+
+        termsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browser= new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/document/d/e/2PACX-1vQby43JG6qh3OV5jMC8m7iBh96hI68e5quLX-AqGXLgbBr4264Ice1EaBUIN4JgnDdC3aXWCF4Oim7k/pub"));
+                startActivity(browser);
+            }
+        });
+
     }
 
     private void attemptContinueWithFacebook() {
